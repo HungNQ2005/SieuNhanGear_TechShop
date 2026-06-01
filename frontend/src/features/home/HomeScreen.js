@@ -1,14 +1,15 @@
-import React from 'react';
-import { View, ScrollView, StyleSheet, TouchableOpacity, Alert, Text, } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, ScrollView, StyleSheet, TouchableOpacity, Alert, Text, ActivityIndicator } from 'react-native';
 import Header from '../../common/Header';
 import Footer from '../../common/Footer';
-import ProductCard from '../../common/ProductCard';
 import TextIntl from '../../common/TextIntl';
 import Banner from '../../common/Banner';
 import HotProductCard from '../../common/HotProductCard';
-import { featuredProducts } from '../../services/mockProducts';
+import ProductCard from '../../common/ProductCard';
 import { useCart } from '../../store/CartContext';
+import api from '../../services/api';
 import {
+  TEXT_HOME_EMPTY_PRODUCTS,
   TEXT_HOME_HERO_STAMP,
   TEXT_HOME_HERO_TITLE,
   TEXT_HOME_HERO_SUBTITLE,
@@ -25,7 +26,41 @@ import {
 } from '../../constants/i18nKeys';
 
 export default function HomeScreen() {
-  const { addToCart, totalItems } = useCart();
+  const { addToCart, totalItems } = useCart()
+  const [products, setProducts] = useState([]);
+  const [loadProducts, setLoadProducts] = useState(true);
+  const [manufacturers, setManufacturers] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const scrollViewRef = useRef(null);
+  const productsSectionRef = useRef(null);
+  const [productsSectionY, setProductsSectionY] = useState(0);
+
+  useEffect(() => {
+    api.get('/products')
+      .then(res => setProducts(res.data))
+      .catch(err => console.error('Failed to fetch products:', err))
+      .finally(() => setLoadProducts(false));
+  }, []);
+
+  useEffect(() => {
+    api.get('/manufacturers').then(res => setManufacturers(res.data));
+    api.get('/categories').then(res => setCategories(res.data));
+  }, []);
+
+  const scrollToProducts = () => {
+    if (scrollViewRef.current && productsSectionY) {
+      scrollViewRef.current.scrollTo({ y: productsSectionY, animated: true });
+    } else if (scrollViewRef.current && productsSectionRef.current) {
+      productsSectionRef.current.measure((x, y, width, height, pageX, pageY) => {
+        scrollViewRef.current.scrollTo({ y: pageY, animated: true });
+      });
+    }
+  };
+
+  const onProductsLayout = (event) => {
+    const { y } = event.nativeEvent.layout;
+    setProductsSectionY(y);
+  };
 
   const IconLightning = () => (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0066ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -41,7 +76,7 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.page}>
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView ref={scrollViewRef} contentContainerStyle={styles.content}>
         <Banner style={styles.banner}>
           <View style={styles.heroSection}>
             <View style={styles.badgeContainer}>
@@ -51,7 +86,7 @@ export default function HomeScreen() {
             <TextIntl tx={TEXT_HOME_HERO_TITLE} style={styles.heroTitle} />
             <TextIntl tx={TEXT_HOME_HERO_SUBTITLE} style={styles.heroSubtitle} />
             <View style={styles.buttonBox}>
-              <TouchableOpacity style={styles.shoppingButton1}>
+              <TouchableOpacity style={styles.shoppingButton1} onPress={scrollToProducts}>
                 <TextIntl tx={TEXT_HOME_HERO_SHOPPING_BUTTON} style={styles.shoppingButton} />
                 <IconPointToRight />
               </TouchableOpacity>
@@ -90,15 +125,32 @@ export default function HomeScreen() {
 
         <TextIntl tx={TEXT_HOME_FEATURED_PRODUCTS} style={styles.sectionTitle} />
 
-        <View style={styles.productList}>
-          {featuredProducts.length === 0 ? (
-            <TextIntl tx={TEXT_NO_PRODUCTS} style={styles.emptyText} />
+        <View ref={productsSectionRef} onLayout={onProductsLayout}>
+          {loadProducts ? (
+            <ActivityIndicator size="large" color="#0066ff" style={styles.loader} />
+          ) : products.length === 0 ? (
+            <View style={styles.emptyContainer}>
+              <TextIntl tx={TEXT_HOME_EMPTY_PRODUCTS} style={styles.emptyText} />
+            </View>
           ) : (
-            featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} onAddToCart={addToCart} />
-            ))
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ gap: 12, paddingHorizontal: 16 }}
+              style={styles.productGrid}
+            >
+              {products.map(product => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  manufacturers={manufacturers}
+                  categories={categories}
+                />
+              ))}
+            </ScrollView>
           )}
         </View>
+
         <View>
           <Footer />
         </View>
@@ -171,14 +223,16 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   sectionTitle: {
-    fontSize: 20,
+    paddingHorizontal: 50,
+    paddingVertical: 15,
+    fontSize: 25,
     fontWeight: '700',
     color: '#0F172A',
     marginBottom: 16,
   },
   emptyText: {
-    color: '#64748B',
-    fontSize: 16,
+    color: 'blue',
+    fontSize: 20,
     textAlign: 'center',
   },
   buttonBox: {
@@ -231,7 +285,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#c2c2c2',
   },
-  productList: {
-    flexDirection: 'row',
+  productGrid: {
+    paddingHorizontal: 30,
+    paddingVertical: 0,
   },
 });

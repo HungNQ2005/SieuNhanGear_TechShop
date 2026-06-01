@@ -69,6 +69,7 @@ export default {
     TEXT_HOME_HERO_STATUS_4: 'Năm',
     TEXT_HOME_HERO_STATUS_5: 'Bảo hành',
     TEXT_HOME_ADD_TO_CART: 'Thêm vào giỏ',
+    TEXT_HOME_EMPTY_PRODUCTS: 'Hiện tại không có sản phẩm nào.',
   },
 
   product: {

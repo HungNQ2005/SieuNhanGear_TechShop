@@ -5,6 +5,7 @@ import { getProducts } from '../services/api'; // API giả định, sau này s�
 import TextIntl from '../common/TextIntl';
 import {
     TEXT_HOME_HOT_PRODUCT,
+    TEXT_HOME_EMPTY_PRODUCTS,
 } from '../constants/i18nKeys';
 
 export default function HotProductCard() {
@@ -49,12 +50,12 @@ export default function HotProductCard() {
     if (!hotProduct) {
         return (
             <View style={styles.card}>
-                <Text style={styles.errorText}>No products available</Text>
+                <TextIntl tx={TEXT_HOME_EMPTY_PRODUCTS} style={styles.emptyText} />
             </View>
         );
     }
 
-    const formattedPrice = hotProduct.price.toLocaleString('vi-VN') + ' ₫';
+    const formattedPrice = hotProduct.price.toLocaleString('vi-VN') + '₫';
 
     return (
         <View style={styles.card}>

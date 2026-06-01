@@ -69,6 +69,7 @@ export default {
     TEXT_HOME_HERO_STATUS_4: 'Year',
     TEXT_HOME_HERO_STATUS_5: 'Warranty',
     TEXT_HOME_ADD_TO_CART: 'Add to Cart',
+    TEXT_HOME_EMPTY_PRODUCTS: 'No products available at the moment.',
   },
 
   product: {

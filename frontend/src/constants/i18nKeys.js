@@ -32,6 +32,7 @@ export const TEXT_HOME_HERO_STATUS_3 = 'home.TEXT_HOME_HERO_STATUS_3';
 export const TEXT_HOME_HERO_STATUS_4 = 'home.TEXT_HOME_HERO_STATUS_4';
 export const TEXT_HOME_HERO_STATUS_5 = 'home.TEXT_HOME_HERO_STATUS_5';
 export const TEXT_HOME_ADD_TO_CART = 'home.TEXT_HOME_ADD_TO_CART';
+export const TEXT_HOME_EMPTY_PRODUCTS = 'home.TEXT_HOME_EMPTY_PRODUCTS';
 
 // ─── Product ──────────────────────────────────────────────────────────────────
 export const TEXT_PRODUCT_DESCRIPTION = 'product.TEXT_DESCRIPTION';
