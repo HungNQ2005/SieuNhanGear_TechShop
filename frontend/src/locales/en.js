@@ -59,7 +59,7 @@ export default {
     TEXT_HOME_HERO_STAMP: 'Genuine parts — Nationwide warranty',
     TEXT_HERO_TITLE: 'Upgrade Your\nDesktop & Laptop',
     TEXT_HERO_SUBTITLE: 'Over 10,000 genuine components from Intel, AMD, NVIDIA,\nASUS, MSI, and other leading global brands. Free configuration\nconsultation.',
-    TEXT_FEATURED_PRODUCTS: 'Featured products',
+    TEXT_FEATURED_PRODUCTS: 'Products',
     TEXT_HOME_HERO_SHOPPING_BUTTON: 'Shop Now',
     TEXT_HOME_HERO_BUILD_CONFIG_BUTTON: 'Build Your Config',
     TEXT_HOME_HOT_PRODUCT: 'Hot Product',
@@ -70,6 +70,9 @@ export default {
     TEXT_HOME_HERO_STATUS_5: 'Warranty',
     TEXT_HOME_ADD_TO_CART: 'Add to Cart',
     TEXT_HOME_EMPTY_PRODUCTS: 'No products available at the moment.',
+    TEXT_HOME_CATEGORY: 'Category',
+    TEXT_HOME_EXPLORE_BY_CATEGORY: 'Explore by Category',
+    TEXT_HOME_FEATURED_ALL_PRODUCTS: 'All',
   },
 
   product: {

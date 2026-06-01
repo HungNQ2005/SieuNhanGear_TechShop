@@ -33,6 +33,9 @@ export const TEXT_HOME_HERO_STATUS_4 = 'home.TEXT_HOME_HERO_STATUS_4';
 export const TEXT_HOME_HERO_STATUS_5 = 'home.TEXT_HOME_HERO_STATUS_5';
 export const TEXT_HOME_ADD_TO_CART = 'home.TEXT_HOME_ADD_TO_CART';
 export const TEXT_HOME_EMPTY_PRODUCTS = 'home.TEXT_HOME_EMPTY_PRODUCTS';
+export const TEXT_HOME_CATEGORY = 'home.TEXT_HOME_CATEGORY';
+export const TEXT_HOME_EXPLORE_BY_CATEGORY = 'home.TEXT_HOME_EXPLORE_BY_CATEGORY';
+export const TEXT_HOME_FEATURED_ALL_PRODUCTS = 'home.TEXT_HOME_FEATURED_ALL_PRODUCTS';
 
 // ─── Product ──────────────────────────────────────────────────────────────────
 export const TEXT_PRODUCT_DESCRIPTION = 'product.TEXT_DESCRIPTION';

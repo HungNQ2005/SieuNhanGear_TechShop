@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { View, ScrollView, StyleSheet, TouchableOpacity, Alert, Text, ActivityIndicator } from 'react-native';
 import Header from '../../common/Header';
 import Footer from '../../common/Footer';
@@ -9,6 +9,9 @@ import ProductCard from '../../common/ProductCard';
 import { useCart } from '../../store/CartContext';
 import api from '../../services/api';
 import {
+  TEXT_HOME_FEATURED_ALL_PRODUCTS,
+  TEXT_HOME_CATEGORY,
+  TEXT_HOME_EXPLORE_BY_CATEGORY,
   TEXT_HOME_EMPTY_PRODUCTS,
   TEXT_HOME_HERO_STAMP,
   TEXT_HOME_HERO_TITLE,
@@ -34,6 +37,7 @@ export default function HomeScreen() {
   const scrollViewRef = useRef(null);
   const productsSectionRef = useRef(null);
   const [productsSectionY, setProductsSectionY] = useState(0);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
   useEffect(() => {
     api.get('/products')
@@ -62,6 +66,17 @@ export default function HomeScreen() {
     setProductsSectionY(y);
   };
 
+  const handleSelectCategory = (categoryId) => {
+    setSelectedCategoryId(categoryId === selectedCategoryId ? null : categoryId);
+    setTimeout(() => {
+    }, 100);
+  };
+
+  const filteredProducts = useMemo(() => {
+    if (!selectedCategoryId) return products;
+    return products.filter(p => String(p.category_id) === selectedCategoryId);
+  }, [products, selectedCategoryId]);
+
   const IconLightning = () => (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0066ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M13 2L4 14H12L11 22L20 10H12L13 2Z" />
@@ -71,6 +86,13 @@ export default function HomeScreen() {
   const IconPointToRight = () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M5 12h14M12 5l7 7-7 7" />
+    </svg>
+  );
+
+  const IconSearch = () => (
+    <svg width="50" height="auto" viewBox="0 0 24 24" fill="none" stroke="#9c9c9c" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="11" cy="11" r="8" />
+      <line x1="21" y1="21" x2="16.65" y2="16.65" />
     </svg>
   );
 
@@ -123,29 +145,41 @@ export default function HomeScreen() {
           </View>
         </Banner>
 
-        <TextIntl tx={TEXT_HOME_FEATURED_PRODUCTS} style={styles.sectionTitle} />
+        <View style={styles.categoryLine}>
+          <View>
+            <TextIntl tx={TEXT_HOME_CATEGORY} style={styles.categoryLine1} />
+            <TextIntl tx={TEXT_HOME_EXPLORE_BY_CATEGORY} style={styles.categoryLine2} />
+          </View>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryScroll}>
+            {/* Nút "Tất cả" */}
+            <TouchableOpacity
+              style={[styles.categoryChip, !selectedCategoryId && styles.categoryChipActive]} onPress={() => handleSelectCategory(null)}>
+              <TextIntl tx={TEXT_HOME_FEATURED_ALL_PRODUCTS} style={[styles.categoryChipText, !selectedCategoryId && styles.categoryChipTextActive]} />
+            </TouchableOpacity>
+            {/* Các category từ API */}
+            {categories.map(cat => (
+              <TouchableOpacity key={cat.id} style={[styles.categoryChip, selectedCategoryId === cat.id && styles.categoryChipActive]} onPress={() => handleSelectCategory(cat.id)}>
+                <Text style={[styles.categoryChipText, selectedCategoryId === cat.id && styles.categoryChipTextActive]}>
+                  {cat.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
 
         <View ref={productsSectionRef} onLayout={onProductsLayout}>
+          <TextIntl tx={TEXT_HOME_FEATURED_PRODUCTS} style={styles.sectionTitle} />
           {loadProducts ? (
             <ActivityIndicator size="large" color="#0066ff" style={styles.loader} />
-          ) : products.length === 0 ? (
+          ) : filteredProducts.length === 0 ? (
             <View style={styles.emptyContainer}>
+              <IconSearch />
               <TextIntl tx={TEXT_HOME_EMPTY_PRODUCTS} style={styles.emptyText} />
             </View>
           ) : (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ gap: 12, paddingHorizontal: 16 }}
-              style={styles.productGrid}
-            >
-              {products.map(product => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  manufacturers={manufacturers}
-                  categories={categories}
-                />
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12, paddingHorizontal: 16 }} style={styles.productGrid}>
+              {filteredProducts.map(product => (
+                <ProductCard key={product.id} product={product} manufacturers={manufacturers} categories={categories} onAddToCart={addToCart} />
               ))}
             </ScrollView>
           )}
@@ -231,7 +265,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   emptyText: {
-    color: 'blue',
+    color: '#7d7d7d',
     fontSize: 20,
     textAlign: 'center',
   },
@@ -288,5 +322,50 @@ const styles = StyleSheet.create({
   productGrid: {
     paddingHorizontal: 30,
     paddingVertical: 0,
+  },
+  emptyContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 12,
+    paddingVertical: 30,
+  },
+  categoryLine: {
+    marginVertical: 16,
+    paddingHorizontal: 50,
+  },
+  categoryScroll: {
+    gap: 12,
+    paddingVertical: 8,
+  },
+  categoryChip: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 30,
+    backgroundColor: '#f1f5f9',
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+  },
+  categoryChipActive: {
+    backgroundColor: '#0066ff',
+    borderColor: '#0066ff',
+  },
+  categoryChipText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#334155',
+  },
+  categoryChipTextActive: {
+    color: '#ffffff',
+  },
+  categoryLine1: {
+    textTransform: 'uppercase',
+    fontSize: 12,
+    color: '#0066ff',
+    fontWeight: '700',
+  },
+  categoryLine2: {
+    fontSize: 30,
+    fontWeight: '700',
+    color: '#0F172A',
   },
 });

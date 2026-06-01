@@ -59,7 +59,7 @@ export default {
     TEXT_HOME_HERO_STAMP: 'Linh kiện chính hãng — Bảo hành toàn quốc',
     TEXT_HERO_TITLE: 'Nâng cấp\nPC & Laptop\ncủa bạn',
     TEXT_HERO_SUBTITLE: 'Hơn 10.000 linh kiện chính hãng từ Intel, AMD,\nNVIDIA, ASUS, MSI và các thương hiệu hàng đầu thế\ngiới. Tư vấn cấu hình miễn phí.',
-    TEXT_FEATURED_PRODUCTS: 'Sản phẩm nổi bật',
+    TEXT_FEATURED_PRODUCTS: 'Sản phẩm',
     TEXT_HOME_HERO_SHOPPING_BUTTON: 'Mua Sắm Ngay',
     TEXT_HOME_HERO_BUILD_CONFIG_BUTTON: 'Xây Dựng Cấu Hình',
     TEXT_HOME_HOT_PRODUCT: 'Sản phẩm hot',
@@ -70,6 +70,9 @@ export default {
     TEXT_HOME_HERO_STATUS_5: 'Bảo hành',
     TEXT_HOME_ADD_TO_CART: 'Thêm vào giỏ',
     TEXT_HOME_EMPTY_PRODUCTS: 'Hiện tại không có sản phẩm nào.',
+    TEXT_HOME_CATEGORY: 'Danh mục',
+    TEXT_HOME_EXPLORE_BY_CATEGORY: 'Khám phá theo danh mục',
+    TEXT_HOME_FEATURED_ALL_PRODUCTS: 'Tất cả',
   },
 
   product: {
