@@ -38,17 +38,55 @@ export default function HomeScreen() {
   const productsSectionRef = useRef(null);
   const [productsSectionY, setProductsSectionY] = useState(0);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    setError(null);
+    setLoadProducts(true);
+
+    function validateProduct(product) {
+      if (!product || typeof product !== 'object') return false;
+      if (!product.id || !product.name) return false;
+      if (typeof product.price !== 'number' || product.price < 0) return false;
+      if (typeof product.rating !== 'number' || product.rating < 0 || product.rating > 5) return false;
+      return true;
+    }
+
     api.get('/products')
-      .then(res => setProducts(res.data))
-      .catch(err => console.error('Failed to fetch products:', err))
+      .then(res => {
+        const validProducts = res.data.filter(validateProduct);
+        setProducts(validProducts);
+      })
+      .catch(err => {
+        setError('TEXT_HOME_ERROR_FETCH_PRODUCTS');
+        logger.error('Failed to fetch products', err);
+      })
       .finally(() => setLoadProducts(false));
   }, []);
 
+  if (error) {
+    return <View><TextIntl tx={error} /></View>;
+  }
+
   useEffect(() => {
-    api.get('/manufacturers').then(res => setManufacturers(res.data));
-    api.get('/categories').then(res => setCategories(res.data));
+    api.get('/manufacturers')
+      .then(res => {
+        const data = Array.isArray(res.data) ? res.data : [];
+        setManufacturers(data);
+      })
+      .catch(err => {
+        logger.error('Failed to fetch manufacturers', err);
+        setManufacturers([]);
+      });
+    api.get('/categories')
+      .then(res => {
+        const data = Array.isArray(res.data) ? res.data : [];
+        setCategories(data);
+      })
+      .catch(err => {
+        logger.error('Failed to fetch categories', err);
+        setCategories([]);
+      });
   }, []);
 
   const scrollToProducts = () => {

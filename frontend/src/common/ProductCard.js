@@ -8,8 +8,8 @@ import {
 export default function ProductCard({ product, manufacturers = [], categories = [], onAddToCart }) {
   if (!product) return null;
 
-  const manufacturer = manufacturers.find(m => String(m.id) === String(product.manufacturer_id));
-  const category = categories.find(c => String(c.id) === String(product.category_id));
+  const manufacturer = manufacturers?.find(m => m && String(m.id) === String(product?.manufacturer_id)) || null;
+  const category = categories?.find(c => c && String(c.id) === String(product?.category_id)) || null;
 
   const formatPrice = (price) =>
     price?.toLocaleString('vi-VN') + 'đ';

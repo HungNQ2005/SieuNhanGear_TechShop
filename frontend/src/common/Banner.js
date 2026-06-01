@@ -7,20 +7,24 @@ export default function Banner({ children, style }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        let isMounted = true;
+
         const fetchBanner = async () => {
             try {
                 const response = await getBanners();
-                const banner = response.data[0];
-                if (banner && banner.img_URL) {
-                    setBannerUrl(`http://localhost:3521/${banner.img_URL}`);
+                if (isMounted) { // Check before state update
+                    setBannerUrl(`http://localhost:3521/${response.data[0].img_URL}`);
                 }
-            } catch (error) {
-                console.error('Failed to load banner:', error);
             } finally {
-                setLoading(false);
+                if (isMounted) setLoading(false);
             }
         };
+
         fetchBanner();
+
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     if (loading) {

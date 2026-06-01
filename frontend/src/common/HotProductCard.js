@@ -30,7 +30,7 @@ export default function HotProductCard() {
                     setHotProduct(topRatedProducts[randomIndex]);
                 }
             } catch (error) {
-                console.error('Failed to fetch hot product:', error);
+
             } finally {
                 setLoading(false);
             }
