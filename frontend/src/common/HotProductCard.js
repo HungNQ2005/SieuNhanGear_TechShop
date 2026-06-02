@@ -1,4 +1,3 @@
-// HotProductCard.js
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { getProducts } from '../services/api'; // API giả định, sau này sẽ thay đổi dựa vào backend chính thức

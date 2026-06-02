@@ -1,4 +1,4 @@
-import "./global.css";
+import "./src/globals.css";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView, StyleSheet, Platform, View } from 'react-native';

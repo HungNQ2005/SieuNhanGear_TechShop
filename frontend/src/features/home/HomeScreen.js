@@ -325,6 +325,11 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 5,
+    shadowColor: '#0066ff',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 25,
+    elevation: 5,
   },
   buildConfigButton: {
     backgroundColor: 'transparent',

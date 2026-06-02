@@ -56,6 +56,6 @@ const styles = StyleSheet.create({
     },
     overlay: {
         ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(7, 21, 48, 0.6)',
+        backgroundColor: 'rgba(7, 21, 48, 0.7)',
     },
 });
