@@ -1,4 +1,3 @@
-// Header.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
 import { useLocalization } from '../providers/LocalizationProvider';

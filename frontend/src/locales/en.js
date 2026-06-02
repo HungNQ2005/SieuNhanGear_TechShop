@@ -73,6 +73,7 @@ export default {
     TEXT_HOME_CATEGORY: 'Category',
     TEXT_HOME_EXPLORE_BY_CATEGORY: 'Explore by Category',
     TEXT_HOME_FEATURED_ALL_PRODUCTS: 'All',
+    TEXT_HOME_PRODUCTS_COUNT: 'products',
   },
 
   product: {

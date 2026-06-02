@@ -6,9 +6,12 @@ import TextIntl from '../../common/TextIntl';
 import Banner from '../../common/Banner';
 import HotProductCard from '../../common/HotProductCard';
 import ProductCard from '../../common/ProductCard';
+import FlashSale from '../../common/FlashSale';
 import { useCart } from '../../store/CartContext';
+import { useLocalization } from '../../providers/LocalizationProvider';
 import api from '../../services/api';
 import {
+  TEXT_HOME_PRODUCTS_COUNT,
   TEXT_HOME_FEATURED_ALL_PRODUCTS,
   TEXT_HOME_CATEGORY,
   TEXT_HOME_EXPLORE_BY_CATEGORY,
@@ -39,6 +42,7 @@ export default function HomeScreen() {
   const [productsSectionY, setProductsSectionY] = useState(0);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [error, setError] = useState(null);
+  const { locale, t } = useLocalization();
 
   useEffect(() => {
     setError(null);
@@ -115,6 +119,39 @@ export default function HomeScreen() {
     return products.filter(p => String(p.category_id) === selectedCategoryId);
   }, [products, selectedCategoryId]);
 
+  const categoriesWithDetails = useMemo(() => {
+    if (!categories.length || !products.length) return [];
+    return categories.map(cat => {
+      const productCount = products.filter(p => String(p.category_id) === String(cat.id)).length;
+      const description = locale === 'vi' ? cat.description_vi : cat.description_en;
+      return {
+        ...cat,
+        description: description || '',
+        productCount,
+      };
+    });
+  }, [categories, products, locale]);
+
+  const getCategoryIcon = (categoryId, categoryName) => {
+    // Trả về component SVG tương ứng
+    // Dưới đây là một số icon mẫu, bạn có thể thay bằng icon phù hợp
+    const iconProps = { width: 32, height: 32, viewBox: "0 0 24 24", fill: "none", stroke: "#0066ff", strokeWidth: 1.5 };
+    switch (Number(categoryId)) {
+      case 1:
+        return <svg {...iconProps}><rect x="4" y="4" width="16" height="16" rx="2" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="16" y1="2" x2="16" y2="6" /></svg>;
+      case 2:
+        return <svg {...iconProps}><rect x="4" y="9" width="16" height="10" rx="1" /><line x1="8" y1="13" x2="16" y2="13" /><line x1="8" y1="17" x2="12" y2="17" /></svg>;
+      case 3:
+        return <svg {...iconProps}><rect x="2" y="8" width="20" height="8" rx="1" /><line x1="6" y1="8" x2="6" y2="6" /><line x1="18" y1="8" x2="18" y2="6" /></svg>;
+      case 4:
+        return <svg {...iconProps}><rect x="4" y="6" width="16" height="12" rx="1" /><path d="M8 10h8M8 14h5" /></svg>;
+      case 5:
+        return <svg {...iconProps}><rect x="3" y="6" width="18" height="12" rx="1" /><circle cx="12" cy="12" r="1.5" /></svg>;
+      default:
+        return <svg {...iconProps}><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>;
+    }
+  };
+
   const IconLightning = () => (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0066ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M13 2L4 14H12L11 22L20 10H12L13 2Z" />
@@ -184,21 +221,55 @@ export default function HomeScreen() {
         </Banner>
 
         <View style={styles.categoryLine}>
-          <View>
+          <View style={styles.categoryHeader}>
             <TextIntl tx={TEXT_HOME_CATEGORY} style={styles.categoryLine1} />
             <TextIntl tx={TEXT_HOME_EXPLORE_BY_CATEGORY} style={styles.categoryLine2} />
           </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryScroll}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.categoryScrollContainer}
+          >
             {/* Nút "Tất cả" */}
             <TouchableOpacity
-              style={[styles.categoryChip, !selectedCategoryId && styles.categoryChipActive]} onPress={() => handleSelectCategory(null)}>
-              <TextIntl tx={TEXT_HOME_FEATURED_ALL_PRODUCTS} style={[styles.categoryChipText, !selectedCategoryId && styles.categoryChipTextActive]} />
+              style={[styles.categoryCard, !selectedCategoryId && styles.categoryCardActive]}
+              onPress={() => handleSelectCategory(null)}
+              activeOpacity={0.8}
+            >
+              <View style={styles.categoryIconWrapper}>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0066ff" strokeWidth="1.5">
+                  <rect x="3" y="3" width="7" height="7" rx="1" />
+                  <rect x="14" y="3" width="7" height="7" rx="1" />
+                  <rect x="3" y="14" width="7" height="7" rx="1" />
+                  <rect x="14" y="14" width="7" height="7" rx="1" />
+                </svg>
+              </View>
+              <Text style={styles.categoryCardTitle}>
+                <TextIntl tx={TEXT_HOME_FEATURED_ALL_PRODUCTS} />
+              </Text>
+              <Text style={styles.categoryCardCount}>
+                {products.length} <TextIntl tx={TEXT_HOME_PRODUCTS_COUNT} />
+              </Text>
             </TouchableOpacity>
+
             {/* Các category từ API */}
-            {categories.map(cat => (
-              <TouchableOpacity key={cat.id} style={[styles.categoryChip, selectedCategoryId === cat.id && styles.categoryChipActive]} onPress={() => handleSelectCategory(cat.id)}>
-                <Text style={[styles.categoryChipText, selectedCategoryId === cat.id && styles.categoryChipTextActive]}>
-                  {cat.name}
+            {categoriesWithDetails.map(cat => (
+              <TouchableOpacity
+                key={cat.id}
+                style={[styles.categoryCard, selectedCategoryId === cat.id && styles.categoryCardActive]}
+                onPress={() => handleSelectCategory(cat.id)}
+                activeOpacity={0.8}
+              >
+                <View style={styles.categoryIconWrapper}>
+                  {getCategoryIcon(cat.id, cat.name)}
+                </View>
+                <Text style={styles.categoryCardTitle}>{cat.name}</Text>
+                <Text style={styles.categoryCardDesc} numberOfLines={1}>
+                  {cat.description}
+                </Text>
+                <Text style={styles.categoryCardCount}>
+                  {cat.productCount} {cat.productCount === 1 ? '' : ''}
+                  <TextIntl tx={TEXT_HOME_PRODUCTS_COUNT} />
                 </Text>
               </TouchableOpacity>
             ))}
@@ -222,6 +293,15 @@ export default function HomeScreen() {
             </ScrollView>
           )}
         </View>
+
+        <FlashSale
+          onViewAll={() => {
+            console.log('Xem tất cả deal');
+          }}
+          onAddToCart={(product) => {
+            addToCart(product);
+          }}
+        />
 
         <View>
           <Footer />
@@ -373,8 +453,11 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
   },
   categoryLine: {
-    marginVertical: 16,
-    paddingHorizontal: 50,
+    marginVertical: 24,
+    paddingHorizontal: 45,
+  },
+  categoryHeader: {
+    marginBottom: 16,
   },
   categoryScroll: {
     gap: 12,
@@ -405,10 +488,63 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#0066ff',
     fontWeight: '700',
+    letterSpacing: 0.5,
   },
   categoryLine2: {
-    fontSize: 30,
+    fontSize: 28,
+    fontWeight: '800',
+    color: '#0F172A',
+    marginTop: 4,
+  },
+  categoryScrollContainer: {
+    gap: 16,
+    paddingVertical: 8,
+    paddingRight: 16,
+  },
+  categoryCard: {
+    width: 160,
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: '#eef2f6',
+    alignItems: 'center',
+  },
+  categoryCardActive: {
+    borderColor: '#0066ff',
+    backgroundColor: '#f0f7ff',
+    shadowOpacity: 0.1,
+  },
+  categoryIconWrapper: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#eef2ff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
+  categoryCardTitle: {
+    fontSize: 16,
     fontWeight: '700',
     color: '#0F172A',
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+  categoryCardDesc: {
+    fontSize: 12,
+    color: '#5b677b',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  categoryCardCount: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#0066ff',
   },
 });
