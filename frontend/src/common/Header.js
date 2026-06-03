@@ -124,8 +124,8 @@ export default function Header() {
     if (dropdownVisible && categories.length === 0) {
       setLoadingDropdown(true);
       Promise.all([
-        api.get(ROUTES.GETCATEGORY),
-        api.get(ROUTES.GETMANUFACTURER),
+        api.get(ROUTES.GET_CATEGORY),
+        api.get(ROUTES.GET_MANUFACTURER),
       ])
         .then(([catRes, manRes]) => {
           setCategories(Array.isArray(catRes.data) ? catRes.data : []);
