@@ -1,23 +1,20 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import {
-    View,
-    Text,
-    ScrollView,
-    TouchableOpacity,
-    StyleSheet,
-    Image,
-    ActivityIndicator,
-} from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, ActivityIndicator, } from 'react-native';
+import TextIntl from './TextIntl';
 import api from '../services/api';
+import {
+    TEXT_HOME_FLASH_SALE_SUBTITLE,
+    TEXT_HOME_FLASH_SALE_BUY_NOW,
+    TEXT_HOME_FLASH_SALE_ALL_DEAL,
+    TEXT_HOME_FLASH_SALE_SOLD,
+} from '../constants/i18nKeys';
 
 const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 const formatPrice = (price) => price?.toLocaleString('vi-VN') + '₫';
 
-// Đồng hồ đếm ngược chia tách thành các ô Block màu trắng như hình mẫu
 const CountdownTimer = () => {
-    // Để cho giống mẫu đếm ngược ngắn hạn, đặt target 2 tiếng hoặc dùng mặc định của bạn
     const targetTime = useMemo(() => new Date().getTime() + 2 * 60 * 60 * 1000, []);
-    const [timeLeft, setTimeLeft] = useState({ days: 3,hours: 0, minutes: 0, seconds: 0 });
+    const [timeLeft, setTimeLeft] = useState({ days: 3, hours: 0, minutes: 0, seconds: 0 });
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -42,7 +39,7 @@ const CountdownTimer = () => {
 
     return (
         <View style={styles.timerContainer}>
-            {/* Giả định thêm ô ngày nếu cần, hoặc chạy 3 ô Giờ - Phút - Giây như flash sale thông thường */}
+            {/* Timer giả định */}
             <View style={styles.timeBlock}><Text style={styles.timeText}>02</Text></View>
             <View style={styles.timeBlock}><Text style={styles.timeText}>{pad(timeLeft.hours)}</Text></View>
             <View style={styles.timeBlock}><Text style={styles.timeText}>{pad(timeLeft.minutes)}</Text></View>
@@ -100,11 +97,11 @@ export default function FlashSale({ onAddToCart, onViewAll }) {
                     <CountdownTimer />
                     <View style={styles.titleContainer}>
                         <Text style={styles.title}>⚡ Flash Sale Gaming</Text>
-                        <Text style={styles.subtitle}>Deal giới hạn dành cho gaming gear</Text>
+                        <TextIntl tx={TEXT_HOME_FLASH_SALE_SUBTITLE} style={styles.subtitle} />
                     </View>
                 </View>
                 <TouchableOpacity style={styles.viewAllButton} onPress={onViewAll}>
-                    <Text style={styles.viewAllText}>Xem tất cả deal</Text>
+                    <TextIntl tx={TEXT_HOME_FLASH_SALE_ALL_DEAL} style={styles.viewAllText} />
                 </TouchableOpacity>
             </View>
 
@@ -150,15 +147,18 @@ export default function FlashSale({ onAddToCart, onViewAll }) {
                                 <View style={styles.progressContainer}>
                                     <View style={[styles.progressBar, { width: `${progressWidth}%` }]} />
                                 </View>
-                                <Text style={styles.soldText}>Đã bán: {item.sold}</Text>
 
+                                <View style={styles.soldText}>
+                                    <TextIntl tx={TEXT_HOME_FLASH_SALE_SOLD} style={styles.soldText} />
+                                    <Text style={styles.soldText}>{item.sold}</Text>
+                                </View>
                                 {/* Nút Mua Ngay */}
                                 <TouchableOpacity
                                     style={styles.buyButton}
                                     onPress={() => onAddToCart?.(item)}
                                     activeOpacity={0.8}
                                 >
-                                    <Text style={styles.buyButtonText}>Mua ngay</Text>
+                                    <TextIntl tx={TEXT_HOME_FLASH_SALE_BUY_NOW} style={styles.buyButtonText} />
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
-        paddingHorizontal: 16,
+        paddingHorizontal: 20,
         marginBottom: 16,
     },
     headerLeft: {
@@ -309,6 +309,8 @@ const styles = StyleSheet.create({
         borderRadius: 3,
     },
     soldText: {
+        flexDirection: 'row',
+        gap: 4,
         fontSize: 10,
         color: '#64748B',
         marginTop: 4,

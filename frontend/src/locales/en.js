@@ -74,6 +74,11 @@ export default {
     TEXT_HOME_EXPLORE_BY_CATEGORY: 'Explore by Category',
     TEXT_HOME_FEATURED_ALL_PRODUCTS: 'All',
     TEXT_HOME_PRODUCTS_COUNT: 'products',
+    TEXT_HOME_FLASH_SALE_SUBTITLE: 'Limited deals for gaming gear',
+    TEXT_HOME_FLASH_SALE_BUY_NOW: 'Buy Now',
+    TEXT_HOME_FLASH_SALE_ALL_DEAL: 'View all deals',
+    TEXT_HOME_FLASH_SALE_SOLD: 'Sold:',
+    TEXT_HOME_NEWS_SUBTITLE: 'Tech News',
   },
 
   product: {

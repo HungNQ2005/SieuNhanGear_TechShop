@@ -7,6 +7,7 @@ import Banner from '../../common/Banner';
 import HotProductCard from '../../common/HotProductCard';
 import ProductCard from '../../common/ProductCard';
 import FlashSale from '../../common/FlashSale';
+import News from '../../common/News';
 import { useCart } from '../../store/CartContext';
 import { useLocalization } from '../../providers/LocalizationProvider';
 import api from '../../services/api';
@@ -302,6 +303,8 @@ export default function HomeScreen() {
             addToCart(product);
           }}
         />
+
+        <News />
 
         <View>
           <Footer />
