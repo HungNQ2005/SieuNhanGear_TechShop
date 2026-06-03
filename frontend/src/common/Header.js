@@ -1,4 +1,3 @@
-Header.js
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, Modal, ScrollView, ActivityIndicator } from 'react-native';
 import { useLocalization } from '../providers/LocalizationProvider';
