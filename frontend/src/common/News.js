@@ -4,7 +4,7 @@ import TextIntl from './TextIntl';
 import {
     TEXT_HOME_NEWS_SUBTITLE,
 } from '../constants/i18nKeys';
-// Mảng dữ liệu mẫu dựa theo hình ảnh bạn cung cấp
+
 const NEWS_DATA = [
     {
         id: '1',
@@ -32,7 +32,6 @@ const NEWS_DATA = [
 export default function News() {
     return (
         <View style={styles.container}>
-            {/* Header của mục Tin tức */}
             <View style={styles.headerRow}>
                 <View>
                     <TextIntl tx={TEXT_HOME_NEWS_SUBTITLE} style={styles.subTitle} />
@@ -50,10 +49,8 @@ export default function News() {
             >
                 {NEWS_DATA.map((item) => (
                     <View key={item.id} style={styles.card}>
-                        {/* Ảnh bài viết */}
                         <Image source={{ uri: item.image }} style={styles.cardImage} />
-
-                        {/* Nội dung bài viết */}
+    
                         <View style={styles.cardBody}>
                             <Text style={styles.cardMeta}>
                                 <Text style={styles.cardTag}>{item.tag}</Text>
@@ -65,7 +62,6 @@ export default function News() {
                                 {item.title}
                             </Text>
 
-                            {/* Nút Đọc thêm */}
                             <TouchableOpacity style={styles.readMoreBtn} activeOpacity={0.6}>
                                 <Text style={styles.readMoreText}>Đọc thêm →</Text>
                             </TouchableOpacity>
