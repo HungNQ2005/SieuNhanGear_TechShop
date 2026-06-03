@@ -1,5 +1,6 @@
 export const ROUTES = {
     BASE_API_URL: 'http://localhost:3521/',
+    ROOT: '/',
     HOME: '/home',
     GET_CATEGORY: '/categories',
     GET_MANUFACTURER: '/manufacturers',
