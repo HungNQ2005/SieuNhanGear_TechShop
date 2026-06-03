@@ -9,6 +9,12 @@ import HomeScreen from './src/features/home/HomeScreen';
 import Header from './src/common/Header';
 import Footer from './src/common/Footer';
 
+{/* path */}
+const ROUTES = {
+  ROOT: '/',
+  HOME: '/home',
+};
+
 export default function App() {
   return (
     <FilterProvider>
@@ -20,10 +26,10 @@ export default function App() {
                 <Header />
               </View>
               <View style={{ flex: 1 }}>
-                {/*Các path để dẫn đến các trang nội dung.*/}
+                {/* Set page cho path */}
                 <Routes>
-                  <Route path="/" element={<HomeScreen />} />
-                  <Route path="/home" element={<HomeScreen />} />
+                  <Route path={ROUTES.ROOT} element={<HomeScreen />} />
+                  <Route path={ROUTES.HOME} element={<HomeScreen />} />
                 </Routes>
               </View>
               <StatusBar style={Platform.OS === 'ios' ? 'dark' : 'light'} />

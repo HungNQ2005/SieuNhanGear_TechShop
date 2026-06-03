@@ -1,8 +1,8 @@
-Header.js
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, Modal, ScrollView, ActivityIndicator } from 'react-native';
 import { useLocalization } from '../providers/LocalizationProvider';
 import { useFilter } from '../store/FilterContext';
+import { useNavigate } from 'react-router-dom';
 import TextIntl from './TextIntl';
 import api from '../services/api';
 import {
@@ -102,6 +102,7 @@ const IconBox = () => (
 // ─── Header Component ─────────────────────────────────────────────────────
 export default function Header() {
   const { t, toggleLocale } = useLocalization();
+  const navigate = useNavigate();
   const {
     selectedCategoryId, setSelectedCategoryId,
     selectedManufacturerId, setSelectedManufacturerId,
@@ -153,13 +154,19 @@ export default function Header() {
     setDropdownVisible(false);
   };
 
+  const handleLogoPress = () => {
+    clearFilters();
+    setSearchQuery('');
+    navigate('/home');
+  };
+
   return (
     <View style={styles.headerContainer}>
       <View style={styles.innerContainer}>
         <View style={styles.topRow}>
 
           {/* Logo */}
-          <Pressable onPress={() => { }} style={styles.logoButton}>
+          <Pressable onPress={handleLogoPress} style={styles.logoButton}>
             <View style={styles.logoIconBox}>
               <IconBox />
             </View>
