@@ -1,13 +1,14 @@
 import axios from 'axios';
+import { ROUTES } from '../constants/routes' 
 
 const api = axios.create({
-  baseURL: 'http://localhost:3521',
+  baseURL: (ROUTES.BASE_API_URL),
   timeout: 10000,
 });
 
-export const getBanners = () => api.get('/banners');
-export const getProducts = () => api.get('/products');
-export const getCategories = () => api.get('/categories');
-export const getManufacturers = () => api.get('/manufacturers');
+export const getBanners = () => api.get(ROUTES.GET_BANNER);
+export const getProducts = () => api.get(ROUTES.GET_PRODUCT);
+export const getCategories = () => api.get(ROUTES.GET_CATEGORY);
+export const getManufacturers = () => api.get(ROUTES.GET_MANUFACTURER);
 
 export default api;

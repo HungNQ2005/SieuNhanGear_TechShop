@@ -1,6 +1,7 @@
 import React from 'react';
 import TextIntl from '../common/TextIntl';
 import { View, Text, Image, TouchableOpacity, StyleSheet, } from 'react-native';
+import { ROUTES } from '../constants/routes';
 import {
   TEXT_HOME_ADD_TO_CART
 } from '../constants/i18nKeys';
@@ -38,7 +39,7 @@ export default function ProductCard({ product, manufacturers = [], categories = 
       <View style={styles.imageContainer}>
         {product.img_URL ? (
           <Image
-            source={{ uri: `http://localhost:3521/${product.img_URL}` }}
+            source={{ uri: `${ROUTES.BASE_API_URL}${product.img_URL}` }}
             style={styles.image}
             resizeMode="cover"
           />

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, ActivityIndicator, } from 'react-native';
+import { ROUTES } from '../constants/routes';
 import TextIntl from './TextIntl';
 import api from '../services/api';
 import {
@@ -121,7 +122,7 @@ export default function FlashSale({ onAddToCart, onViewAll }) {
                                 <Image
                                     source={
                                         item.img_URL
-                                            ? { uri: `http://localhost:3521/${item.img_URL}` }
+                                            ? { uri: `${ROUTES.BASE_API_URL}${item.img_URL}` }
                                             : require('../../assets/placeholder.png')
                                     }
                                     style={styles.productImage}

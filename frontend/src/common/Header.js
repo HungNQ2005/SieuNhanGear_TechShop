@@ -3,6 +3,7 @@ import { View, Text, TextInput, Pressable, StyleSheet, Modal, ScrollView, Activi
 import { useLocalization } from '../providers/LocalizationProvider';
 import { useFilter } from '../store/FilterContext';
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../constants/routes';
 import TextIntl from './TextIntl';
 import api from '../services/api';
 import {
@@ -123,8 +124,8 @@ export default function Header() {
     if (dropdownVisible && categories.length === 0) {
       setLoadingDropdown(true);
       Promise.all([
-        api.get('/categories'),
-        api.get('/manufacturers'),
+        api.get(ROUTES.GETCATEGORY),
+        api.get(ROUTES.GETMANUFACTURER),
       ])
         .then(([catRes, manRes]) => {
           setCategories(Array.isArray(catRes.data) ? catRes.data : []);
@@ -157,7 +158,7 @@ export default function Header() {
   const handleLogoPress = () => {
     clearFilters();
     setSearchQuery('');
-    navigate('/home');
+    navigate(ROUTES.HOME);
   };
 
   return (
