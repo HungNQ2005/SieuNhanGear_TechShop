@@ -5,15 +5,10 @@ import { SafeAreaView, StyleSheet, Platform, View } from 'react-native';
 import { LocalizationProvider } from './src/providers/LocalizationProvider';
 import { CartProvider } from './src/store/CartContext';
 import { FilterProvider } from './src/store/FilterContext';
+import { ROUTES } from './src/constants/routes'
 import HomeScreen from './src/features/home/HomeScreen';
 import Header from './src/common/Header';
 import Footer from './src/common/Footer';
-
-{/* path */}
-const ROUTES = {
-  ROOT: '/',
-  HOME: '/home',
-};
 
 export default function App() {
   return (
