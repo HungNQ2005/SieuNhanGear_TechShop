@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
+Header.js
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, TextInput, Pressable, StyleSheet, Modal, ScrollView, ActivityIndicator } from 'react-native';
 import { useLocalization } from '../providers/LocalizationProvider';
+import { useFilter } from '../store/FilterContext';
+import TextIntl from './TextIntl';
+import api from '../services/api';
 import {
   TEXT_APP_TITLE,
   TEXT_CATEGORIES_LABEL,
@@ -14,6 +18,9 @@ import {
   TEXT_CHANGE_LANGUAGE,
   TEXT_ACCOUNT_LABEL,
   TEXT_CART_SUBLABEL,
+  TEXT_HOME_DROPDOWN_ALL_PRODUCT,
+  TEXT_HOME_DROPDOWN_CATEGORY,
+  TEXT_HOME_DROPDOWN_MANUFACTURER,
 } from '../constants/i18nKeys';
 
 // ─── SVG Icons (giữ nguyên) ─────────────────────────────────────────────
@@ -95,8 +102,56 @@ const IconBox = () => (
 // ─── Header Component ─────────────────────────────────────────────────────
 export default function Header() {
   const { t, toggleLocale } = useLocalization();
+  const {
+    selectedCategoryId, setSelectedCategoryId,
+    selectedManufacturerId, setSelectedManufacturerId,
+    clearFilters
+  } = useFilter();
+
   const [searchQuery, setSearchQuery] = useState('');
   const [cartCount] = useState(0);
+
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [manufacturers, setManufacturers] = useState([]);
+  const [loadingDropdown, setLoadingDropdown] = useState(false);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
+  const categoryButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (dropdownVisible && categories.length === 0) {
+      setLoadingDropdown(true);
+      Promise.all([
+        api.get('/categories'),
+        api.get('/manufacturers'),
+      ])
+        .then(([catRes, manRes]) => {
+          setCategories(Array.isArray(catRes.data) ? catRes.data : []);
+          setManufacturers(Array.isArray(manRes.data) ? manRes.data : []);
+        })
+        .catch(err => console.error('Dropdown fetch error:', err))
+        .finally(() => setLoadingDropdown(false));
+    }
+  }, [dropdownVisible]);
+
+  const handleOpenDropdown = () => {
+    categoryButtonRef.current?.measure((x, y, width, height, pageX, pageY) => {
+      setDropdownPosition({ top: pageY + height + 4, left: pageX });
+    });
+    setDropdownVisible(true);
+  };
+
+  const handleSelectCategory = (id) => {
+    setSelectedCategoryId(id === selectedCategoryId ? null : id);
+    setSelectedManufacturerId(null); // bỏ filter manufacturer khi chọn category
+    setDropdownVisible(false);
+  };
+
+  const handleSelectManufacturer = (id) => {
+    setSelectedManufacturerId(id === selectedManufacturerId ? null : id);
+    setSelectedCategoryId(null); // bỏ filter category khi chọn manufacturer
+    setDropdownVisible(false);
+  };
 
   return (
     <View style={styles.headerContainer}>
@@ -112,11 +167,77 @@ export default function Header() {
           </Pressable>
 
           {/* Danh mục button */}
-          <Pressable style={styles.categoryButton}>
+          <Pressable
+            ref={categoryButtonRef}
+            style={styles.categoryButton}
+            onPress={handleOpenDropdown}
+          >
             <IconGrid />
             <Text style={styles.categoryText}>{t(TEXT_CATEGORIES_LABEL)}</Text>
             <IconChevronDown />
           </Pressable>
+
+          {/* Dropdown Modal */}
+          <Modal
+            visible={dropdownVisible}
+            transparent
+            animationType="fade"
+            onRequestClose={() => setDropdownVisible(false)}
+          >
+            <Pressable
+              style={styles.modalOverlay}
+              onPress={() => setDropdownVisible(false)}
+            >
+              <Pressable
+                style={[styles.dropdownBox, { top: dropdownPosition.top, left: dropdownPosition.left }]}
+                onPress={(e) => e.stopPropagation()}
+              >
+                {loadingDropdown ? (
+                  <ActivityIndicator color="#0066ff" style={{ padding: 24 }} />
+                ) : (
+                  <ScrollView style={{ maxHeight: 420 }} showsVerticalScrollIndicator={false}>
+
+                    {/* ── Tất cả ── */}
+                    <Pressable
+                      style={[styles.dropdownAllBtn, !selectedCategoryId && !selectedManufacturerId && styles.dropdownItemActive]}
+                      onPress={() => { clearFilters(); setDropdownVisible(false); }}
+                    >
+                      <TextIntl tx={TEXT_HOME_DROPDOWN_ALL_PRODUCT} style={styles.dropdownAllText} />
+                    </Pressable>
+
+                    {/* ── Nhóm Category ── */}
+                    <TextIntl tx={TEXT_HOME_DROPDOWN_CATEGORY} style={styles.dropdownGroupLabel} />
+                    {categories.map(cat => (
+                      <Pressable
+                        key={`cat-${cat.id}`}
+                        style={[styles.dropdownItem, selectedCategoryId === cat.id && styles.dropdownItemActive]}
+                        onPress={() => handleSelectCategory(cat.id)}
+                      >
+                        <Text style={[styles.dropdownItemText, selectedCategoryId === cat.id && styles.dropdownItemTextActive]}>
+                          {cat.name}
+                        </Text>
+                      </Pressable>
+                    ))}
+
+                    {/* ── Nhóm Manufacturer ── */}
+                    <TextIntl tx={TEXT_HOME_DROPDOWN_MANUFACTURER} style={styles.dropdownGroupLabel} />
+                    {manufacturers.map(man => (
+                      <Pressable
+                        key={`man-${man.id}`}
+                        style={[styles.dropdownItem, selectedManufacturerId === man.id && styles.dropdownItemActive]}
+                        onPress={() => handleSelectManufacturer(man.id)}
+                      >
+                        <Text style={[styles.dropdownItemText, selectedManufacturerId === man.id && styles.dropdownItemTextActive]}>
+                          {man.name}
+                        </Text>
+                      </Pressable>
+                    ))}
+
+                  </ScrollView>
+                )}
+              </Pressable>
+            </Pressable>
+          </Modal>
 
           {/* Search bar */}
           <View style={styles.searchContainer}>
@@ -218,8 +339,8 @@ const styles = StyleSheet.create({
   topRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 56, 
-    gap: 12, 
+    height: 56,
+    gap: 12,
   },
   // Logo
   logoButton: {
@@ -231,7 +352,7 @@ const styles = StyleSheet.create({
   logoIconBox: {
     width: 32,
     height: 32,
-    backgroundColor: '#2563eb', 
+    backgroundColor: '#2563eb',
     borderRadius: 6,
     alignItems: 'center',
     justifyContent: 'center',
@@ -303,7 +424,7 @@ const styles = StyleSheet.create({
   },
   smallLabel: {
     fontSize: 10,
-    color: '#6b7280', 
+    color: '#6b7280',
   },
   boldValue: {
     fontSize: 14,
@@ -314,7 +435,7 @@ const styles = StyleSheet.create({
   divider: {
     width: 1,
     height: 32,
-    backgroundColor: '#e5e7eb', 
+    backgroundColor: '#e5e7eb',
   },
   languageText: {
     fontSize: 14,
@@ -342,7 +463,7 @@ const styles = StyleSheet.create({
     right: -6,
     minWidth: 16,
     height: 16,
-    backgroundColor: '#ef4444', 
+    backgroundColor: '#ef4444',
     borderRadius: 999,
     alignItems: 'center',
     justifyContent: 'center',
@@ -359,5 +480,60 @@ const styles = StyleSheet.create({
     marginTop: 0.5,
     color: '#111827',
     whiteSpace: 'nowrap',
+  },
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.15)',
+  },
+  dropdownBox: {
+    position: 'absolute',
+    width: 260,
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.12,
+    shadowRadius: 24,
+    elevation: 16,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+    overflow: 'hidden',
+  },
+  dropdownGroupLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#9ca3af',
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 4,
+  },
+  dropdownItem: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+  },
+  dropdownItemActive: {
+    backgroundColor: '#eff6ff',
+  },
+  dropdownItemText: {
+    fontSize: 14,
+    color: '#374151',
+  },
+  dropdownItemTextActive: {
+    color: '#2563eb',
+    fontWeight: '600',
+  },
+  dropdownAllBtn: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f3f4f6',
+  },
+  dropdownAllText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#374151',
   },
 });

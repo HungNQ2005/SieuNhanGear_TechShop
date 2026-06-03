@@ -79,6 +79,11 @@ export default {
     TEXT_HOME_FLASH_SALE_ALL_DEAL: 'Xem tất cả deal',
     TEXT_HOME_FLASH_SALE_SOLD: 'Đã bán:',
     TEXT_HOME_NEWS_SUBTITLE: 'TIN TỨC CÔNG NGHỆ',
+    TEXT_HOME_NEWS_VIEW_ALL: 'Xem tất cả',
+    TEXT_HOME_NEWS_READ_MORE: 'Đọc thêm →',
+    TEXT_HOME_DROPDOWN_ALL_PRODUCT: 'Tất cả sản phẩm',
+    TEXT_HOME_DROPDOWN_CATEGORY: 'Danh mục',
+    TEXT_HOME_DROPDOWN_MANUFACTURER: 'Nhà sản xuất',
   },
 
   product: {

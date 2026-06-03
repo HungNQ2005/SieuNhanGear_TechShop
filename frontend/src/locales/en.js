@@ -79,6 +79,11 @@ export default {
     TEXT_HOME_FLASH_SALE_ALL_DEAL: 'View all deals',
     TEXT_HOME_FLASH_SALE_SOLD: 'Sold:',
     TEXT_HOME_NEWS_SUBTITLE: 'Tech News',
+    TEXT_HOME_NEWS_VIEW_ALL: 'View All',
+    TEXT_HOME_NEWS_READ_MORE: 'Read More →',
+    TEXT_HOME_DROPDOWN_ALL_PRODUCT: 'ALL',
+    TEXT_HOME_DROPDOWN_CATEGORY: 'Categories',
+    TEXT_HOME_DROPDOWN_MANUFACTURER: 'Manufacturers',
   },
 
   product: {

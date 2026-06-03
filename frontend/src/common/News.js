@@ -3,8 +3,10 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'rea
 import TextIntl from './TextIntl';
 import {
     TEXT_HOME_NEWS_SUBTITLE,
+    TEXT_HOME_NEWS_VIEW_ALL,
+    TEXT_HOME_NEWS_READ_MORE,
 } from '../constants/i18nKeys';
-// Mảng dữ liệu mẫu dựa theo hình ảnh bạn cung cấp
+
 const NEWS_DATA = [
     {
         id: '1',
@@ -39,7 +41,7 @@ export default function News() {
                     <Text style={styles.mainTitle}>Blog & Gaming News</Text>
                 </View>
                 <TouchableOpacity activeOpacity={0.7}>
-                    <Text style={styles.viewAllText}>Xem tất cả</Text>
+                    <TextIntl tx={TEXT_HOME_NEWS_VIEW_ALL} style={styles.viewAllText} />
                 </TouchableOpacity>
             </View>
 
@@ -67,7 +69,7 @@ export default function News() {
 
                             {/* Nút Đọc thêm */}
                             <TouchableOpacity style={styles.readMoreBtn} activeOpacity={0.6}>
-                                <Text style={styles.readMoreText}>Đọc thêm →</Text>
+                                <TextIntl tx={TEXT_HOME_NEWS_READ_MORE} style={styles.readMoreText} />
                             </TouchableOpacity>
                         </View>
                     </View>

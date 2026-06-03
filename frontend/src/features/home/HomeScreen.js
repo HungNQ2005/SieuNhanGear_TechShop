@@ -8,6 +8,7 @@ import HotProductCard from '../../common/HotProductCard';
 import ProductCard from '../../common/ProductCard';
 import FlashSale from '../../common/FlashSale';
 import News from '../../common/News';
+import { useFilter } from '../../store/FilterContext';
 import { useCart } from '../../store/CartContext';
 import { useLocalization } from '../../providers/LocalizationProvider';
 import api from '../../services/api';
@@ -41,7 +42,7 @@ export default function HomeScreen() {
   const scrollViewRef = useRef(null);
   const productsSectionRef = useRef(null);
   const [productsSectionY, setProductsSectionY] = useState(0);
-  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const { selectedCategoryId, setSelectedCategoryId, selectedManufacturerId } = useFilter();
   const [error, setError] = useState(null);
   const { locale, t } = useLocalization();
 
@@ -116,9 +117,18 @@ export default function HomeScreen() {
   };
 
   const filteredProducts = useMemo(() => {
-    if (!selectedCategoryId) return products;
-    return products.filter(p => String(p.category_id) === selectedCategoryId);
-  }, [products, selectedCategoryId]);
+    let result = products;
+
+    if (selectedCategoryId) {
+      result = result.filter(p => String(p.category_id) === String(selectedCategoryId));
+    }
+
+    if (selectedManufacturerId) {
+      result = result.filter(p => String(p.manufacturer_id) === String(selectedManufacturerId));
+    }
+
+    return result;
+  }, [products, selectedCategoryId, selectedManufacturerId]);
 
   const categoriesWithDetails = useMemo(() => {
     if (!categories.length || !products.length) return [];
