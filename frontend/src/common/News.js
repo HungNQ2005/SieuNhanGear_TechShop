@@ -34,7 +34,6 @@ const NEWS_DATA = [
 export default function News() {
     return (
         <View style={styles.container}>
-            {/* Header của mục Tin tức */}
             <View style={styles.headerRow}>
                 <View>
                     <TextIntl tx={TEXT_HOME_NEWS_SUBTITLE} style={styles.subTitle} />
@@ -52,10 +51,8 @@ export default function News() {
             >
                 {NEWS_DATA.map((item) => (
                     <View key={item.id} style={styles.card}>
-                        {/* Ảnh bài viết */}
                         <Image source={{ uri: item.image }} style={styles.cardImage} />
-
-                        {/* Nội dung bài viết */}
+    
                         <View style={styles.cardBody}>
                             <Text style={styles.cardMeta}>
                                 <Text style={styles.cardTag}>{item.tag}</Text>
@@ -67,7 +64,6 @@ export default function News() {
                                 {item.title}
                             </Text>
 
-                            {/* Nút Đọc thêm */}
                             <TouchableOpacity style={styles.readMoreBtn} activeOpacity={0.6}>
                                 <TextIntl tx={TEXT_HOME_NEWS_READ_MORE} style={styles.readMoreText} />
                             </TouchableOpacity>
