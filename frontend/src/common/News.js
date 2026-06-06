@@ -1,37 +1,41 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import TextIntl from './TextIntl';
+import api from '../services/api';
+import { ROUTES } from '../constants/routes';
 import {
     TEXT_HOME_NEWS_SUBTITLE,
     TEXT_HOME_NEWS_VIEW_ALL,
     TEXT_HOME_NEWS_READ_MORE,
 } from '../constants/i18nKeys';
 
-const NEWS_DATA = [
-    {
-        id: '1',
-        tag: 'GPU',
-        date: '29/05/2026',
-        title: 'RTX 5090 có gì mới?',
-        image: 'http://localhost:3521/images/news/news_1.avif',
-    },
-    {
-        id: '2',
-        tag: 'LAPTOP',
-        date: '28/05/2026',
-        title: 'Top laptop gaming đáng mua 2026',
-        image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?q=80&w=600&auto=format&fit=crop',
-    },
-    {
-        id: '3',
-        tag: 'BUILD PC',
-        date: '27/05/2026',
-        title: 'Build PC gaming 30 triệu',
-        image: 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?q=80&w=600&auto=format&fit=crop', 
-    },
-];
-
 export default function News() {
+    const [news, setNews] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetchNews();
+    }, []);
+
+    const fetchNews = async () => {
+        try {
+            const response = await api.get(ROUTES.GET_NEWS);
+            setNews(response.data);
+        } catch (error) {
+            console.error('Failed to fetch news:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (loading) {
+        return (
+            <View style={styles.loaderContainer}>
+                <ActivityIndicator size="large" color="#0066ff" />
+            </View>
+        );
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.headerRow}>
@@ -49,10 +53,10 @@ export default function News() {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.scrollContent}
             >
-                {NEWS_DATA.map((item) => (
+                {news.map((item) => (
                     <View key={item.id} style={styles.card}>
-                        <Image source={{ uri: item.image }} style={styles.cardImage} />
-    
+                        <Image source={{ uri: `${ROUTES.BASE_API_URL}${item.image}` }} style={styles.cardImage} />
+
                         <View style={styles.cardBody}>
                             <Text style={styles.cardMeta}>
                                 <Text style={styles.cardTag}>{item.tag}</Text>
@@ -79,6 +83,13 @@ const styles = StyleSheet.create({
     container: {
         marginVertical: 20,
         paddingHorizontal: 45,
+    },
+    loaderContainer: {
+        marginVertical: 20,
+        paddingHorizontal: 45,
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 300,
     },
     headerRow: {
         flexDirection: 'row',
@@ -109,7 +120,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
     },
     card: {
-        width: 280, 
+        width: 280,
         backgroundColor: '#ffffff',
         borderRadius: 16,
         borderWidth: 1,

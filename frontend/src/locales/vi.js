@@ -86,6 +86,23 @@ export default {
     TEXT_HOME_DROPDOWN_MANUFACTURER: 'Nhà sản xuất',
   },
 
+  productPage: {
+    TEXT_BACK: 'Quay lại',
+    TEXT_ADD_TO_CART: 'Thêm vào giỏ',
+    TEXT_BUY_NOW: 'Mua ngay',
+    TEXT_DESCRIPTION: 'Mô tả sản phẩm',
+    TEXT_SPECS: 'Thông số kỹ thuật',
+    TEXT_MANUFACTURER: 'Hãng sản xuất',
+    TEXT_CATEGORY: 'Danh mục',
+    TEXT_RATING: 'Đánh giá khách hàng',
+    TEXT_NOT_FOUND: 'Không tìm thấy sản phẩm.',
+    TEXT_ERROR: 'Không thể tải sản phẩm. Vui lòng thử lại.',
+    TEXT_IN_STOCK: 'Còn hàng',
+    TEXT_WARRANTY: 'Bảo hành 3 năm',
+    TEXT_FREE_SHIP: 'Miễn phí vận chuyển',
+    TEXT_RELATED: 'Sản phẩm liên quan',
+  },
+
   product: {
     TEXT_DESCRIPTION: 'Gear PC chất lượng cao, kiểm tra kỹ trước khi bán.',
     TEXT_SKU: 'Mã',

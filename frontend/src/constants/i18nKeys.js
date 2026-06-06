@@ -48,10 +48,25 @@ export const TEXT_HOME_DROPDOWN_ALL_PRODUCT = 'home.TEXT_HOME_DROPDOWN_ALL_PRODU
 export const TEXT_HOME_DROPDOWN_CATEGORY = 'home.TEXT_HOME_DROPDOWN_CATEGORY';
 export const TEXT_HOME_DROPDOWN_MANUFACTURER = 'home.TEXT_HOME_DROPDOWN_MANUFACTURER';
 
-
-// ─── Product ──────────────────────────────────────────────────────────────────
+// ─── Product (existing) ───────────────────────────────────────────────────────
 export const TEXT_PRODUCT_DESCRIPTION = 'product.TEXT_DESCRIPTION';
 export const TEXT_PRODUCT_SKU = 'product.TEXT_SKU';
+
+// ─── Product Page (NEW) ───────────────────────────────────────────────────────
+export const TEXT_PRODUCT_PAGE_BACK          = 'productPage.TEXT_BACK';
+export const TEXT_PRODUCT_PAGE_ADD_TO_CART   = 'productPage.TEXT_ADD_TO_CART';
+export const TEXT_PRODUCT_PAGE_BUY_NOW       = 'productPage.TEXT_BUY_NOW';
+export const TEXT_PRODUCT_PAGE_DESCRIPTION   = 'productPage.TEXT_DESCRIPTION';
+export const TEXT_PRODUCT_PAGE_SPECS         = 'productPage.TEXT_SPECS';
+export const TEXT_PRODUCT_PAGE_MANUFACTURER  = 'productPage.TEXT_MANUFACTURER';
+export const TEXT_PRODUCT_PAGE_CATEGORY      = 'productPage.TEXT_CATEGORY';
+export const TEXT_PRODUCT_PAGE_RATING        = 'productPage.TEXT_RATING';
+export const TEXT_PRODUCT_PAGE_NOT_FOUND     = 'productPage.TEXT_NOT_FOUND';
+export const TEXT_PRODUCT_PAGE_ERROR         = 'productPage.TEXT_ERROR';
+export const TEXT_PRODUCT_PAGE_IN_STOCK      = 'productPage.TEXT_IN_STOCK';
+export const TEXT_PRODUCT_PAGE_WARRANTY      = 'productPage.TEXT_WARRANTY';
+export const TEXT_PRODUCT_PAGE_FREE_SHIP     = 'productPage.TEXT_FREE_SHIP';
+export const TEXT_PRODUCT_PAGE_RELATED     = 'productPage.TEXT_RELATED';
 
 // ─── Footer ──────────────────────────────────────────────────────────────────
 export const TEXT_FOOTER_DESCRIPTION = 'common.TEXT_FOOTER_DESCRIPTION';
@@ -84,37 +99,3 @@ export const TEXT_FOOTER_ABOUT_TERMS = 'common.TEXT_FOOTER_ABOUT_TERMS';
 export const TEXT_FOOTER_ABOUT_PRIVACY = 'common.TEXT_FOOTER_ABOUT_PRIVACY';
 export const TEXT_FOOTER_COPYRIGHT = 'common.TEXT_FOOTER_COPYRIGHT';
 export const TEXT_FOOTER_SECURE_PAYMENT = 'common.TEXT_FOOTER_SECURE_PAYMENT';
-
-// ─── Map ──────────────────────────────────────────────────────────────────────
-export const I18N_KEYS = {
-  common: {
-    TEXT_APP_TITLE,
-    TEXT_APP_SUBTITLE,
-    TEXT_CART_TITLE,
-    TEXT_ADD_TO_CART,
-    TEXT_PRICE_LABEL,
-    TEXT_VIEW_DETAILS,
-    TEXT_CHANGE_LANGUAGE,
-    TEXT_SEARCH_PLACEHOLDER,
-    TEXT_HOTLINE_LABEL,
-    TEXT_HOTLINE_NUMBER,
-    TEXT_SHOWROOM_LABEL,
-    TEXT_SHOWROOM_SUBLABEL,
-    TEXT_TRACK_ORDER_LABEL,
-    TEXT_TRACK_ORDER_SUBLABEL,
-    TEXT_NO_PRODUCTS,
-    TEXT_PRODUCT_COUNT,
-    TEXT_CATEGORIES_LABEL,
-    TEXT_CART_SUBLABEL,
-  },
-  home: {
-    TEXT_HOME_HERO_STAMP: TEXT_HOME_HERO_STAMP,
-    TEXT_HERO_TITLE: TEXT_HOME_HERO_TITLE,
-    TEXT_HERO_SUBTITLE: TEXT_HOME_HERO_SUBTITLE,
-    TEXT_FEATURED_PRODUCTS: TEXT_HOME_FEATURED_PRODUCTS,
-  },
-  product: {
-    TEXT_DESCRIPTION: TEXT_PRODUCT_DESCRIPTION,
-    TEXT_SKU: TEXT_PRODUCT_SKU,
-  },
-};
