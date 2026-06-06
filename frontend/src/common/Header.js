@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet, Modal, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet, Modal, ScrollView, ActivityIndicator, useWindowDimensions } from 'react-native';
 import { useLocalization } from '../providers/LocalizationProvider';
 import { useFilter } from '../store/FilterContext';
 import { useNavigate } from 'react-router-dom';
@@ -24,7 +24,7 @@ import {
   TEXT_HOME_DROPDOWN_MANUFACTURER,
 } from '../constants/i18nKeys';
 
-// ─── SVG Icons (giữ nguyên) ─────────────────────────────────────────────
+// ─── SVG Icons ───────────────────────────────────────────────────────────────
 const IconGrid = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
     <rect x="3" y="3" width="7" height="7" rx="1" />
@@ -38,7 +38,7 @@ const IconShippingBox = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M16.5 9.4 7.5 4.2" />
     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-    <polyline points="3.29 7 12 12 20.71 7" />
+    <polyline points="3.29 7 12 12.01 20.71 7" />
     <line x1="12" y1="22" x2="12" y2="12" />
   </svg>
 );
@@ -100,7 +100,15 @@ const IconBox = () => (
   </svg>
 );
 
-// ─── Header Component ─────────────────────────────────────────────────────
+const IconMore = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="1" />
+    <circle cx="19" cy="12" r="1" />
+    <circle cx="5" cy="12" r="1" />
+  </svg>
+);
+
+// ─── Header Component ─────────────────────────────────────────────────────────
 export default function Header() {
   const { t, toggleLocale } = useLocalization();
   const navigate = useNavigate();
@@ -110,15 +118,24 @@ export default function Header() {
     clearFilters
   } = useFilter();
 
+  const { width } = useWindowDimensions();
+  const isCompact = width < 1100;
+
   const [searchQuery, setSearchQuery] = useState('');
   const [cartCount] = useState(0);
 
+  // Category dropdown
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [categories, setCategories] = useState([]);
   const [manufacturers, setManufacturers] = useState([]);
   const [loadingDropdown, setLoadingDropdown] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
   const categoryButtonRef = useRef(null);
+
+  // More dropdown
+  const [moreVisible, setMoreVisible] = useState(false);
+  const [morePosition, setMorePosition] = useState({ top: 0, left: 0 });
+  const moreButtonRef = useRef(null);
 
   useEffect(() => {
     if (dropdownVisible && categories.length === 0) {
@@ -143,15 +160,22 @@ export default function Header() {
     setDropdownVisible(true);
   };
 
+  const handleOpenMore = () => {
+    moreButtonRef.current?.measure((x, y, w, height, pageX, pageY) => {
+      setMorePosition({ top: pageY + height + 4, left: pageX });
+    });
+    setMoreVisible(true);
+  };
+
   const handleSelectCategory = (id) => {
     setSelectedCategoryId(id === selectedCategoryId ? null : id);
-    setSelectedManufacturerId(null); // bỏ filter manufacturer khi chọn category
+    setSelectedManufacturerId(null);
     setDropdownVisible(false);
   };
 
   const handleSelectManufacturer = (id) => {
     setSelectedManufacturerId(id === selectedManufacturerId ? null : id);
-    setSelectedCategoryId(null); // bỏ filter category khi chọn manufacturer
+    setSelectedCategoryId(null);
     setDropdownVisible(false);
   };
 
@@ -185,7 +209,7 @@ export default function Header() {
             <IconChevronDown />
           </Pressable>
 
-          {/* Dropdown Modal */}
+          {/* Category Dropdown Modal */}
           <Modal
             visible={dropdownVisible}
             transparent
@@ -205,7 +229,6 @@ export default function Header() {
                 ) : (
                   <ScrollView style={{ maxHeight: 420 }} showsVerticalScrollIndicator={false}>
 
-                    {/* ── Tất cả ── */}
                     <Pressable
                       style={[styles.dropdownAllBtn, !selectedCategoryId && !selectedManufacturerId && styles.dropdownItemActive]}
                       onPress={() => { clearFilters(); setDropdownVisible(false); }}
@@ -213,7 +236,6 @@ export default function Header() {
                       <TextIntl tx={TEXT_HOME_DROPDOWN_ALL_PRODUCT} style={styles.dropdownAllText} />
                     </Pressable>
 
-                    {/* ── Nhóm Category ── */}
                     <TextIntl tx={TEXT_HOME_DROPDOWN_CATEGORY} style={styles.dropdownGroupLabel} />
                     {categories.map(cat => (
                       <Pressable
@@ -227,7 +249,6 @@ export default function Header() {
                       </Pressable>
                     ))}
 
-                    {/* ── Nhóm Manufacturer ── */}
                     <TextIntl tx={TEXT_HOME_DROPDOWN_MANUFACTURER} style={styles.dropdownGroupLabel} />
                     {manufacturers.map(man => (
                       <Pressable
@@ -263,56 +284,105 @@ export default function Header() {
           {/* Right actions */}
           <View style={styles.rightActions}>
 
-            {/* Hotline */}
-            <View style={styles.actionItem}>
-              <View style={styles.iconWrapper}><IconPhone /></View>
-              <View>
-                <Text style={styles.smallLabel}>{t(TEXT_HOTLINE_LABEL)}</Text>
-                <Text style={styles.boldValue}>{t(TEXT_HOTLINE_NUMBER)}</Text>
-              </View>
-            </View>
+            {/* ── Full mode (width >= 1100) ── */}
+            {!isCompact && (
+              <>
+                <View style={styles.actionItem}>
+                  <View style={styles.iconWrapper}><IconPhone /></View>
+                  <View>
+                    <Text style={styles.smallLabel}>{t(TEXT_HOTLINE_LABEL)}</Text>
+                    <Text style={styles.boldValue}>{t(TEXT_HOTLINE_NUMBER)}</Text>
+                  </View>
+                </View>
 
-            <View style={styles.divider} />
+                <Pressable style={styles.actionItem}>
+                  <View style={styles.iconWrapper}><IconMapPin /></View>
+                  <View>
+                    <Text style={styles.smallLabel}>{t(TEXT_SHOWROOM_LABEL)}</Text>
+                    <Text style={styles.boldValue}>{t(TEXT_SHOWROOM_SUBLABEL)}</Text>
+                  </View>
+                </Pressable>
 
-            {/* Showroom */}
-            <Pressable style={styles.actionItem}>
-              <View style={styles.iconWrapper}><IconMapPin /></View>
-              <View>
-                <Text style={styles.smallLabel}>{t(TEXT_SHOWROOM_LABEL)}</Text>
-                <Text style={styles.boldValue}>{t(TEXT_SHOWROOM_SUBLABEL)}</Text>
-              </View>
-            </Pressable>
+                <Pressable style={styles.actionItem}>
+                  <View style={styles.iconWrapper}><IconShippingBox /></View>
+                  <View>
+                    <Text style={styles.smallLabel}>{t(TEXT_TRACK_ORDER_LABEL)}</Text>
+                    <Text style={styles.boldValue}>{t(TEXT_TRACK_ORDER_SUBLABEL)}</Text>
+                  </View>
+                </Pressable>
 
-            <View style={styles.divider} />
+                <Pressable onPress={toggleLocale} style={styles.actionItem}>
+                  <IconGlobe />
+                  <Text style={styles.languageText}>{t(TEXT_CHANGE_LANGUAGE)}</Text>
+                  <IconChevronDown />
+                </Pressable>
+              </>
+            )}
 
-            {/* Track order */}
-            <Pressable style={styles.actionItem}>
-              <View style={styles.iconWrapper}><IconShippingBox /></View>
-              <View>
-                <Text style={styles.smallLabel}>{t(TEXT_TRACK_ORDER_LABEL)}</Text>
-                <Text style={styles.boldValue}>{t(TEXT_TRACK_ORDER_SUBLABEL)}</Text>
-              </View>
-            </Pressable>
+            {/* ── Compact mode: nút More ── */}
+            {isCompact && (
+              <>
+                <Pressable ref={moreButtonRef} style={styles.moreButton} onPress={handleOpenMore}>
+                  <IconMore />
+                </Pressable>
 
-            <View style={styles.divider} />
+                {/* More Dropdown Modal */}
+                <Modal
+                  visible={moreVisible}
+                  transparent
+                  animationType="fade"
+                  onRequestClose={() => setMoreVisible(false)}
+                >
+                  <Pressable style={styles.modalOverlay} onPress={() => setMoreVisible(false)}>
+                    <Pressable
+                      style={[styles.dropdownBox, { top: morePosition.top, left: morePosition.left }]}
+                      onPress={(e) => e.stopPropagation()}
+                    >
+                      {/* Hotline */}
+                      <View style={styles.moreItem}>
+                        <IconPhone />
+                        <View>
+                          <Text style={styles.smallLabel}>{t(TEXT_HOTLINE_LABEL)}</Text>
+                          <Text style={styles.boldValue}>{t(TEXT_HOTLINE_NUMBER)}</Text>
+                        </View>
+                      </View>
 
-            {/* Language toggle */}
-            <Pressable onPress={toggleLocale} style={styles.actionItem}>
-              <IconGlobe />
-              <Text style={styles.languageText}>{t(TEXT_CHANGE_LANGUAGE)}</Text>
-              <IconChevronDown />
-            </Pressable>
+                      {/* Showroom */}
+                      <Pressable style={styles.moreItem}>
+                        <IconMapPin />
+                        <View>
+                          <Text style={styles.smallLabel}>{t(TEXT_SHOWROOM_LABEL)}</Text>
+                          <Text style={styles.boldValue}>{t(TEXT_SHOWROOM_SUBLABEL)}</Text>
+                        </View>
+                      </Pressable>
 
-            <View style={styles.divider} />
+                      {/* Track order */}
+                      <Pressable style={styles.moreItem}>
+                        <IconShippingBox />
+                        <View>
+                          <Text style={styles.smallLabel}>{t(TEXT_TRACK_ORDER_LABEL)}</Text>
+                          <Text style={styles.boldValue}>{t(TEXT_TRACK_ORDER_SUBLABEL)}</Text>
+                        </View>
+                      </Pressable>
 
-            {/* Account */}
+                      {/* Language */}
+                      <Pressable
+                        onPress={() => { toggleLocale(); setMoreVisible(false); }}
+                        style={styles.moreItem}
+                      >
+                        <IconGlobe />
+                        <Text style={styles.languageText}>{t(TEXT_CHANGE_LANGUAGE)}</Text>
+                      </Pressable>
+                    </Pressable>
+                  </Pressable>
+                </Modal>
+              </>
+            )}
+
+            {/* Account & Cart — luôn hiển thị */}
             <Pressable style={styles.iconButton}>
               <IconUser />
             </Pressable>
-
-            <View style={styles.divider} />
-
-            {/* Cart */}
             <Pressable style={styles.cartButton}>
               <View style={styles.cartIconWrapper}>
                 <IconShoppingCart />
@@ -427,9 +497,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 4,
   },
-  iconWrapper: {
-
-  },
+  iconWrapper: {},
   smallLabel: {
     fontSize: 10,
     color: '#6b7280',
@@ -439,11 +507,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#111827',
     whiteSpace: 'nowrap',
-  },
-  divider: {
-    width: 1,
-    height: 32,
-    backgroundColor: '#e5e7eb',
   },
   languageText: {
     fontSize: 14,
@@ -489,7 +552,29 @@ const styles = StyleSheet.create({
     color: '#111827',
     whiteSpace: 'nowrap',
   },
-
+  // More button
+  moreButton: {
+    backgroundColor: '#2563eb',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  // More dropdown items
+  moreItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  moreDivider: {
+    height: 1,
+    backgroundColor: '#f3f4f6',
+    marginHorizontal: 12,
+  },
+  // Shared dropdown styles
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.15)',
