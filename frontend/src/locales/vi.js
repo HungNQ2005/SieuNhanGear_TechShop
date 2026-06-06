@@ -98,8 +98,9 @@ export default {
     TEXT_NOT_FOUND: 'Không tìm thấy sản phẩm.',
     TEXT_ERROR: 'Không thể tải sản phẩm. Vui lòng thử lại.',
     TEXT_IN_STOCK: 'Còn hàng',
-    TEXT_WARRANTY: 'Bảo hành 24 tháng',
+    TEXT_WARRANTY: 'Bảo hành 3 năm',
     TEXT_FREE_SHIP: 'Miễn phí vận chuyển',
+    TEXT_RELATED: 'Sản phẩm liên quan',
   },
 
   product: {

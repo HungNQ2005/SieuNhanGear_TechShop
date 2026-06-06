@@ -66,6 +66,7 @@ export const TEXT_PRODUCT_PAGE_ERROR         = 'productPage.TEXT_ERROR';
 export const TEXT_PRODUCT_PAGE_IN_STOCK      = 'productPage.TEXT_IN_STOCK';
 export const TEXT_PRODUCT_PAGE_WARRANTY      = 'productPage.TEXT_WARRANTY';
 export const TEXT_PRODUCT_PAGE_FREE_SHIP     = 'productPage.TEXT_FREE_SHIP';
+export const TEXT_PRODUCT_PAGE_RELATED     = 'productPage.TEXT_RELATED';
 
 // ─── Footer ──────────────────────────────────────────────────────────────────
 export const TEXT_FOOTER_DESCRIPTION = 'common.TEXT_FOOTER_DESCRIPTION';

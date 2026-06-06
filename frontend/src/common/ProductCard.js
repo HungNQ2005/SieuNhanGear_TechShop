@@ -8,7 +8,7 @@ import { TEXT_HOME_ADD_TO_CART } from '../constants/i18nKeys';
 export default function ProductCard({ product, manufacturers = [], categories = [], onAddToCart }) {
   if (!product) return null;
 
-  const navigate = useNavigate();  // ← NEW
+  const navigate = useNavigate();
 
   const manufacturer = manufacturers?.find(m => m && String(m.id) === String(product?.manufacturer_id)) || null;
   const category = categories?.find(c => c && String(c.id) === String(product?.category_id)) || null;
@@ -34,15 +34,14 @@ export default function ProductCard({ product, manufacturers = [], categories = 
     </svg>
   );
 
-  // ← NEW: navigate tới ProductPage khi nhấp vào card
   const handleCardPress = () => {
-    navigate(`/product/${product.id}`);
+    navigate(ROUTES.PRODUCT_PAGE.replace(':id', product.id));
   };
 
   return (
     <TouchableOpacity
       style={styles.card}
-      onPress={handleCardPress}   // ← NEW: nhấp vào card → ProductPage
+      onPress={handleCardPress}
       activeOpacity={0.92}
     >
       {/* Product image */}

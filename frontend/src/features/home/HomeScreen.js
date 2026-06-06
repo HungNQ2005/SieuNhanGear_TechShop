@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { View, ScrollView, StyleSheet, TouchableOpacity, Alert, Text, ActivityIndicator } from 'react-native';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
 import TextIntl from '../../common/TextIntl';
 import Banner from '../../common/Banner';
 import HotProductCard from '../../common/HotProductCard';
@@ -33,13 +31,12 @@ import {
   TEXT_HOME_HERO_STATUS_5,
 } from '../../constants/i18nKeys';
 
-export default function HomeScreen() {
+export default function HomeScreen({ scrollViewRef }) {
   const { addToCart, totalItems } = useCart()
   const [products, setProducts] = useState([]);
   const [loadProducts, setLoadProducts] = useState(true);
   const [manufacturers, setManufacturers] = useState([]);
   const [categories, setCategories] = useState([]);
-  const scrollViewRef = useRef(null);
   const productsSectionRef = useRef(null);
   const [productsSectionY, setProductsSectionY] = useState(0);
   const { selectedCategoryId, setSelectedCategoryId, selectedManufacturerId } = useFilter();
@@ -184,142 +181,135 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.page}>
-      <ScrollView ref={scrollViewRef} contentContainerStyle={styles.content}>
-        <Banner style={styles.banner}>
-          <View style={styles.heroSection}>
-            <View style={styles.badgeContainer}>
-              <IconLightning />
-              <TextIntl tx={TEXT_HOME_HERO_STAMP} style={styles.heroStamp} />
-            </View>
-            <TextIntl tx={TEXT_HOME_HERO_TITLE} style={styles.heroTitle} />
-            <TextIntl tx={TEXT_HOME_HERO_SUBTITLE} style={styles.heroSubtitle} />
-            <View style={styles.buttonBox}>
-              <TouchableOpacity style={styles.shoppingButton1} onPress={scrollToProducts}>
-                <TextIntl tx={TEXT_HOME_HERO_SHOPPING_BUTTON} style={styles.shoppingButton} />
-                <IconPointToRight />
-              </TouchableOpacity>
+      <Banner style={styles.banner}>
+        <View style={styles.heroSection}>
+          <View style={styles.badgeContainer}>
+            <IconLightning />
+            <TextIntl tx={TEXT_HOME_HERO_STAMP} style={styles.heroStamp} />
+          </View>
+          <TextIntl tx={TEXT_HOME_HERO_TITLE} style={styles.heroTitle} />
+          <TextIntl tx={TEXT_HOME_HERO_SUBTITLE} style={styles.heroSubtitle} />
+          <View style={styles.buttonBox}>
+            <TouchableOpacity style={styles.shoppingButton1} onPress={scrollToProducts}>
+              <TextIntl tx={TEXT_HOME_HERO_SHOPPING_BUTTON} style={styles.shoppingButton} />
+              <IconPointToRight />
+            </TouchableOpacity>
 
-              <TouchableOpacity style={styles.buildConfigButton1}>
-                <TextIntl tx={TEXT_HOME_HERO_BUILD_CONFIG_BUTTON} style={styles.buildConfigButton} />
-              </TouchableOpacity>
+            <TouchableOpacity style={styles.buildConfigButton1}>
+              <TextIntl tx={TEXT_HOME_HERO_BUILD_CONFIG_BUTTON} style={styles.buildConfigButton} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.line} />
+          <View style={styles.statusLine}>
+            <View>
+              <Text style={styles.statusLine2}>10K+</Text>
+              <TextIntl tx={TEXT_HOME_HERO_STATUS_1} style={styles.statusLine3} />
             </View>
-            <View style={styles.line} />
-            <View style={styles.statusLine}>
-              <View>
-                <Text style={styles.statusLine2}>10K+</Text>
-                <TextIntl tx={TEXT_HOME_HERO_STATUS_1} style={styles.statusLine3} />
+            <View>
+              <Text style={styles.statusLine2}>50K+</Text>
+              <TextIntl tx={TEXT_HOME_HERO_STATUS_2} style={styles.statusLine3} />
+            </View>
+            <View>
+              <Text style={styles.statusLine2}>99%</Text>
+              <TextIntl tx={TEXT_HOME_HERO_STATUS_3} style={styles.statusLine3} />
+            </View>
+            <View>
+              <View style={styles.statusLine1}>
+                <Text style={styles.statusLine2}>3</Text>
+                <TextIntl tx={TEXT_HOME_HERO_STATUS_4} style={styles.statusLine2} />
               </View>
-              <View>
-                <Text style={styles.statusLine2}>50K+</Text>
-                <TextIntl tx={TEXT_HOME_HERO_STATUS_2} style={styles.statusLine3} />
-              </View>
-              <View>
-                <Text style={styles.statusLine2}>99%</Text>
-                <TextIntl tx={TEXT_HOME_HERO_STATUS_3} style={styles.statusLine3} />
-              </View>
-              <View>
-                <View style={styles.statusLine1}>
-                  <Text style={styles.statusLine2}>3</Text>
-                  <TextIntl tx={TEXT_HOME_HERO_STATUS_4} style={styles.statusLine2} />
-                </View>
-                <TextIntl tx={TEXT_HOME_HERO_STATUS_5} style={styles.statusLine3} />
-              </View>
+              <TextIntl tx={TEXT_HOME_HERO_STATUS_5} style={styles.statusLine3} />
             </View>
           </View>
-          <View style={styles.hotProductContainer}>
-            <HotProductCard />
-          </View>
-        </Banner>
+        </View>
+        <View style={styles.hotProductContainer}>
+          <HotProductCard />
+        </View>
+      </Banner>
 
-        <View style={styles.categoryLine}>
-          <View style={styles.categoryHeader}>
-            <TextIntl tx={TEXT_HOME_CATEGORY} style={styles.categoryLine1} />
-            <TextIntl tx={TEXT_HOME_EXPLORE_BY_CATEGORY} style={styles.categoryLine2} />
-          </View>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.categoryScrollContainer}
+      <View style={styles.categoryLine}>
+        <View style={styles.categoryHeader}>
+          <TextIntl tx={TEXT_HOME_CATEGORY} style={styles.categoryLine1} />
+          <TextIntl tx={TEXT_HOME_EXPLORE_BY_CATEGORY} style={styles.categoryLine2} />
+        </View>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.categoryScrollContainer}
+        >
+          {/* Nút "Tất cả" */}
+          <TouchableOpacity
+            style={[styles.categoryCard, !selectedCategoryId && styles.categoryCardActive]}
+            onPress={() => handleSelectCategory(null)}
+            activeOpacity={0.8}
           >
-            {/* Nút "Tất cả" */}
+            <View style={styles.categoryIconWrapper}>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0066ff" strokeWidth="1.5">
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+              </svg>
+            </View>
+            <Text style={styles.categoryCardTitle}>
+              <TextIntl tx={TEXT_HOME_FEATURED_ALL_PRODUCTS} />
+            </Text>
+            <Text style={styles.categoryCardCount}>
+              {products.length} <TextIntl tx={TEXT_HOME_PRODUCTS_COUNT} />
+            </Text>
+          </TouchableOpacity>
+
+          {/* Các category từ API */}
+          {categoriesWithDetails.map(cat => (
             <TouchableOpacity
-              style={[styles.categoryCard, !selectedCategoryId && styles.categoryCardActive]}
-              onPress={() => handleSelectCategory(null)}
+              key={cat.id}
+              style={[styles.categoryCard, selectedCategoryId === cat.id && styles.categoryCardActive]}
+              onPress={() => handleSelectCategory(cat.id)}
               activeOpacity={0.8}
             >
               <View style={styles.categoryIconWrapper}>
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0066ff" strokeWidth="1.5">
-                  <rect x="3" y="3" width="7" height="7" rx="1" />
-                  <rect x="14" y="3" width="7" height="7" rx="1" />
-                  <rect x="3" y="14" width="7" height="7" rx="1" />
-                  <rect x="14" y="14" width="7" height="7" rx="1" />
-                </svg>
+                {getCategoryIcon(cat.id, cat.name)}
               </View>
-              <Text style={styles.categoryCardTitle}>
-                <TextIntl tx={TEXT_HOME_FEATURED_ALL_PRODUCTS} />
+              <Text style={styles.categoryCardTitle}>{cat.name}</Text>
+              <Text style={styles.categoryCardDesc} numberOfLines={1}>
+                {cat.description}
               </Text>
               <Text style={styles.categoryCardCount}>
-                {products.length} <TextIntl tx={TEXT_HOME_PRODUCTS_COUNT} />
+                {cat.productCount} {cat.productCount === 1 ? '' : ''}
+                <TextIntl tx={TEXT_HOME_PRODUCTS_COUNT} />
               </Text>
             </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
 
-            {/* Các category từ API */}
-            {categoriesWithDetails.map(cat => (
-              <TouchableOpacity
-                key={cat.id}
-                style={[styles.categoryCard, selectedCategoryId === cat.id && styles.categoryCardActive]}
-                onPress={() => handleSelectCategory(cat.id)}
-                activeOpacity={0.8}
-              >
-                <View style={styles.categoryIconWrapper}>
-                  {getCategoryIcon(cat.id, cat.name)}
-                </View>
-                <Text style={styles.categoryCardTitle}>{cat.name}</Text>
-                <Text style={styles.categoryCardDesc} numberOfLines={1}>
-                  {cat.description}
-                </Text>
-                <Text style={styles.categoryCardCount}>
-                  {cat.productCount} {cat.productCount === 1 ? '' : ''}
-                  <TextIntl tx={TEXT_HOME_PRODUCTS_COUNT} />
-                </Text>
-              </TouchableOpacity>
+      <View ref={productsSectionRef} onLayout={onProductsLayout}>
+        <TextIntl tx={TEXT_HOME_FEATURED_PRODUCTS} style={styles.sectionTitle} />
+        {loadProducts ? (
+          <ActivityIndicator size="large" color="#0066ff" style={styles.loader} />
+        ) : filteredProducts.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <IconSearch />
+            <TextIntl tx={TEXT_HOME_EMPTY_PRODUCTS} style={styles.emptyText} />
+          </View>
+        ) : (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12, paddingHorizontal: 16 }} style={styles.productGrid}>
+            {filteredProducts.map(product => (
+              <ProductCard key={product.id} product={product} manufacturers={manufacturers} categories={categories} onAddToCart={addToCart} />
             ))}
           </ScrollView>
-        </View>
+        )}
+      </View>
 
-        <View ref={productsSectionRef} onLayout={onProductsLayout}>
-          <TextIntl tx={TEXT_HOME_FEATURED_PRODUCTS} style={styles.sectionTitle} />
-          {loadProducts ? (
-            <ActivityIndicator size="large" color="#0066ff" style={styles.loader} />
-          ) : filteredProducts.length === 0 ? (
-            <View style={styles.emptyContainer}>
-              <IconSearch />
-              <TextIntl tx={TEXT_HOME_EMPTY_PRODUCTS} style={styles.emptyText} />
-            </View>
-          ) : (
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12, paddingHorizontal: 16 }} style={styles.productGrid}>
-              {filteredProducts.map(product => (
-                <ProductCard key={product.id} product={product} manufacturers={manufacturers} categories={categories} onAddToCart={addToCart} />
-              ))}
-            </ScrollView>
-          )}
-        </View>
+      <FlashSale
+        onViewAll={() => {
+        }}
+        onAddToCart={(product) => {
+          addToCart(product);
+        }}
+      />
 
-        <FlashSale
-          onViewAll={() => {
-            console.log('Xem tất cả deal');
-          }}
-          onAddToCart={(product) => {
-            addToCart(product);
-          }}
-        />
-
-        <News />
-
-        <View>
-          <Footer />
-        </View>
-      </ScrollView>
+      <News />
     </View>
   );
 }

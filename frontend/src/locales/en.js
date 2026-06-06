@@ -98,8 +98,9 @@ export default {
     TEXT_NOT_FOUND: 'Product not found.',
     TEXT_ERROR: 'Failed to load product. Please try again.',
     TEXT_IN_STOCK: 'In Stock',
-    TEXT_WARRANTY: '24-month Warranty',
+    TEXT_WARRANTY: '3 years Warranty',
     TEXT_FREE_SHIP: 'Free Shipping',
+    TEXT_RELATED: 'Related Products',
   },
 
   product: {

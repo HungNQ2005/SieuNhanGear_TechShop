@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, ActivityIndicator, } from 'react-native';
+import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
 import TextIntl from './TextIntl';
 import api from '../services/api';
@@ -52,6 +53,7 @@ const CountdownTimer = () => {
 export default function FlashSale({ onAddToCart, onViewAll }) {
     const [flashProducts, setFlashProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -116,7 +118,12 @@ export default function FlashSale({ onAddToCart, onViewAll }) {
                     const progressWidth = Math.min((item.sold / item.maxStock) * 100, 100);
 
                     return (
-                        <View key={item.id} style={styles.productCard}>
+                        <TouchableOpacity
+                            key={item.id}
+                            style={styles.productCard}
+                            onPress={() => navigate(ROUTES.PRODUCT_PAGE.replace(':id', item.id))}
+                            activeOpacity={0.92}
+                        >
                             {/* Khung ảnh & Badge Flash Sale */}
                             <View style={styles.imageWrapper}>
                                 <Image
@@ -162,7 +169,7 @@ export default function FlashSale({ onAddToCart, onViewAll }) {
                                     <TextIntl tx={TEXT_HOME_FLASH_SALE_BUY_NOW} style={styles.buyButtonText} />
                                 </TouchableOpacity>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     );
                 })}
             </ScrollView>

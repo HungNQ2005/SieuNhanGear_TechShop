@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator, } from 'react-native';
 import { useParams, useNavigate } from 'react-router-dom';
+import ProductCard from '../../common/ProductCard';
 import api from '../../services/api';
 import { ROUTES } from '../../constants/routes';
 import { useCart } from '../../store/CartContext';
@@ -20,9 +21,8 @@ import {
     TEXT_PRODUCT_PAGE_IN_STOCK,
     TEXT_PRODUCT_PAGE_WARRANTY,
     TEXT_PRODUCT_PAGE_FREE_SHIP,
+    TEXT_PRODUCT_PAGE_RELATED,
 } from '../../constants/i18nKeys';
-
-// ─── Icon helpers ────────────────────────────────────────────────────────────
 
 const IconBack = () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -38,25 +38,23 @@ const IconCart = () => (
 );
 
 const IconShield = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0066ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
     </svg>
 );
 
 const IconTruck = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0066ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="1" y="3" width="15" height="13" /><polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
         <circle cx="5.5" cy="18.5" r="2.5" /><circle cx="18.5" cy="18.5" r="2.5" />
     </svg>
 );
 
 const IconCheck = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0066ff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="20 6 9 17 4 12" />
     </svg>
 );
-
-// ─── Star Rating ─────────────────────────────────────────────────────────────
 
 function StarRating({ rating }) {
     const full = Math.floor(rating);
@@ -78,8 +76,6 @@ function StarRating({ rating }) {
     );
 }
 
-// ─── Spec Row ────────────────────────────────────────────────────────────────
-
 function SpecRow({ label, value, last }) {
     return (
         <View style={[styles.specRow, last && styles.specRowLast]}>
@@ -88,8 +84,6 @@ function SpecRow({ label, value, last }) {
         </View>
     );
 }
-
-// ─── Main Component ───────────────────────────────────────────────────────────
 
 export default function ProductPage() {
     const { id } = useParams();
@@ -100,6 +94,10 @@ export default function ProductPage() {
     const [product, setProduct] = useState(null);
     const [manufacturer, setManufacturer] = useState(null);
     const [category, setCategory] = useState(null);
+    const [allProducts, setAllProducts] = useState([]);
+    const [allManufacturers, setAllManufacturers] = useState([]);
+    const [allCategories, setAllCategories] = useState([]);
+    const [relatedProducts, setRelatedProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [addedToCart, setAddedToCart] = useState(false);
@@ -110,19 +108,33 @@ export default function ProductPage() {
         setError(null);
 
         Promise.all([
-            api.get(`/products/${id}`),
+            api.get(ROUTES.GET_PRODUCT_BY_ID(id)),
             api.get(ROUTES.GET_MANUFACTURER),
             api.get(ROUTES.GET_CATEGORY),
+            api.get(ROUTES.GET_PRODUCT),
         ])
-            .then(([prodRes, manRes, catRes]) => {
+            .then(([prodRes, manRes, catRes, allProdRes]) => {
                 const prod = prodRes.data;
                 setProduct(prod);
 
                 const mans = Array.isArray(manRes.data) ? manRes.data : [];
                 const cats = Array.isArray(catRes.data) ? catRes.data : [];
+                const allProds = Array.isArray(allProdRes.data) ? allProdRes.data : [];
+
+                setAllManufacturers(mans);
+                setAllCategories(cats);
+                setAllProducts(allProds);
 
                 setManufacturer(mans.find(m => String(m.id) === String(prod.manufacturer_id)) || null);
                 setCategory(cats.find(c => String(c.id) === String(prod.category_id)) || null);
+
+                const related = allProds.filter(p =>
+                    p.id !== prod.id && (
+                        String(p.category_id) === String(prod.category_id) ||
+                        String(p.manufacturer_id) === String(prod.manufacturer_id)
+                    )
+                ).slice(0, 6); //Load tối đa 6 sản phẩm, lag problem <(")
+                setRelatedProducts(related);
             })
             .catch(() => setError('error'))
             .finally(() => setLoading(false));
@@ -138,7 +150,6 @@ export default function ProductPage() {
     const formatPrice = (price) =>
         price?.toLocaleString('vi-VN') + 'đ';
 
-    // ── Loading ──
     if (loading) {
         return (
             <View style={styles.centerScreen}>
@@ -147,7 +158,6 @@ export default function ProductPage() {
         );
     }
 
-    // ── Error ──
     if (error || !product) {
         return (
             <View style={styles.centerScreen}>
@@ -174,7 +184,7 @@ export default function ProductPage() {
 
             {/* ── Breadcrumb / Back ── */}
             <View style={styles.breadcrumbRow}>
-                <TouchableOpacity style={styles.backLink} onPress={() => navigate(-1)}>
+                <TouchableOpacity style={styles.backLink} onPress={() => navigate(ROUTES.HOME)}>
                     <IconBack />
                     <TextIntl tx={TEXT_PRODUCT_PAGE_BACK} style={styles.backLinkText} />
                 </TouchableOpacity>
@@ -302,15 +312,35 @@ export default function ProductPage() {
                             value={`${category.name}${categoryDescription ? ' — ' + categoryDescription : ''}`}
                         />
                     )}
-                    <SpecRow label="Rating" value={`${product.rating} / 5 ★`} />
+                    <SpecRow label={<TextIntl tx={TEXT_PRODUCT_PAGE_RATING} />} value={`${product.rating} / 5 ★`} last={true} />
                 </View>
             </View>
+
+            {/* ── Related Products Section ── */}
+            {relatedProducts.length > 0 && (
+                <View style={styles.relatedSection}>
+                    <TextIntl tx={TEXT_PRODUCT_PAGE_RELATED} style={styles.relatedTitle}/>
+                    <ScrollView
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={styles.relatedScroll}
+                    >
+                        {relatedProducts.map(relProd => (
+                            <ProductCard
+                                key={relProd.id}
+                                product={relProd}
+                                manufacturers={allManufacturers}
+                                categories={allCategories}
+                                onAddToCart={addToCart}
+                            />
+                        ))}
+                    </ScrollView>
+                </View>
+            )}
 
         </ScrollView>
     );
 }
-
-// ─── Styles ──────────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
     page: {
@@ -318,10 +348,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#F8FAFC',
     },
     pageContent: {
-        maxWidth: 1100,
+        maxWidth: 1200,
         marginHorizontal: 'auto',
-        paddingHorizontal: 24,
-        paddingVertical: 24,
+        paddingHorizontal: 32,
+        paddingVertical: 32,
         paddingBottom: 60,
     },
 
@@ -343,6 +373,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 10,
         borderRadius: 8,
+        cursor: 'pointer',
     },
     backBtnText: {
         color: '#fff',
@@ -366,6 +397,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderWidth: 1,
         borderColor: '#e5e7eb',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.05,
+        shadowRadius: 2,
     },
     backLinkText: {
         fontSize: 14,
@@ -380,34 +415,34 @@ const styles = StyleSheet.create({
     // Product section
     productSection: {
         flexDirection: 'row',
-        gap: 40,
+        gap: 48,
         backgroundColor: '#fff',
-        borderRadius: 20,
-        padding: 32,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.06,
-        shadowRadius: 16,
+        borderRadius: 24,
+        padding: 40,
+        shadowColor: '#0f172a',
+        shadowOffset: { width: 0, height: 10 },
+        shadowOpacity: 0.04,
+        shadowRadius: 20,
         elevation: 4,
-        marginBottom: 24,
+        marginBottom: 32,
         flexWrap: 'wrap',
     },
 
     // Image
     imageWrapper: {
-        flex: 1,
-        minWidth: 280,
+        flex: 1.2,
+        minWidth: 400,
         position: 'relative',
-        backgroundColor: '#F1F5F9',
-        borderRadius: 14,
+        backgroundColor: '#F8FAFC',
+        borderRadius: 16,
         overflow: 'hidden',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: 320,
+        height: 480,
     },
     productImage: {
         width: '100%',
-        height: 340,
+        height: '100%',
     },
     imagePlaceholder: {
         width: '100%',
@@ -438,9 +473,10 @@ const styles = StyleSheet.create({
 
     // Info
     infoWrapper: {
-        flex: 1,
-        minWidth: 280,
-        gap: 14,
+        flex: 1.5,
+        minWidth: 400,
+        gap: 18,
+        justifyContent: 'center',
     },
     tagRow: {
         flexDirection: 'row',
@@ -468,10 +504,10 @@ const styles = StyleSheet.create({
         borderRadius: 4,
     },
     productName: {
-        fontSize: 26,
+        fontSize: 30,
         fontWeight: '800',
         color: '#0f172a',
-        lineHeight: 34,
+        lineHeight: 40,
     },
 
     // Rating
@@ -487,7 +523,7 @@ const styles = StyleSheet.create({
         gap: 2,
     },
     star: {
-        fontSize: 16,
+        fontSize: 18,
     },
     starFilled: {
         color: '#f59e0b',
@@ -508,17 +544,18 @@ const styles = StyleSheet.create({
 
     // Price
     price: {
-        fontSize: 32,
+        fontSize: 38,
         fontWeight: '900',
         color: '#0066ff',
+        marginVertical: 4,
     },
 
     // Trust badges
     trustRow: {
         flexDirection: 'row',
-        gap: 16,
+        gap: 24,
         flexWrap: 'wrap',
-        paddingVertical: 12,
+        paddingVertical: 16,
         borderTopWidth: 1,
         borderBottomWidth: 1,
         borderColor: '#f1f5f9',
@@ -546,9 +583,9 @@ const styles = StyleSheet.create({
         letterSpacing: 0.5,
     },
     descText: {
-        fontSize: 14,
-        color: '#374151',
-        lineHeight: 22,
+        fontSize: 15,
+        color: '#334155',
+        lineHeight: 24,
     },
 
     // Actions
@@ -559,15 +596,15 @@ const styles = StyleSheet.create({
         marginTop: 6,
     },
     addToCartBtn: {
-        flex: 1,
-        minWidth: 160,
+        flex: 1.3,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: 8,
+        gap: 10,
         backgroundColor: '#0066ff',
-        paddingVertical: 14,
-        borderRadius: 10,
+        paddingVertical: 16,
+        borderRadius: 12,
+        cursor: 'pointer',
     },
     addedBtn: {
         backgroundColor: '#10b981',
@@ -606,16 +643,19 @@ const styles = StyleSheet.create({
         elevation: 4,
     },
     specsTitle: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: '800',
         color: '#0f172a',
-        marginBottom: 20,
+        marginBottom: 24,
     },
-    specsTable: {
-        borderWidth: 1,
-        borderColor: '#e5e7eb',
-        borderRadius: 10,
-        overflow: 'hidden',
+    specLabel: {
+        width: 260,
+        paddingHorizontal: 24,
+        paddingVertical: 18,
+        fontSize: 14,
+        fontWeight: '650',
+        color: '#475569',
+        backgroundColor: '#f8fafc',
     },
     specRow: {
         flexDirection: 'row',
@@ -641,5 +681,23 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#1e293b',
         lineHeight: 20,
+    },
+
+    //Related
+    relatedSection: {
+        marginTop: 48,
+        paddingHorizontal: 4,
+    },
+    relatedTitle: {
+        fontSize: 22,
+        fontWeight: '800',
+        color: '#0f172a',
+        marginBottom: 20,
+        paddingLeft: 8,
+    },
+    relatedScroll: {
+        gap: 16,
+        paddingHorizontal: 8,
+        paddingBottom: 8,
     },
 });
