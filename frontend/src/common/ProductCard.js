@@ -1,13 +1,14 @@
 import React from 'react';
 import TextIntl from '../common/TextIntl';
-import { View, Text, Image, TouchableOpacity, StyleSheet, } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { useNavigate } from 'react-router-dom';  // ← NEW
 import { ROUTES } from '../constants/routes';
-import {
-  TEXT_HOME_ADD_TO_CART
-} from '../constants/i18nKeys';
+import { TEXT_HOME_ADD_TO_CART } from '../constants/i18nKeys';
 
 export default function ProductCard({ product, manufacturers = [], categories = [], onAddToCart }) {
   if (!product) return null;
+
+  const navigate = useNavigate();  // ← NEW
 
   const manufacturer = manufacturers?.find(m => m && String(m.id) === String(product?.manufacturer_id)) || null;
   const category = categories?.find(c => c && String(c.id) === String(product?.category_id)) || null;
@@ -33,8 +34,17 @@ export default function ProductCard({ product, manufacturers = [], categories = 
     </svg>
   );
 
+  // ← NEW: navigate tới ProductPage khi nhấp vào card
+  const handleCardPress = () => {
+    navigate(`/product/${product.id}`);
+  };
+
   return (
-    <View style={styles.card}>
+    <TouchableOpacity
+      style={styles.card}
+      onPress={handleCardPress}   // ← NEW: nhấp vào card → ProductPage
+      activeOpacity={0.92}
+    >
       {/* Product image */}
       <View style={styles.imageContainer}>
         {product.img_URL ? (
@@ -48,7 +58,11 @@ export default function ProductCard({ product, manufacturers = [], categories = 
             <Text style={styles.imagePlaceholderText}>No Image</Text>
           </View>
         )}
-        <TouchableOpacity style={styles.wishlistBtn} activeOpacity={0.7}>
+        <TouchableOpacity
+          style={styles.wishlistBtn}
+          activeOpacity={0.7}
+          onPress={(e) => e.stopPropagation()}  // ngăn bubble lên card
+        >
           <Text style={styles.wishlistIcon}>♡</Text>
         </TouchableOpacity>
       </View>
@@ -94,17 +108,20 @@ export default function ProductCard({ product, manufacturers = [], categories = 
         {/* Price */}
         <Text style={styles.price}>{formatPrice(product.price)}</Text>
 
-        {/* Add to cart button */}
+        {/* Add to cart button — stop propagation để không trigger card click */}
         <TouchableOpacity
           style={styles.addToCartBtn}
           activeOpacity={0.85}
-          onPress={() => onAddToCart && onAddToCart(product)}
+          onPress={(e) => {
+            e?.stopPropagation?.();
+            onAddToCart && onAddToCart(product);
+          }}
         >
           <IconCart />
           <TextIntl tx={TEXT_HOME_ADD_TO_CART} style={styles.addToCartText} />
         </TouchableOpacity>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -120,6 +137,7 @@ const styles = StyleSheet.create({
     elevation: 4,
     marginBottom: 16,
     width: 300,
+    cursor: 'pointer',  // web cursor hint
   },
   imageContainer: {
     position: 'relative',
@@ -215,11 +233,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#9ca3af',
   },
-  soldCount: {
-    fontSize: 11,
-    color: '#9ca3af',
-    marginLeft: 'auto',
-  },
   price: {
     fontSize: 18,
     fontWeight: '700',
@@ -234,9 +247,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#0066ff',
     paddingVertical: 11,
     borderRadius: 8,
-  },
-  cartIcon: {
-    fontSize: 15,
   },
   addToCartText: {
     color: '#ffffff',

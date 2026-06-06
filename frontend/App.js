@@ -5,8 +5,9 @@ import { SafeAreaView, StyleSheet, Platform, View } from 'react-native';
 import { LocalizationProvider } from './src/providers/LocalizationProvider';
 import { CartProvider } from './src/store/CartContext';
 import { FilterProvider } from './src/store/FilterContext';
-import { ROUTES } from './src/constants/routes'
+import { ROUTES } from './src/constants/routes';
 import HomeScreen from './src/features/home/HomeScreen';
+import ProductPage from './src/features/product/ProductPage';  // ← NEW
 import Header from './src/common/Header';
 import Footer from './src/common/Footer';
 
@@ -21,10 +22,10 @@ export default function App() {
                 <Header />
               </View>
               <View style={{ flex: 1 }}>
-                {/* Set page cho path */}
                 <Routes>
                   <Route path={ROUTES.ROOT} element={<HomeScreen />} />
                   <Route path={ROUTES.HOME} element={<HomeScreen />} />
+                  <Route path={ROUTES.PRODUCT_PAGE} element={<ProductPage />} />
                 </Routes>
               </View>
               <StatusBar style={Platform.OS === 'ios' ? 'dark' : 'light'} />

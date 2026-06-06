@@ -86,6 +86,22 @@ export default {
     TEXT_HOME_DROPDOWN_MANUFACTURER: 'Manufacturers',
   },
 
+  productPage: {
+    TEXT_BACK: 'Back',
+    TEXT_ADD_TO_CART: 'Add to Cart',
+    TEXT_BUY_NOW: 'Buy Now',
+    TEXT_DESCRIPTION: 'Description',
+    TEXT_SPECS: 'Technical Specifications',
+    TEXT_MANUFACTURER: 'Manufacturer',
+    TEXT_CATEGORY: 'Category',
+    TEXT_RATING: 'Customer Rating',
+    TEXT_NOT_FOUND: 'Product not found.',
+    TEXT_ERROR: 'Failed to load product. Please try again.',
+    TEXT_IN_STOCK: 'In Stock',
+    TEXT_WARRANTY: '24-month Warranty',
+    TEXT_FREE_SHIP: 'Free Shipping',
+  },
+
   product: {
     TEXT_DESCRIPTION: 'High-quality PC gear, tested for durability and performance.',
     TEXT_SKU: 'SKU',
