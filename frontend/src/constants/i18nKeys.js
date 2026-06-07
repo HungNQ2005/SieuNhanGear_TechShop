@@ -37,6 +37,7 @@ export const TEXT_HOME_CATEGORY = 'home.TEXT_HOME_CATEGORY';
 export const TEXT_HOME_EXPLORE_BY_CATEGORY = 'home.TEXT_HOME_EXPLORE_BY_CATEGORY';
 export const TEXT_HOME_FEATURED_ALL_PRODUCTS = 'home.TEXT_HOME_FEATURED_ALL_PRODUCTS';
 export const TEXT_HOME_PRODUCTS_COUNT = 'home.TEXT_HOME_PRODUCTS_COUNT';
+export const TEXT_HOME_FLASH_SALE_TITLE = 'home.TEXT_HOME_FLASH_SALE_TITLE';
 export const TEXT_HOME_FLASH_SALE_SUBTITLE = 'home.TEXT_HOME_FLASH_SALE_SUBTITLE';
 export const TEXT_HOME_FLASH_SALE_BUY_NOW = 'home.TEXT_HOME_FLASH_SALE_BUY_NOW';
 export const TEXT_HOME_FLASH_SALE_ALL_DEAL = 'home.TEXT_HOME_FLASH_SALE_ALL_DEAL';
@@ -53,20 +54,20 @@ export const TEXT_PRODUCT_DESCRIPTION = 'product.TEXT_DESCRIPTION';
 export const TEXT_PRODUCT_SKU = 'product.TEXT_SKU';
 
 // ─── Product Page (NEW) ───────────────────────────────────────────────────────
-export const TEXT_PRODUCT_PAGE_BACK          = 'productPage.TEXT_BACK';
-export const TEXT_PRODUCT_PAGE_ADD_TO_CART   = 'productPage.TEXT_ADD_TO_CART';
-export const TEXT_PRODUCT_PAGE_BUY_NOW       = 'productPage.TEXT_BUY_NOW';
-export const TEXT_PRODUCT_PAGE_DESCRIPTION   = 'productPage.TEXT_DESCRIPTION';
-export const TEXT_PRODUCT_PAGE_SPECS         = 'productPage.TEXT_SPECS';
-export const TEXT_PRODUCT_PAGE_MANUFACTURER  = 'productPage.TEXT_MANUFACTURER';
-export const TEXT_PRODUCT_PAGE_CATEGORY      = 'productPage.TEXT_CATEGORY';
-export const TEXT_PRODUCT_PAGE_RATING        = 'productPage.TEXT_RATING';
-export const TEXT_PRODUCT_PAGE_NOT_FOUND     = 'productPage.TEXT_NOT_FOUND';
-export const TEXT_PRODUCT_PAGE_ERROR         = 'productPage.TEXT_ERROR';
-export const TEXT_PRODUCT_PAGE_IN_STOCK      = 'productPage.TEXT_IN_STOCK';
-export const TEXT_PRODUCT_PAGE_WARRANTY      = 'productPage.TEXT_WARRANTY';
-export const TEXT_PRODUCT_PAGE_FREE_SHIP     = 'productPage.TEXT_FREE_SHIP';
-export const TEXT_PRODUCT_PAGE_RELATED     = 'productPage.TEXT_RELATED';
+export const TEXT_PRODUCT_PAGE_BACK = 'productPage.TEXT_BACK';
+export const TEXT_PRODUCT_PAGE_ADD_TO_CART = 'productPage.TEXT_ADD_TO_CART';
+export const TEXT_PRODUCT_PAGE_BUY_NOW = 'productPage.TEXT_BUY_NOW';
+export const TEXT_PRODUCT_PAGE_DESCRIPTION = 'productPage.TEXT_DESCRIPTION';
+export const TEXT_PRODUCT_PAGE_SPECS = 'productPage.TEXT_SPECS';
+export const TEXT_PRODUCT_PAGE_MANUFACTURER = 'productPage.TEXT_MANUFACTURER';
+export const TEXT_PRODUCT_PAGE_CATEGORY = 'productPage.TEXT_CATEGORY';
+export const TEXT_PRODUCT_PAGE_RATING = 'productPage.TEXT_RATING';
+export const TEXT_PRODUCT_PAGE_NOT_FOUND = 'productPage.TEXT_NOT_FOUND';
+export const TEXT_PRODUCT_PAGE_ERROR = 'productPage.TEXT_ERROR';
+export const TEXT_PRODUCT_PAGE_IN_STOCK = 'productPage.TEXT_IN_STOCK';
+export const TEXT_PRODUCT_PAGE_WARRANTY = 'productPage.TEXT_WARRANTY';
+export const TEXT_PRODUCT_PAGE_FREE_SHIP = 'productPage.TEXT_FREE_SHIP';
+export const TEXT_PRODUCT_PAGE_RELATED = 'productPage.TEXT_RELATED';
 
 // ─── Footer ──────────────────────────────────────────────────────────────────
 export const TEXT_FOOTER_DESCRIPTION = 'common.TEXT_FOOTER_DESCRIPTION';

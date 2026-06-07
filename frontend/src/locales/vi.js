@@ -74,6 +74,7 @@ export default {
     TEXT_HOME_EXPLORE_BY_CATEGORY: 'Khám phá theo danh mục',
     TEXT_HOME_FEATURED_ALL_PRODUCTS: 'Tất cả',
     TEXT_HOME_PRODUCTS_COUNT: 'sản phẩm',
+    TEXT_HOME_FLASH_SALE_TITLE: 'Flash Sale Gaming',
     TEXT_HOME_FLASH_SALE_SUBTITLE: 'Deal giới hạn dành cho gaming gear',
     TEXT_HOME_FLASH_SALE_BUY_NOW: 'Mua ngay',
     TEXT_HOME_FLASH_SALE_ALL_DEAL: 'Xem tất cả deal',

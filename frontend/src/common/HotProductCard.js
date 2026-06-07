@@ -6,17 +6,14 @@ import {
     TEXT_HOME_HOT_PRODUCT,
     TEXT_HOME_EMPTY_PRODUCTS,
 } from '../constants/i18nKeys';
+import {
+  IconLightning,
+} from '../constants/icons';
 
 export default function HotProductCard() {
     const [hotProduct, setHotProduct] = useState(null);
     const [loading, setLoading] = useState(true);
-
-    const IconLightning = () => (
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ff443b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M13 2L4 14H12L11 22L20 10H12L13 2Z" />
-        </svg>
-    );
-
+    
     useEffect(() => {
         const fetchHotProduct = async () => {
             try {
