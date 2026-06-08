@@ -30,6 +30,11 @@ import {
   TEXT_HOME_HERO_STATUS_4,
   TEXT_HOME_HERO_STATUS_5,
 } from '../../constants/i18nKeys';
+import {
+  IconLightningBlue,
+  IconPointToRight,
+  IconSearchCannotFind,
+} from '../../constants/icons';
 
 export default function HomeScreen({ scrollViewRef }) {
   const { addToCart, totalItems } = useCart()
@@ -160,31 +165,12 @@ export default function HomeScreen({ scrollViewRef }) {
     }
   };
 
-  const IconLightning = () => (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0066ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M13 2L4 14H12L11 22L20 10H12L13 2Z" />
-    </svg>
-  );
-
-  const IconPointToRight = () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M5 12h14M12 5l7 7-7 7" />
-    </svg>
-  );
-
-  const IconSearch = () => (
-    <svg width="50" height="auto" viewBox="0 0 24 24" fill="none" stroke="#9c9c9c" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="11" cy="11" r="8" />
-      <line x1="21" y1="21" x2="16.65" y2="16.65" />
-    </svg>
-  );
-
   return (
     <View style={styles.page}>
       <Banner style={styles.banner}>
         <View style={styles.heroSection}>
           <View style={styles.badgeContainer}>
-            <IconLightning />
+            <IconLightningBlue />
             <TextIntl tx={TEXT_HOME_HERO_STAMP} style={styles.heroStamp} />
           </View>
           <TextIntl tx={TEXT_HOME_HERO_TITLE} style={styles.heroTitle} />
@@ -289,7 +275,7 @@ export default function HomeScreen({ scrollViewRef }) {
           <ActivityIndicator size="large" color="#0066ff" style={styles.loader} />
         ) : filteredProducts.length === 0 ? (
           <View style={styles.emptyContainer}>
-            <IconSearch />
+            <IconSearchCannotFind />
             <TextIntl tx={TEXT_HOME_EMPTY_PRODUCTS} style={styles.emptyText} />
           </View>
         ) : (

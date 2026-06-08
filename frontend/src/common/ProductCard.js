@@ -3,7 +3,12 @@ import TextIntl from '../common/TextIntl';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigate } from 'react-router-dom';  // ← NEW
 import { ROUTES } from '../constants/routes';
-import { TEXT_HOME_ADD_TO_CART } from '../constants/i18nKeys';
+import {
+  TEXT_HOME_ADD_TO_CART
+} from '../constants/i18nKeys';
+import {
+  IconCart,
+} from '../constants/icons';
 
 export default function ProductCard({ product, manufacturers = [], categories = [], onAddToCart }) {
   if (!product) return null;
@@ -25,14 +30,6 @@ export default function ProductCard({ product, manufacturers = [], categories = 
       return '☆';
     });
   };
-
-  const IconCart = () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="9" cy="21" r="1" />
-      <circle cx="20" cy="21" r="1" />
-      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-    </svg>
-  );
 
   const handleCardPress = () => {
     navigate(ROUTES.PRODUCT_PAGE.replace(':id', product.id));

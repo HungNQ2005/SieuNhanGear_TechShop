@@ -23,38 +23,13 @@ import {
     TEXT_PRODUCT_PAGE_FREE_SHIP,
     TEXT_PRODUCT_PAGE_RELATED,
 } from '../../constants/i18nKeys';
-
-const IconBack = () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M19 12H5M12 5l-7 7 7 7" />
-    </svg>
-);
-
-const IconCart = () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
-        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-    </svg>
-);
-
-const IconShield = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0066ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-    </svg>
-);
-
-const IconTruck = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0066ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="1" y="3" width="15" height="13" /><polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
-        <circle cx="5.5" cy="18.5" r="2.5" /><circle cx="18.5" cy="18.5" r="2.5" />
-    </svg>
-);
-
-const IconCheck = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0066ff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="20 6 9 17 4 12" />
-    </svg>
-);
+import {
+    IconCart,
+    IconBack,
+    IconShield,
+    IconTruck,
+    IconCheck,
+} from '../../constants/icons';
 
 function StarRating({ rating }) {
     const full = Math.floor(rating);
@@ -319,7 +294,7 @@ export default function ProductPage() {
             {/* ── Related Products Section ── */}
             {relatedProducts.length > 0 && (
                 <View style={styles.relatedSection}>
-                    <TextIntl tx={TEXT_PRODUCT_PAGE_RELATED} style={styles.relatedTitle}/>
+                    <TextIntl tx={TEXT_PRODUCT_PAGE_RELATED} style={styles.relatedTitle} />
                     <ScrollView
                         horizontal
                         showsHorizontalScrollIndicator={false}

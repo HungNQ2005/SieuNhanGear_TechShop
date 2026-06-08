@@ -5,11 +5,15 @@ import { ROUTES } from '../constants/routes';
 import TextIntl from './TextIntl';
 import api from '../services/api';
 import {
+    TEXT_HOME_FLASH_SALE_TITLE,
     TEXT_HOME_FLASH_SALE_SUBTITLE,
     TEXT_HOME_FLASH_SALE_BUY_NOW,
     TEXT_HOME_FLASH_SALE_ALL_DEAL,
     TEXT_HOME_FLASH_SALE_SOLD,
 } from '../constants/i18nKeys';
+import {
+    IconLightning,
+} from '../constants/icons';
 
 const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 const formatPrice = (price) => price?.toLocaleString('vi-VN') + '₫';
@@ -99,7 +103,10 @@ export default function FlashSale({ onAddToCart, onViewAll }) {
                 <View style={styles.headerLeft}>
                     <CountdownTimer />
                     <View style={styles.titleContainer}>
-                        <Text style={styles.title}>⚡ Flash Sale Gaming</Text>
+                        <View style={styles.titleLogo}>
+                            <IconLightning />
+                            <TextIntl tx={TEXT_HOME_FLASH_SALE_TITLE} style={styles.title} />
+                        </View>
                         <TextIntl tx={TEXT_HOME_FLASH_SALE_SUBTITLE} style={styles.subtitle} />
                     </View>
                 </View>
@@ -199,6 +206,11 @@ const styles = StyleSheet.create({
     },
     titleContainer: {
         marginTop: 4,
+    },
+    titleLogo: {
+        flexDirection: 'row',
+        alignItems: 'baseline',
+        gap: 8,
     },
     title: {
         fontSize: 20,
