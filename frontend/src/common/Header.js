@@ -3,6 +3,7 @@ import { View, Text, TextInput, Pressable, StyleSheet, Modal, ScrollView, Activi
 import { useLocalization } from '../providers/LocalizationProvider';
 import { useFilter } from '../store/FilterContext';
 import { useNavigate } from 'react-router-dom';
+import { API } from '../constants/apiURL';
 import { ROUTES } from '../constants/routes';
 import { ICONS } from '../constants/icons';
 import TextIntl from './TextIntl';
@@ -71,8 +72,8 @@ export default function Header() {
     if (dropdownVisible && categories.length === 0) {
       setLoadingDropdown(true);
       Promise.all([
-        api.get(ROUTES.GET_CATEGORY),
-        api.get(ROUTES.GET_MANUFACTURER),
+        api.get(API.GET_CATEGORY),
+        api.get(API.GET_MANUFACTURER),
       ])
         .then(([catRes, manRes]) => {
           setCategories(Array.isArray(catRes.data) ? catRes.data : []);

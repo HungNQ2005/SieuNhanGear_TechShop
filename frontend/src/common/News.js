@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import TextIntl from './TextIntl';
 import api from '../services/api';
-import { ROUTES } from '../constants/routes';
+import { API } from '../constants/apiURL';
 import {
     TEXT_HOME_NEWS_SUBTITLE,
     TEXT_HOME_NEWS_VIEW_ALL,
@@ -19,7 +19,7 @@ export default function News() {
 
     const fetchNews = async () => {
         try {
-            const response = await api.get(ROUTES.GET_NEWS);
+            const response = await api.get(API.GET_NEWS);
             setNews(response.data);
         } catch (error) {
             console.error('Failed to fetch news:', error);
@@ -55,7 +55,7 @@ export default function News() {
             >
                 {news.map((item) => (
                     <View key={item.id} style={styles.card}>
-                        <Image source={{ uri: `${ROUTES.BASE_API_URL}${item.image}` }} style={styles.cardImage} />
+                        <Image source={{ uri: `${API.BASE_API_URL}${item.image}` }} style={styles.cardImage} />
 
                         <View style={styles.cardBody}>
                             <Text style={styles.cardMeta}>
