@@ -32,7 +32,7 @@ import {
   TEXT_HOME_DROPDOWN_CATEGORY,
   TEXT_HOME_DROPDOWN_MANUFACTURER,
 } from "../constants/i18nKeys";
-import AuthModal from "./AuthModal";
+import AuthModal from "../features/Auth/Auth";
 // ─── SVG Icons (giữ nguyên) ─────────────────────────────────────────────
 const IconGrid = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="white">

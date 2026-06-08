@@ -11,11 +11,9 @@ import {
   ScrollView,
 } from "react-native";
 import { authModalStyles } from "./AuthModal.styles";
-import { login } from "../services/mockAuth";
-import { useLocalization } from "../providers/LocalizationProvider";
-import TextIntl from "./TextIntl";
-const LOGIN = "login";
-const REGISTER = "register";
+import { login } from "../../services/mockAuth";
+import { useLocalization } from "../../providers/LocalizationProvider";
+import TextIntl from "../../common/TextIntl";
 import {
   TEXT_LOGIN,
   TEXT_REGISTER,
@@ -39,7 +37,11 @@ import {
   TEXT_BENEFIT_3,
   TEXT_BENEFIT_4,
   TEXT_ALREADY_HAVE_ACCOUNT,
-} from "../constants/i18nKeys";
+  TEXT_COPYRIGHT,
+} from "../../constants/i18nKeys";
+
+const LOGIN = "login";
+const REGISTER = "register";
 function InputField({
   label,
   value,
@@ -53,9 +55,6 @@ function InputField({
       <Text style={authModalStyles.fieldLabel}>{label}</Text>
       <View style={authModalStyles.inputShell}>
         <View style={authModalStyles.inputIcon}>
-          <Text style={authModalStyles.inputIconText}>
-            {secureTextEntry ? "🔒" : "✉"}
-          </Text>
         </View>
         <TextInput
           value={value}
@@ -207,7 +206,7 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
 
       <View style={authModalStyles.leftFooter}>
         <Text style={authModalStyles.leftFooterText}>
-          © 2024 SieuNhanGear Vietnam. Bảo mật SSL 256-bit.
+          {t(TEXT_COPYRIGHT)}
         </Text>
       </View>
     </View>

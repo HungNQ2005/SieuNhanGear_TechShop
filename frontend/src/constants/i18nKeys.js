@@ -82,6 +82,7 @@ export const TEXT_BENEFIT_4 = "common.TEXT_BENEFIT_4";
 export const TEXT_HAVE_ACCOUNT = "common.TEXT_HAVE_ACCOUNT";
 export const TEXT_ALREADY_HAVE_ACCOUNT = "common.TEXT_ALREADY_HAVE_ACCOUNT";
 export const TEXT_LOGIN_ERROR = "common.TEXT_LOGIN_ERROR";
+export const TEXT_COPYRIGHT = "common.TEXT_COPYRIGHT";
 // ─── Product ──────────────────────────────────────────────────────────────────
 export const TEXT_PRODUCT_DESCRIPTION = "product.TEXT_DESCRIPTION";
 export const TEXT_PRODUCT_SKU = "product.TEXT_SKU";

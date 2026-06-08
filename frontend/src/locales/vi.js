@@ -85,6 +85,7 @@ export default {
     TEXT_HAVE_ACCOUNT: "Chưa có tài khoản?",
     TEXT_ALREADY_HAVE_ACCOUNT: "Đã có tài khoản?",
     TEXT_LOGIN_ERROR: "Email hoặc mật khẩu không chính xác",
+    TEXT_COPYRIGHT: "© 2024 SieuNhanGear Vietnam. Bảo mật SSL 256-bit.",
   },
 
   home: {

@@ -84,6 +84,7 @@ export default {
     TEXT_HAVE_ACCOUNT: "Don't have an account?",
     TEXT_ALREADY_HAVE_ACCOUNT: "Already have an account?",
     TEXT_LOGIN_ERROR: "Invalid email or password",
+    TEXT_COPYRIGHT: "© 2024 SieuNhanGear Vietnam. 256-bit SSL Security.",
   },
 
   home: {
