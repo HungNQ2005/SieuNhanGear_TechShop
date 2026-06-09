@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, ActivityIndicator, } from 'react-native';
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../constants/routes';
 import { API } from '../constants/apiURL';
 import TextIntl from './TextIntl';
 import api from '../services/api';
@@ -128,7 +129,7 @@ export default function FlashSale({ onAddToCart, onViewAll }) {
                         <TouchableOpacity
                             key={item.id}
                             style={styles.productCard}
-                            onPress={() => navigate(API.PRODUCT_PAGE.replace(':id', item.id))}
+                            onPress={() => navigate(ROUTES.PRODUCT_PAGE.replace(':id', item.id))}
                             activeOpacity={0.92}
                         >
                             {/* Khung ảnh & Badge Flash Sale */}
@@ -187,7 +188,7 @@ export default function FlashSale({ onAddToCart, onViewAll }) {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#0066FF',
-        marginHorizontal: 12,
+        marginHorizontal: 32,
         marginVertical: 12,
         borderRadius: 20,
         paddingTop: 20,

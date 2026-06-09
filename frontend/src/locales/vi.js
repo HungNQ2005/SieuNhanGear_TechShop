@@ -88,7 +88,7 @@ export default {
   },
 
   productPage: {
-    TEXT_BACK: 'Quay lại',
+    TEXT_BACK: 'Trang Chủ',
     TEXT_ADD_TO_CART: 'Thêm vào giỏ',
     TEXT_BUY_NOW: 'Mua ngay',
     TEXT_DESCRIPTION: 'Mô tả sản phẩm',
@@ -101,6 +101,7 @@ export default {
     TEXT_IN_STOCK: 'Còn hàng',
     TEXT_WARRANTY: 'Bảo hành 3 năm',
     TEXT_FREE_SHIP: 'Miễn phí vận chuyển',
+    TEXT_COMMENTS: 'Đánh giá sản phẩm',
     TEXT_RELATED: 'Sản phẩm liên quan',
   },
 

@@ -6,11 +6,8 @@ export const styles = StyleSheet.create({
     backgroundColor: '#F8FAFC',
   },
   pageContent: {
-    maxWidth: 1200,
     marginHorizontal: 'auto',
-    paddingHorizontal: 32,
     paddingVertical: 32,
-    paddingBottom: 60,
   },
 
   // Center screen (loading / error)
@@ -50,24 +47,26 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     paddingVertical: 6,
-    paddingHorizontal: 10,
+    paddingHorizontal: 2,
     borderRadius: 8,
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
   },
   backLinkText: {
     fontSize: 14,
-    color: '#374151',
-    fontWeight: '500',
+    color: '#9ca3af',
+    fontWeight: '400',
   },
   breadcrumbCategory: {
     fontSize: 14,
     color: '#9ca3af',
+  },
+  breadcrumbCategory1: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  separator: {
+    fontSize: 14,
+    color: '#9ca3af',
+    marginHorizontal: 4,
   },
 
   // Product section
@@ -77,13 +76,12 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 24,
     padding: 40,
-    shadowColor: '#0f172a',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.04,
-    shadowRadius: 20,
     elevation: 4,
-    marginBottom: 32,
     flexWrap: 'wrap',
+  },
+  productInfoFlow: {
+    flexDirection: 'row',
+    gap: 14,
   },
 
   // Image
@@ -113,15 +111,6 @@ export const styles = StyleSheet.create({
     color: '#9ca3af',
     fontSize: 16,
   },
-  brandBadge: {
-    position: 'absolute',
-    top: 12,
-    left: 12,
-    backgroundColor: '#0066ff',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 6,
-  },
   brandBadgeText: {
     color: '#fff',
     fontSize: 11,
@@ -131,10 +120,12 @@ export const styles = StyleSheet.create({
 
   // Info
   infoWrapper: {
-    flex: 1.5,
-    minWidth: 400,
-    gap: 18,
     justifyContent: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    padding: 32,
+    elevation: 4,
+    marginBottom: 24,
   },
   tagRow: {
     flexDirection: 'row',
@@ -294,10 +285,6 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 20,
     padding: 32,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 16,
     elevation: 4,
   },
   specsTitle: {
@@ -331,7 +318,16 @@ export const styles = StyleSheet.create({
     color: '#1e293b',
     lineHeight: 20,
   },
-
+  //Comment
+  commentsSection: {
+    marginTop: 32,
+  },
+  commentsTitle: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: '#0f172a',
+    marginBottom: 16,
+  },
   // Related
   relatedSection: {
     marginTop: 48,

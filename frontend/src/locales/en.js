@@ -88,7 +88,7 @@ export default {
   },
 
   productPage: {
-    TEXT_BACK: 'Back',
+    TEXT_BACK: 'Home Page',
     TEXT_ADD_TO_CART: 'Add to Cart',
     TEXT_BUY_NOW: 'Buy Now',
     TEXT_DESCRIPTION: 'Description',
@@ -101,6 +101,7 @@ export default {
     TEXT_IN_STOCK: 'In Stock',
     TEXT_WARRANTY: '3 years Warranty',
     TEXT_FREE_SHIP: 'Free Shipping',
+    TEXT_COMMENTS: 'Customer Reviews',
     TEXT_RELATED: 'Related Products',
   },
 
