@@ -335,6 +335,7 @@ const styles = StyleSheet.create({
   },
   banner: {
     flexDirection: 'row',
+    backgroundColor: '#111827',
   },
   line: {
     borderBottomWidth: 1,
