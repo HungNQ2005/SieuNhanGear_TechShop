@@ -11,6 +11,7 @@ export const styles = StyleSheet.create({
   },
   banner: {
     flexDirection: 'row',
+    backgroundColor: '#111827', // thêm màu nền từ style cũ
   },
   line: {
     borderBottomWidth: 1,
@@ -112,6 +113,7 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
   },
   buildConfigButton1: {
+    // empty
   },
   statusLine: {
     flexDirection: 'row',
@@ -195,6 +197,10 @@ export const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 20,
     padding: 16,
+    shadowColor: '#000',        // thêm shadow từ style cũ
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
     elevation: 3,
     borderWidth: 1,
     borderColor: '#eef2f6',
@@ -231,5 +237,9 @@ export const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
     color: '#0066ff',
+  },
+  // Thêm style loader (đang thiếu)
+  loader: {
+    marginVertical: 20,
   },
 });

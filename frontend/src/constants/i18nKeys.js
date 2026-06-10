@@ -1,22 +1,22 @@
 // ─── Common ───────────────────────────────────────────────────────────────────
-export const TEXT_APP_TITLE = 'common.TEXT_APP_TITLE';
-export const TEXT_APP_SUBTITLE = 'common.TEXT_APP_SUBTITLE';
-export const TEXT_CART_TITLE = 'common.TEXT_CART_TITLE';
-export const TEXT_ADD_TO_CART = 'common.TEXT_ADD_TO_CART';
-export const TEXT_PRICE_LABEL = 'common.TEXT_PRICE_LABEL';
-export const TEXT_VIEW_DETAILS = 'common.TEXT_VIEW_DETAILS';
-export const TEXT_CHANGE_LANGUAGE = 'common.TEXT_CHANGE_LANGUAGE';
-export const TEXT_SEARCH_PLACEHOLDER = 'common.TEXT_SEARCH_PLACEHOLDER';
-export const TEXT_HOTLINE_LABEL = 'common.TEXT_HOTLINE_LABEL';
-export const TEXT_HOTLINE_NUMBER = 'common.TEXT_HOTLINE_NUMBER';
-export const TEXT_SHOWROOM_LABEL = 'common.TEXT_SHOWROOM_LABEL';
-export const TEXT_SHOWROOM_SUBLABEL = 'common.TEXT_SHOWROOM_SUBLABEL';
-export const TEXT_TRACK_ORDER_LABEL = 'common.TEXT_TRACK_ORDER_LABEL';
-export const TEXT_TRACK_ORDER_SUBLABEL = 'common.TEXT_TRACK_ORDER_SUBLABEL';
-export const TEXT_NO_PRODUCTS = 'common.TEXT_NO_PRODUCTS';
-export const TEXT_PRODUCT_COUNT = 'common.TEXT_PRODUCT_COUNT';
-export const TEXT_CATEGORIES_LABEL = 'common.TEXT_CATEGORIES_LABEL';
-export const TEXT_CART_SUBLABEL = 'common.TEXT_CART_SUBLABEL';
+export const TEXT_APP_TITLE = "common.TEXT_APP_TITLE";
+export const TEXT_APP_SUBTITLE = "common.TEXT_APP_SUBTITLE";
+export const TEXT_CART_TITLE = "common.TEXT_CART_TITLE";
+export const TEXT_ADD_TO_CART = "common.TEXT_ADD_TO_CART";
+export const TEXT_PRICE_LABEL = "common.TEXT_PRICE_LABEL";
+export const TEXT_VIEW_DETAILS = "common.TEXT_VIEW_DETAILS";
+export const TEXT_CHANGE_LANGUAGE = "common.TEXT_CHANGE_LANGUAGE";
+export const TEXT_SEARCH_PLACEHOLDER = "common.TEXT_SEARCH_PLACEHOLDER";
+export const TEXT_HOTLINE_LABEL = "common.TEXT_HOTLINE_LABEL";
+export const TEXT_HOTLINE_NUMBER = "common.TEXT_HOTLINE_NUMBER";
+export const TEXT_SHOWROOM_LABEL = "common.TEXT_SHOWROOM_LABEL";
+export const TEXT_SHOWROOM_SUBLABEL = "common.TEXT_SHOWROOM_SUBLABEL";
+export const TEXT_TRACK_ORDER_LABEL = "common.TEXT_TRACK_ORDER_LABEL";
+export const TEXT_TRACK_ORDER_SUBLABEL = "common.TEXT_TRACK_ORDER_SUBLABEL";
+export const TEXT_NO_PRODUCTS = "common.TEXT_NO_PRODUCTS";
+export const TEXT_PRODUCT_COUNT = "common.TEXT_PRODUCT_COUNT";
+export const TEXT_CATEGORIES_LABEL = "common.TEXT_CATEGORIES_LABEL";
+export const TEXT_CART_SUBLABEL = "common.TEXT_CART_SUBLABEL";
 
 // ─── Home ─────────────────────────────────────────────────────────────────────
 export const TEXT_HOME_HERO_STAMP = 'home.TEXT_HOME_HERO_STAMP';
@@ -49,11 +49,35 @@ export const TEXT_HOME_DROPDOWN_ALL_PRODUCT = 'home.TEXT_HOME_DROPDOWN_ALL_PRODU
 export const TEXT_HOME_DROPDOWN_CATEGORY = 'home.TEXT_HOME_DROPDOWN_CATEGORY';
 export const TEXT_HOME_DROPDOWN_MANUFACTURER = 'home.TEXT_HOME_DROPDOWN_MANUFACTURER';
 
-// ─── Product (existing) ───────────────────────────────────────────────────────
+// ─── Auth Modal ──────────────────────────────────────────────────────────────
+export const TEXT_LOGIN = "common.TEXT_LOGIN";
+export const TEXT_REGISTER = "common.TEXT_REGISTER";
+export const TEXT_LOGIN_SUBTITLE = "common.TEXT_LOGIN_SUBTITLE";
+export const TEXT_REGISTER_SUBTITLE = "common.TEXT_REGISTER_SUBTITLE";
+export const TEXT_EMAIL = "common.TEXT_EMAIL";
+export const TEXT_PASSWORD = "common.TEXT_PASSWORD";
+export const TEXT_FORGOT_PASSWORD = "common.TEXT_FORGOT_PASSWORD";
+export const TEXT_REMEMBER_LOGIN = "common.TEXT_REMEMBER_LOGIN";
+export const TEXT_NO_ACCOUNT = "common.TEXT_NO_ACCOUNT";
+export const TEXT_REGISTER_NOW = "common.TEXT_REGISTER_NOW";
+export const TEXT_NAME = "common.TEXT_NAME";
+export const TEXT_REGISTER_ERROR = "common.TEXT_REGISTER_ERROR";
+export const TEXT_PASSWORD_MISMATCH = "common.TEXT_PASSWORD_MISMATCH";
+export const TEXT_CONFIRM_PASSWORD = "common.TEXT_CONFIRM_PASSWORD";
+export const TEXT_WELCOME_TITLE = "common.TEXT_WELCOME_TITLE";
+export const TEXT_WELCOME_SUBTITLE = "common.TEXT_WELCOME_SUBTITLE";
+export const TEXT_BENEFIT_1 = "common.TEXT_BENEFIT_1";
+export const TEXT_BENEFIT_2 = "common.TEXT_BENEFIT_2";
+export const TEXT_BENEFIT_3 = "common.TEXT_BENEFIT_3";
+export const TEXT_BENEFIT_4 = "common.TEXT_BENEFIT_4";
+export const TEXT_HAVE_ACCOUNT = "common.TEXT_HAVE_ACCOUNT";
+export const TEXT_ALREADY_HAVE_ACCOUNT = "common.TEXT_ALREADY_HAVE_ACCOUNT";
+export const TEXT_LOGIN_ERROR = "common.TEXT_LOGIN_ERROR";
+export const TEXT_COPYRIGHT = "common.TEXT_COPYRIGHT";
+
+// ─── Product Page ────────────────────────────────────────────────────────────
 export const TEXT_PRODUCT_DESCRIPTION = 'product.TEXT_DESCRIPTION';
 export const TEXT_PRODUCT_SKU = 'product.TEXT_SKU';
-
-// ─── Product Page (NEW) ───────────────────────────────────────────────────────
 export const TEXT_PRODUCT_PAGE_BACK = 'productPage.TEXT_BACK';
 export const TEXT_PRODUCT_PAGE_ADD_TO_CART = 'productPage.TEXT_ADD_TO_CART';
 export const TEXT_PRODUCT_PAGE_BUY_NOW = 'productPage.TEXT_BUY_NOW';
@@ -67,7 +91,7 @@ export const TEXT_PRODUCT_PAGE_ERROR = 'productPage.TEXT_ERROR';
 export const TEXT_PRODUCT_PAGE_IN_STOCK = 'productPage.TEXT_IN_STOCK';
 export const TEXT_PRODUCT_PAGE_WARRANTY = 'productPage.TEXT_WARRANTY';
 export const TEXT_PRODUCT_PAGE_FREE_SHIP = 'productPage.TEXT_FREE_SHIP';
-export const TEXT_PRODUCT_PAGE_COMMENTS = 'productPage.TEXT_COMMENTS'
+export const TEXT_PRODUCT_PAGE_COMMENTS = 'productPage.TEXT_COMMENTS';
 export const TEXT_PRODUCT_PAGE_RELATED = 'productPage.TEXT_RELATED';
 
 // ─── Footer ──────────────────────────────────────────────────────────────────
@@ -101,3 +125,37 @@ export const TEXT_FOOTER_ABOUT_TERMS = 'common.TEXT_FOOTER_ABOUT_TERMS';
 export const TEXT_FOOTER_ABOUT_PRIVACY = 'common.TEXT_FOOTER_ABOUT_PRIVACY';
 export const TEXT_FOOTER_COPYRIGHT = 'common.TEXT_FOOTER_COPYRIGHT';
 export const TEXT_FOOTER_SECURE_PAYMENT = 'common.TEXT_FOOTER_SECURE_PAYMENT';
+
+// ─── Map ──────────────────────────────────────────────────────────────────────
+export const I18N_KEYS = {
+  common: {
+    TEXT_APP_TITLE,
+    TEXT_APP_SUBTITLE,
+    TEXT_CART_TITLE,
+    TEXT_ADD_TO_CART,
+    TEXT_PRICE_LABEL,
+    TEXT_VIEW_DETAILS,
+    TEXT_CHANGE_LANGUAGE,
+    TEXT_SEARCH_PLACEHOLDER,
+    TEXT_HOTLINE_LABEL,
+    TEXT_HOTLINE_NUMBER,
+    TEXT_SHOWROOM_LABEL,
+    TEXT_SHOWROOM_SUBLABEL,
+    TEXT_TRACK_ORDER_LABEL,
+    TEXT_TRACK_ORDER_SUBLABEL,
+    TEXT_NO_PRODUCTS,
+    TEXT_PRODUCT_COUNT,
+    TEXT_CATEGORIES_LABEL,
+    TEXT_CART_SUBLABEL,
+  },
+  home: {
+    TEXT_HOME_HERO_STAMP,
+    TEXT_HERO_TITLE: TEXT_HOME_HERO_TITLE,
+    TEXT_HERO_SUBTITLE: TEXT_HOME_HERO_SUBTITLE,
+    TEXT_FEATURED_PRODUCTS: TEXT_HOME_FEATURED_PRODUCTS,
+  },
+  product: {
+    TEXT_DESCRIPTION: TEXT_PRODUCT_DESCRIPTION,
+    TEXT_SKU: TEXT_PRODUCT_SKU,
+  },
+};
