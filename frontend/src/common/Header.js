@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -8,13 +8,15 @@ import {
   Modal,
   ScrollView,
   ActivityIndicator,
-} from "react-native";
-import { useLocalization } from "../providers/LocalizationProvider";
-import { useFilter } from "../store/FilterContext";
-import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../constants/routes";
-import TextIntl from "./TextIntl";
-import api from "../services/api";
+  useWindowDimensions,
+} from 'react-native';
+import { useLocalization } from '../providers/LocalizationProvider';
+import { useFilter } from '../store/FilterContext';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../constants/routes';
+import { API } from '../constants/apiURL';
+import TextIntl from './TextIntl';
+import api from '../services/api';
 import {
   TEXT_APP_TITLE,
   TEXT_CATEGORIES_LABEL,
@@ -26,169 +28,25 @@ import {
   TEXT_TRACK_ORDER_LABEL,
   TEXT_TRACK_ORDER_SUBLABEL,
   TEXT_CHANGE_LANGUAGE,
-  TEXT_ACCOUNT_LABEL,
   TEXT_CART_SUBLABEL,
   TEXT_HOME_DROPDOWN_ALL_PRODUCT,
   TEXT_HOME_DROPDOWN_CATEGORY,
   TEXT_HOME_DROPDOWN_MANUFACTURER,
-} from "../constants/i18nKeys";
-import AuthModal from "../features/Auth/Auth";
-// ─── SVG Icons (giữ nguyên) ─────────────────────────────────────────────
-const IconGrid = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-    <rect x="3" y="3" width="7" height="7" rx="1" />
-    <rect x="14" y="3" width="7" height="7" rx="1" />
-    <rect x="3" y="14" width="7" height="7" rx="1" />
-    <rect x="14" y="14" width="7" height="7" rx="1" />
-  </svg>
-);
-
-const IconShippingBox = () => (
-  <svg
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="#2563eb"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M16.5 9.4 7.5 4.2" />
-    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-    <polyline points="3.29 7 12 12 20.71 7" />
-    <line x1="12" y1="22" x2="12" y2="12" />
-  </svg>
-);
-
-const IconChevronDown = () => (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="white"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <polyline points="6 9 12 15 18 9" />
-  </svg>
-);
-
-const IconSearch = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="white"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <circle cx="11" cy="11" r="8" />
-    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-  </svg>
-);
-
-const IconPhone = () => (
-  <svg
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="#2563eb"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.91 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.82 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l.97-.97a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-  </svg>
-);
-
-const IconMapPin = () => (
-  <svg
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="#2563eb"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-    <circle cx="12" cy="10" r="3" />
-  </svg>
-);
-
-const IconGlobe = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="#2563eb"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <circle cx="12" cy="12" r="10" />
-    <line x1="2" y1="12" x2="22" y2="12" />
-    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-  </svg>
-);
-
-const IconUser = () => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-    <circle cx="12" cy="7" r="4" />
-  </svg>
-);
-
-const IconShoppingCart = () => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <circle cx="9" cy="21" r="1" />
-    <circle cx="20" cy="21" r="1" />
-    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-  </svg>
-);
-
-const IconBox = () => (
-  <svg
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="white"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-    <line x1="12" y1="22.08" x2="12" y2="12" />
-  </svg>
-);
+} from '../constants/i18nKeys';
+import {
+  IconGrid,
+  IconShippingBox,
+  IconChevronDown,
+  IconSearch,
+  IconPhone,
+  IconMapPin,
+  IconGlobe,
+  IconUser,
+  IconShoppingCart,
+  IconBox,
+  IconMore,
+} from '../constants/icons';
+import AuthModal from '../features/Auth/Auth';
 
 // ─── Header Component ─────────────────────────────────────────────────────
 export default function Header() {
@@ -202,12 +60,13 @@ export default function Header() {
     clearFilters,
   } = useFilter();
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const { width } = useWindowDimensions();
+  const isCompact = width < 1100;
+
+  const [searchQuery, setSearchQuery] = useState('');
   const [cartCount] = useState(0);
   const [user, setUser] = useState(null);
-
   const [showAuthModal, setShowAuthModal] = useState(false);
-
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -216,12 +75,16 @@ export default function Header() {
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
   const categoryButtonRef = useRef(null);
 
+  const [moreVisible, setMoreVisible] = useState(false);
+  const [morePosition, setMorePosition] = useState({ top: 0, left: 0 });
+  const moreButtonRef = useRef(null);
+
   useEffect(() => {
     if (dropdownVisible && categories.length === 0) {
       setLoadingDropdown(true);
       Promise.all([
-        api.get(ROUTES.GET_CATEGORY),
-        api.get(ROUTES.GET_MANUFACTURER),
+        api.get(API.GET_CATEGORY),
+        api.get(API.GET_MANUFACTURER),
       ])
         .then(([catRes, manRes]) => {
           setCategories(Array.isArray(catRes.data) ? catRes.data : []);
@@ -239,15 +102,22 @@ export default function Header() {
     setDropdownVisible(true);
   };
 
+  const handleOpenMore = () => {
+    moreButtonRef.current?.measure((x, y, w, height, pageX, pageY) => {
+      setMorePosition({ top: pageY + height + 4, left: pageX });
+    });
+    setMoreVisible(true);
+  };
+
   const handleSelectCategory = (id) => {
     setSelectedCategoryId(id === selectedCategoryId ? null : id);
-    setSelectedManufacturerId(null); // bỏ filter manufacturer khi chọn category
+    setSelectedManufacturerId(null);
     setDropdownVisible(false);
   };
 
   const handleSelectManufacturer = (id) => {
     setSelectedManufacturerId(id === selectedManufacturerId ? null : id);
-    setSelectedCategoryId(null); // bỏ filter category khi chọn manufacturer
+    setSelectedCategoryId(null);
     setDropdownVisible(false);
   };
 
@@ -256,6 +126,12 @@ export default function Header() {
     setSearchQuery("");
     navigate(ROUTES.HOME);
   };
+
+  const handleSearch = () => {
+    // Implement search logic here
+    console.log("Search:", searchQuery);
+  };
+
   return (
     <View style={styles.headerContainer}>
       <View style={styles.innerContainer}>
@@ -279,7 +155,7 @@ export default function Header() {
             <IconChevronDown />
           </Pressable>
 
-          {/* Dropdown Modal */}
+          {/* Category Dropdown Modal */}
           <Modal
             visible={dropdownVisible}
             transparent
@@ -300,17 +176,14 @@ export default function Header() {
                 {loadingDropdown ? (
                   <ActivityIndicator color="#0066ff" style={{ padding: 24 }} />
                 ) : (
-                  <ScrollView
-                    style={{ maxHeight: 420 }}
-                    showsVerticalScrollIndicator={false}
-                  >
-                    {/* ── Tất cả ── */}
+                  <ScrollView style={{ maxHeight: 420 }} showsVerticalScrollIndicator={false}>
+                    {/* Tất cả sản phẩm */}
                     <Pressable
                       style={[
                         styles.dropdownAllBtn,
                         !selectedCategoryId &&
-                          !selectedManufacturerId &&
-                          styles.dropdownItemActive,
+                        !selectedManufacturerId &&
+                        styles.dropdownItemActive,
                       ]}
                       onPress={() => {
                         clearFilters();
@@ -323,26 +196,21 @@ export default function Header() {
                       />
                     </Pressable>
 
-                    {/* ── Nhóm Category ── */}
-                    <TextIntl
-                      tx={TEXT_HOME_DROPDOWN_CATEGORY}
-                      style={styles.dropdownGroupLabel}
-                    />
+                    {/* Danh mục category */}
+                    <TextIntl tx={TEXT_HOME_DROPDOWN_CATEGORY} style={styles.dropdownGroupLabel} />
                     {categories.map((cat) => (
                       <Pressable
                         key={`cat-${cat.id}`}
                         style={[
                           styles.dropdownItem,
-                          selectedCategoryId === cat.id &&
-                            styles.dropdownItemActive,
+                          selectedCategoryId === cat.id && styles.dropdownItemActive,
                         ]}
                         onPress={() => handleSelectCategory(cat.id)}
                       >
                         <Text
                           style={[
                             styles.dropdownItemText,
-                            selectedCategoryId === cat.id &&
-                              styles.dropdownItemTextActive,
+                            selectedCategoryId === cat.id && styles.dropdownItemTextActive,
                           ]}
                         >
                           {cat.name}
@@ -350,26 +218,21 @@ export default function Header() {
                       </Pressable>
                     ))}
 
-                    {/* ── Nhóm Manufacturer ── */}
-                    <TextIntl
-                      tx={TEXT_HOME_DROPDOWN_MANUFACTURER}
-                      style={styles.dropdownGroupLabel}
-                    />
+                    {/* Danh mục manufacturer */}
+                    <TextIntl tx={TEXT_HOME_DROPDOWN_MANUFACTURER} style={styles.dropdownGroupLabel} />
                     {manufacturers.map((man) => (
                       <Pressable
                         key={`man-${man.id}`}
                         style={[
                           styles.dropdownItem,
-                          selectedManufacturerId === man.id &&
-                            styles.dropdownItemActive,
+                          selectedManufacturerId === man.id && styles.dropdownItemActive,
                         ]}
                         onPress={() => handleSelectManufacturer(man.id)}
                       >
                         <Text
                           style={[
                             styles.dropdownItemText,
-                            selectedManufacturerId === man.id &&
-                              styles.dropdownItemTextActive,
+                            selectedManufacturerId === man.id && styles.dropdownItemTextActive,
                           ]}
                         >
                           {man.name}
@@ -389,68 +252,106 @@ export default function Header() {
               onChangeText={setSearchQuery}
               placeholder={t(TEXT_SEARCH_PLACEHOLDER)}
               style={styles.searchInput}
+              onSubmitEditing={handleSearch}
             />
-            <Pressable style={styles.searchButton}>
+            <Pressable style={styles.searchButton} onPress={handleSearch}>
               <IconSearch />
             </Pressable>
           </View>
 
           {/* Right actions */}
           <View style={styles.rightActions}>
-            {/* Hotline */}
-            <View style={styles.actionItem}>
-              <View style={styles.iconWrapper}>
-                <IconPhone />
-              </View>
-              <View>
-                <Text style={styles.smallLabel}>{t(TEXT_HOTLINE_LABEL)}</Text>
-                <Text style={styles.boldValue}>{t(TEXT_HOTLINE_NUMBER)}</Text>
-              </View>
-            </View>
+            {/* Full mode (width >= 1100) */}
+            {!isCompact && (
+              <>
+                <View style={styles.actionItem}>
+                  <View style={styles.iconWrapper}><IconPhone /></View>
+                  <View>
+                    <Text style={styles.smallLabel}>{t(TEXT_HOTLINE_LABEL)}</Text>
+                    <Text style={styles.boldValue}>{t(TEXT_HOTLINE_NUMBER)}</Text>
+                  </View>
+                </View>
 
-            <View style={styles.divider} />
+                <Pressable style={styles.actionItem}>
+                  <View style={styles.iconWrapper}><IconMapPin /></View>
+                  <View>
+                    <Text style={styles.smallLabel}>{t(TEXT_SHOWROOM_LABEL)}</Text>
+                    <Text style={styles.boldValue}>{t(TEXT_SHOWROOM_SUBLABEL)}</Text>
+                  </View>
+                </Pressable>
 
-            {/* Showroom */}
-            <Pressable style={styles.actionItem}>
-              <View style={styles.iconWrapper}>
-                <IconMapPin />
-              </View>
-              <View>
-                <Text style={styles.smallLabel}>{t(TEXT_SHOWROOM_LABEL)}</Text>
-                <Text style={styles.boldValue}>
-                  {t(TEXT_SHOWROOM_SUBLABEL)}
-                </Text>
-              </View>
-            </Pressable>
+                <Pressable style={styles.actionItem}>
+                  <View style={styles.iconWrapper}><IconShippingBox /></View>
+                  <View>
+                    <Text style={styles.smallLabel}>{t(TEXT_TRACK_ORDER_LABEL)}</Text>
+                    <Text style={styles.boldValue}>{t(TEXT_TRACK_ORDER_SUBLABEL)}</Text>
+                  </View>
+                </Pressable>
 
-            <View style={styles.divider} />
+                <Pressable onPress={toggleLocale} style={styles.actionItem}>
+                  <IconGlobe />
+                  <Text style={styles.languageText}>{t(TEXT_CHANGE_LANGUAGE)}</Text>
+                  <IconChevronDown />
+                </Pressable>
+              </>
+            )}
 
-            {/* Track order */}
-            <Pressable style={styles.actionItem}>
-              <View style={styles.iconWrapper}>
-                <IconShippingBox />
-              </View>
-              <View>
-                <Text style={styles.smallLabel}>
-                  {t(TEXT_TRACK_ORDER_LABEL)}
-                </Text>
-                <Text style={styles.boldValue}>
-                  {t(TEXT_TRACK_ORDER_SUBLABEL)}
-                </Text>
-              </View>
-            </Pressable>
+            {/* Compact mode: More button */}
+            {isCompact && (
+              <>
+                <Pressable ref={moreButtonRef} style={styles.moreButton} onPress={handleOpenMore}>
+                  <IconMore />
+                </Pressable>
 
-            <View style={styles.divider} />
+                <Modal
+                  visible={moreVisible}
+                  transparent
+                  animationType="fade"
+                  onRequestClose={() => setMoreVisible(false)}
+                >
+                  <Pressable style={styles.modalOverlay} onPress={() => setMoreVisible(false)}>
+                    <Pressable
+                      style={[styles.dropdownBox, { top: morePosition.top, left: morePosition.left }]}
+                      onPress={(e) => e.stopPropagation()}
+                    >
+                      <View style={styles.moreItem}>
+                        <IconPhone />
+                        <View>
+                          <Text style={styles.smallLabel}>{t(TEXT_HOTLINE_LABEL)}</Text>
+                          <Text style={styles.boldValue}>{t(TEXT_HOTLINE_NUMBER)}</Text>
+                        </View>
+                      </View>
 
-            {/* Language toggle */}
-            <Pressable onPress={toggleLocale} style={styles.actionItem}>
-              <IconGlobe />
-              <Text style={styles.languageText}>{t(TEXT_CHANGE_LANGUAGE)}</Text>
-              <IconChevronDown />
-            </Pressable>
+                      <Pressable style={styles.moreItem}>
+                        <IconMapPin />
+                        <View>
+                          <Text style={styles.smallLabel}>{t(TEXT_SHOWROOM_LABEL)}</Text>
+                          <Text style={styles.boldValue}>{t(TEXT_SHOWROOM_SUBLABEL)}</Text>
+                        </View>
+                      </Pressable>
 
-            <View style={styles.divider} />
+                      <Pressable style={styles.moreItem}>
+                        <IconShippingBox />
+                        <View>
+                          <Text style={styles.smallLabel}>{t(TEXT_TRACK_ORDER_LABEL)}</Text>
+                          <Text style={styles.boldValue}>{t(TEXT_TRACK_ORDER_SUBLABEL)}</Text>
+                        </View>
+                      </Pressable>
 
+                      <Pressable
+                        onPress={() => { toggleLocale(); setMoreVisible(false); }}
+                        style={styles.moreItem}
+                      >
+                        <IconGlobe />
+                        <Text style={styles.languageText}>{t(TEXT_CHANGE_LANGUAGE)}</Text>
+                      </Pressable>
+                    </Pressable>
+                  </Pressable>
+                </Modal>
+              </>
+            )}
+
+            {/* Account button */}
             <Pressable
               style={styles.iconButton}
               onPress={() => {
@@ -462,12 +363,11 @@ export default function Header() {
               }}
             >
               <IconUser />
-              {showUserDropdown && (
+              {user && <Text style={styles.userName}>{user.name}</Text>}
+              {showUserDropdown && user && (
                 <View style={styles.userDropdown}>
                   <Text style={styles.dropdownName}>{user.name}</Text>
-
                   <Text>Role: {user.role}</Text>
-
                   <Pressable
                     onPress={() => {
                       setUser(null);
@@ -478,12 +378,9 @@ export default function Header() {
                   </Pressable>
                 </View>
               )}
-              {user && <Text style={styles.userName}>{user.name}</Text>}
             </Pressable>
 
-            <View style={styles.divider} />
-
-            {/* Cart */}
+            {/* Cart button */}
             <Pressable style={styles.cartButton}>
               <View style={styles.cartIconWrapper}>
                 <IconShoppingCart />
@@ -498,6 +395,7 @@ export default function Header() {
           </View>
         </View>
       </View>
+
       <AuthModal
         visible={showAuthModal}
         onClose={() => setShowAuthModal(false)}
@@ -525,7 +423,6 @@ const styles = StyleSheet.create({
     height: 56,
     gap: 12,
   },
-  // Logo
   logoButton: {
     flexDirection: "row",
     alignItems: "center",
@@ -547,7 +444,6 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
     whiteSpace: "nowrap",
   },
-  // Danh mục button
   categoryButton: {
     flexDirection: "row",
     alignItems: "center",
@@ -563,7 +459,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
   },
-  // Search bar
   searchContainer: {
     flex: 2,
     flexDirection: "row",
@@ -588,7 +483,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  // Right actions
   rightActions: {
     flexDirection: "row",
     alignItems: "center",
@@ -602,7 +496,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 4,
   },
-  iconWrapper: {},
   smallLabel: {
     fontSize: 10,
     color: "#6b7280",
@@ -613,11 +506,6 @@ const styles = StyleSheet.create({
     color: "#111827",
     whiteSpace: "nowrap",
   },
-  divider: {
-    width: 1,
-    height: 32,
-    backgroundColor: "#e5e7eb",
-  },
   languageText: {
     fontSize: 14,
     fontWeight: "500",
@@ -627,6 +515,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 4,
     alignItems: "center",
+    position: "relative",
   },
   cartButton: {
     flexDirection: "row",
@@ -662,7 +551,21 @@ const styles = StyleSheet.create({
     color: "#111827",
     whiteSpace: "nowrap",
   },
-
+  moreButton: {
+    backgroundColor: '#2563eb',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  moreItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
   modalOverlay: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.15)",
@@ -719,8 +622,8 @@ const styles = StyleSheet.create({
   },
   userDropdown: {
     position: "absolute",
-    top: 60,
-    right: 80,
+    top: 30,
+    right: 0,
     backgroundColor: "#fff",
     borderWidth: 1,
     borderColor: "#ddd",
@@ -729,9 +632,13 @@ const styles = StyleSheet.create({
     minWidth: 180,
     zIndex: 999,
   },
-
   dropdownName: {
     fontWeight: "bold",
     marginBottom: 6,
+  },
+  userName: {
+    fontSize: 12,
+    marginLeft: 4,
+    color: "#111827",
   },
 });

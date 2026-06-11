@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, ImageBackground, ActivityIndicator, StyleSheet } from 'react-native';
 import { getBanners } from '../services/api';
-import { ROUTES } from '../constants/routes';
+import { API } from '../constants/apiURL';
  
 export default function Banner({ children, style }) {
     const [bannerUrl, setBannerUrl] = useState(null);
@@ -14,7 +14,7 @@ export default function Banner({ children, style }) {
             try {
                 const response = await getBanners();
                 if (isMounted) { // Check before state update
-                    setBannerUrl(`${ROUTES.BASE_API_URL}${response.data[0].img_URL}`);
+                    setBannerUrl(`${API.BASE_API_URL}${response.data[0].img_URL}`);
                 }
             } finally {
                 if (isMounted) setLoading(false);

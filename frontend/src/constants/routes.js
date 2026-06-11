@@ -1,9 +1,6 @@
 export const ROUTES = {
-    BASE_API_URL: 'http://localhost:3521/',
+    //Navigate to front-end
     ROOT: '/',
     HOME: '/home',
-    GET_CATEGORY: '/categories',
-    GET_MANUFACTURER: '/manufacturers',
-    GET_BANNER: '/banners',
-    GET_PRODUCT: '/products',
+    PRODUCT_PAGE: '/product/:id',
 };

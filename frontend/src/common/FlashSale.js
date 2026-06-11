@@ -1,14 +1,20 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, ActivityIndicator, } from 'react-native';
+import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
+import { API } from '../constants/apiURL';
 import TextIntl from './TextIntl';
 import api from '../services/api';
 import {
+    TEXT_HOME_FLASH_SALE_TITLE,
     TEXT_HOME_FLASH_SALE_SUBTITLE,
     TEXT_HOME_FLASH_SALE_BUY_NOW,
     TEXT_HOME_FLASH_SALE_ALL_DEAL,
     TEXT_HOME_FLASH_SALE_SOLD,
 } from '../constants/i18nKeys';
+import {
+    IconLightning,
+} from '../constants/icons';
 
 const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 const formatPrice = (price) => price?.toLocaleString('vi-VN') + '₫';
@@ -52,6 +58,7 @@ const CountdownTimer = () => {
 export default function FlashSale({ onAddToCart, onViewAll }) {
     const [flashProducts, setFlashProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -97,7 +104,10 @@ export default function FlashSale({ onAddToCart, onViewAll }) {
                 <View style={styles.headerLeft}>
                     <CountdownTimer />
                     <View style={styles.titleContainer}>
-                        <Text style={styles.title}>⚡ Flash Sale Gaming</Text>
+                        <View style={styles.titleLogo}>
+                            <IconLightning />
+                            <TextIntl tx={TEXT_HOME_FLASH_SALE_TITLE} style={styles.title} />
+                        </View>
                         <TextIntl tx={TEXT_HOME_FLASH_SALE_SUBTITLE} style={styles.subtitle} />
                     </View>
                 </View>
@@ -116,13 +126,18 @@ export default function FlashSale({ onAddToCart, onViewAll }) {
                     const progressWidth = Math.min((item.sold / item.maxStock) * 100, 100);
 
                     return (
-                        <View key={item.id} style={styles.productCard}>
+                        <TouchableOpacity
+                            key={item.id}
+                            style={styles.productCard}
+                            onPress={() => navigate(ROUTES.PRODUCT_PAGE.replace(':id', item.id))}
+                            activeOpacity={0.92}
+                        >
                             {/* Khung ảnh & Badge Flash Sale */}
                             <View style={styles.imageWrapper}>
                                 <Image
                                     source={
                                         item.img_URL
-                                            ? { uri: `${ROUTES.BASE_API_URL}${item.img_URL}` }
+                                            ? { uri: `${API.BASE_API_URL}${item.img_URL}` }
                                             : require('../../assets/placeholder.png')
                                     }
                                     style={styles.productImage}
@@ -162,7 +177,7 @@ export default function FlashSale({ onAddToCart, onViewAll }) {
                                     <TextIntl tx={TEXT_HOME_FLASH_SALE_BUY_NOW} style={styles.buyButtonText} />
                                 </TouchableOpacity>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     );
                 })}
             </ScrollView>
@@ -173,7 +188,7 @@ export default function FlashSale({ onAddToCart, onViewAll }) {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#0066FF',
-        marginHorizontal: 12,
+        marginHorizontal: 32,
         marginVertical: 12,
         borderRadius: 20,
         paddingTop: 20,
@@ -192,6 +207,11 @@ const styles = StyleSheet.create({
     },
     titleContainer: {
         marginTop: 4,
+    },
+    titleLogo: {
+        flexDirection: 'row',
+        alignItems: 'baseline',
+        gap: 8,
     },
     title: {
         fontSize: 20,
