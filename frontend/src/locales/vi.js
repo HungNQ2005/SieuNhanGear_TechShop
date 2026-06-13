@@ -10,8 +10,8 @@ export default {
     TEXT_SEARCH_PLACEHOLDER: "Bạn cần tìm gì?",
     TEXT_HOTLINE_LABEL: "Hotline",
     TEXT_HOTLINE_NUMBER: "1800 9999",
-    TEXT_SHOWROOM_LABEL: "Hệ thống",
-    TEXT_SHOWROOM_SUBLABEL: "Showroom",
+    TEXT_SHOWROOM_LABEL: "Hệ thống Showroom",
+    TEXT_SHOWROOM_SUBLABEL: "Showrooms",
     TEXT_TRACK_ORDER_LABEL: "Tra cứu",
     TEXT_TRACK_ORDER_SUBLABEL: "Đơn hàng",
     TEXT_NO_PRODUCTS: "Không có sản phẩm nào.",
@@ -86,7 +86,9 @@ export default {
     TEXT_ALREADY_HAVE_ACCOUNT: "Đã có tài khoản?",
     TEXT_LOGIN_ERROR: "Email hoặc mật khẩu không chính xác",
     TEXT_COPYRIGHT: "© 2024 SieuNhanGear Vietnam. Bảo mật SSL 256-bit.",
+    TEXT_SHOWROOM_ERROR_LOAD: "Không thể tải dữ liệu showroom.",
   },
+
 
   home: {
     TEXT_HOME_HERO_STAMP: 'Linh kiện chính hãng — Bảo hành toàn quốc',

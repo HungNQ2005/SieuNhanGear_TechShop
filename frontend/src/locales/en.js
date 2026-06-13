@@ -10,8 +10,8 @@ export default {
     TEXT_SEARCH_PLACEHOLDER: "What are you looking for?",
     TEXT_HOTLINE_LABEL: "Hotline",
     TEXT_HOTLINE_NUMBER: "1800 9999",
-    TEXT_SHOWROOM_LABEL: "Showroom", // kept in VN per design
-    TEXT_SHOWROOM_SUBLABEL: "System",
+    TEXT_SHOWROOM_LABEL: "Our Showrooms", // kept in VN per design
+    TEXT_SHOWROOM_SUBLABEL: "Showrooms",
     TEXT_TRACK_ORDER_LABEL: "Order", // kept in VN per design
     TEXT_TRACK_ORDER_SUBLABEL: "Tracking",
     TEXT_NO_PRODUCTS: "No products available.",
@@ -85,7 +85,9 @@ export default {
     TEXT_ALREADY_HAVE_ACCOUNT: "Already have an account?",
     TEXT_LOGIN_ERROR: "Invalid email or password",
     TEXT_COPYRIGHT: "© 2024 SieuNhanGear Vietnam. 256-bit SSL Security.",
+    TEXT_SHOWROOM_ERROR_LOAD: "Failed to load showroom data.",
   },
+
 
   home: {
     TEXT_HOME_HERO_STAMP: 'Genuine parts — Nationwide warranty',
