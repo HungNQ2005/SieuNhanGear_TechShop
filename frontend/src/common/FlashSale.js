@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, ActivityIndicator, } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
+import { API } from '../constants/apiURL';
 import TextIntl from './TextIntl';
 import api from '../services/api';
 import {
@@ -136,7 +137,7 @@ export default function FlashSale({ onAddToCart, onViewAll }) {
                                 <Image
                                     source={
                                         item.img_URL
-                                            ? { uri: `${ROUTES.BASE_API_URL}${item.img_URL}` }
+                                            ? { uri: `${API.BASE_API_URL}${item.img_URL}` }
                                             : require('../../assets/placeholder.png')
                                     }
                                     style={styles.productImage}
@@ -187,7 +188,7 @@ export default function FlashSale({ onAddToCart, onViewAll }) {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#0066FF',
-        marginHorizontal: 12,
+        marginHorizontal: 32,
         marginVertical: 12,
         borderRadius: 20,
         paddingTop: 20,

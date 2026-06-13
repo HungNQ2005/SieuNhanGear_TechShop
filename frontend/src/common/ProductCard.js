@@ -1,8 +1,9 @@
 import React from 'react';
 import TextIntl from '../common/TextIntl';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigate } from 'react-router-dom';  // ← NEW
+import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
+import { API } from '../constants/apiURL';
 import {
   TEXT_HOME_ADD_TO_CART
 } from '../constants/i18nKeys';
@@ -45,7 +46,7 @@ export default function ProductCard({ product, manufacturers = [], categories = 
       <View style={styles.imageContainer}>
         {product.img_URL ? (
           <Image
-            source={{ uri: `${ROUTES.BASE_API_URL}${product.img_URL}` }}
+            source={{ uri: `${API.BASE_API_URL}${product.img_URL}` }}
             style={styles.image}
             resizeMode="cover"
           />
@@ -126,14 +127,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 14,
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
     elevation: 4,
     marginBottom: 16,
     width: 300,
-    cursor: 'pointer',  // web cursor hint
+    cursor: 'pointer',
   },
   imageContainer: {
     position: 'relative',
