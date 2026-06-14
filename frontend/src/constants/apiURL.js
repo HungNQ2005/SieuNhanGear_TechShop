@@ -1,6 +1,7 @@
 export const API = {
     //Navigate to back-end
     BASE_API_URL: 'http://localhost:3521/',
+    GET_SHOWROOM: 'api/showroom',
     GET_CATEGORY: 'api/categories',
     GET_CATEGORY_BY_ID:(id) => `api/categories/${id}`,
     GET_MANUFACTURER: 'api/manufacturers',

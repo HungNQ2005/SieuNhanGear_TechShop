@@ -10,8 +10,10 @@ import { ROUTES } from './src/constants/routes';
 import { LocalizationProvider } from './src/providers/LocalizationProvider';
 import { CartProvider } from './src/store/CartContext';
 import { FilterProvider } from './src/store/FilterContext';
+import ViewShowroom from './src/features/viewShowroom/ViewShowroom';
 
 export default function App() {
+
   const scrollViewRef = useRef(null);
 
   return (
@@ -30,8 +32,10 @@ export default function App() {
                   <Route path={ROUTES.ROOT} element={<HomeScreen scrollViewRef={scrollViewRef} />} />
                   <Route path={ROUTES.HOME} element={<HomeScreen scrollViewRef={scrollViewRef} />} />
                   <Route path={ROUTES.PRODUCT_PAGE} element={<ProductPage hideOuterScroll />} />
+                  <Route path={ROUTES.SHOWROOM} element={<ViewShowroom />} />
                 </Routes>
                 <Footer />
+
               </ScrollView>
               <StatusBar style={Platform.OS === 'ios' ? 'dark' : 'light'} />
             </SafeAreaView>

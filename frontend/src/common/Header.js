@@ -272,13 +272,17 @@ export default function Header() {
                   </View>
                 </View>
 
-                <Pressable style={styles.actionItem}>
+                <Pressable
+                  style={styles.actionItem}
+                  onPress={() => navigate(ROUTES.SHOWROOM)}
+                >
                   <View style={styles.iconWrapper}><IconMapPin /></View>
                   <View>
                     <Text style={styles.smallLabel}>{t(TEXT_SHOWROOM_LABEL)}</Text>
                     <Text style={styles.boldValue}>{t(TEXT_SHOWROOM_SUBLABEL)}</Text>
                   </View>
                 </Pressable>
+
 
                 <Pressable style={styles.actionItem}>
                   <View style={styles.iconWrapper}><IconShippingBox /></View>

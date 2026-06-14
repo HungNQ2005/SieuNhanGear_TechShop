@@ -17,6 +17,8 @@ export const TEXT_NO_PRODUCTS = "common.TEXT_NO_PRODUCTS";
 export const TEXT_PRODUCT_COUNT = "common.TEXT_PRODUCT_COUNT";
 export const TEXT_CATEGORIES_LABEL = "common.TEXT_CATEGORIES_LABEL";
 export const TEXT_CART_SUBLABEL = "common.TEXT_CART_SUBLABEL";
+export const TEXT_SHOWROOM_ERROR_LOAD = "common.TEXT_SHOWROOM_ERROR_LOAD";
+
 
 // ─── Home ─────────────────────────────────────────────────────────────────────
 export const TEXT_HOME_HERO_STAMP = 'home.TEXT_HOME_HERO_STAMP';
@@ -147,7 +149,9 @@ export const I18N_KEYS = {
     TEXT_PRODUCT_COUNT,
     TEXT_CATEGORIES_LABEL,
     TEXT_CART_SUBLABEL,
+    TEXT_SHOWROOM_ERROR_LOAD,
   },
+
   home: {
     TEXT_HOME_HERO_STAMP,
     TEXT_HERO_TITLE: TEXT_HOME_HERO_TITLE,
