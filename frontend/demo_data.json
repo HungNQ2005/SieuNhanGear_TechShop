@@ -73,7 +73,6 @@
       "img_URL": ""
     }
   ],
-
   "categories": [
     {
       "id": 1,
@@ -148,7 +147,6 @@
       "description_en": "Headsets with mic, gaming and music"
     }
   ],
-
   "manufacturers": [
     {
       "id": 1,
@@ -229,8 +227,30 @@
       "description_en": "Premium gaming peripherals brand from Kingston"
     }
   ],
-
-   "banners": [
+  "news": [
+    {
+      "id": "1",
+      "tag": "GPU",
+      "date": "29/05/2026",
+      "title": "RTX 5090 có gì mới?",
+      "image": "images/news/news_1.avif"
+    },
+    {
+      "id": "2",
+      "tag": "LAPTOP",
+      "date": "28/05/2026",
+      "title": "Top laptop gaming đáng mua 2026",
+      "image": "images/news/news_2.avif"
+    },
+    {
+      "id": "3",
+      "tag": "GPU",
+      "date": "BUILD PC",
+      "title": "Build PC gaming 30 triệu",
+      "image": "images/news/news_3.avif"
+    }
+  ],
+  "banners": [
     {
       "id": 1,
       "img_URL": "images/banner/banner_1.jpg"
