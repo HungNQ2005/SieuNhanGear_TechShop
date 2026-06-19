@@ -5,27 +5,39 @@ import CartItem from "../components/CartItem";
 import CartSummary from "../components/CartSummary";
 import { useCart } from "../../../store/CartContext";
 import { ROUTES } from "../../../constants/routes";
+import { useLocalization } from "../../../providers/LocalizationProvider";
+import {
+  TEXT_CART_EMPTY,
+  TEXT_CART_CONTINUE_SHOPPING,
+  TEXT_CART_SUBLABEL,
+  TEXT_CART_TITLE,
+  TEXT_CART_TOTAL,
+  TEXT_CART_CHECKOUT,
+  TEXT_CART_DESCRIPTION,
+  TEXT_CART_PRODUCT,
+} from "../../../constants/i18nKeys";
 export default function CartScreen() {
   const { items, increaseQuantity, decreaseQuantity, removeItem } = useCart();
   const navigate = useNavigate();
+  const { t } = useLocalization();
   return (
     <View style={styles.container}>
       <View style={styles.left}>
-        <Text style={styles.title}>Giỏ hàng ({items.length})</Text>
-
+        <Text style={styles.title}>{t(TEXT_CART_TITLE)} </Text>
+        <Text style={styles.sublabel}>( {items.length} {t(TEXT_CART_PRODUCT)} )</Text>
         {items.length === 0 ? (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyTitle}>Giỏ hàng trống</Text>
+            <Text style={styles.emptyTitle}>{t(TEXT_CART_EMPTY)}</Text>
 
             <Text style={styles.emptyDescription}>
-              Hãy thêm một số linh kiện tuyệt vời vào giỏ!
+              {t(TEXT_CART_DESCRIPTION)}
             </Text>
 
             <Pressable
               style={styles.shopButton}
               onPress={() => navigate(ROUTES.HOME)}
             >
-              <Text style={styles.shopButtonText}>Khám phá sản phẩm</Text>
+              <Text style={styles.shopButtonText}>{t(TEXT_CART_CONTINUE_SHOPPING)}</Text>
             </Pressable>
           </View>
         ) : (
@@ -75,9 +87,12 @@ const styles = StyleSheet.create({
     color: "#0f172a",
   },
 
-  emptyText: {
-    fontSize: 18,
+  sublabel: {
+    fontSize: 16,
     color: "#64748b",
+    marginBottom: 16,
+    top: -30,
+    left: 4,
   },
   emptyContainer: {
     flex: 1,

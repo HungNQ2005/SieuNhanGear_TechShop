@@ -74,7 +74,19 @@ export const TEXT_HAVE_ACCOUNT = "common.TEXT_HAVE_ACCOUNT";
 export const TEXT_ALREADY_HAVE_ACCOUNT = "common.TEXT_ALREADY_HAVE_ACCOUNT";
 export const TEXT_LOGIN_ERROR = "common.TEXT_LOGIN_ERROR";
 export const TEXT_COPYRIGHT = "common.TEXT_COPYRIGHT";
-
+// ─── Cart ────────────────────────────────────────────────────────────────────
+export const TEXT_CART_EMPTY = "cart.TEXT_CART_EMPTY";
+export const TEXT_CART_TOTAL = "cart.TEXT_CART_TOTAL";
+export const TEXT_CART_CHECKOUT = "cart.TEXT_CART_CHECKOUT";
+export const TEXT_CART_CONTINUE_SHOPPING = "cart.TEXT_CART_CONTINUE_SHOPPING";
+export const TEXT_CART_DESCRIPTION = "cart.TEXT_CART_DESCRIPTION";
+export const TEXT_CART_SUMMARY_TITLE = "cart.TEXT_CART_SUMMARY_TITLE";
+export const TEXT_CART_SUBTOTAL = "cart.TEXT_CART_SUBTOTAL";
+export const TEXT_CART_SHIPPING = "cart.TEXT_CART_SHIPPING";
+export const TEXT_CART_FREE_SHIPPING = "cart.TEXT_CART_FREE_SHIPPING";
+export const TEXT_CART_GRAND_TOTAL = "cart.TEXT_CART_GRAND_TOTAL";
+export const TEXT_CART_PROCEED_CHECKOUT = "cart.TEXT_CART_PROCEED_CHECKOUT";
+export const TEXT_CART_PRODUCT = "cart.TEXT_CART_PRODUCT";
 // ─── Product Page ────────────────────────────────────────────────────────────
 export const TEXT_PRODUCT_DESCRIPTION = 'product.TEXT_DESCRIPTION';
 export const TEXT_PRODUCT_SKU = 'product.TEXT_SKU';
@@ -132,6 +144,9 @@ export const I18N_KEYS = {
     TEXT_APP_TITLE,
     TEXT_APP_SUBTITLE,
     TEXT_CART_TITLE,
+    TEXT_CART_SUBLABEL,
+    TEXT_CART_TOTAL,
+    TEXT_CART_CHECKOUT,
     TEXT_ADD_TO_CART,
     TEXT_PRICE_LABEL,
     TEXT_VIEW_DETAILS,
@@ -147,6 +162,8 @@ export const I18N_KEYS = {
     TEXT_PRODUCT_COUNT,
     TEXT_CATEGORIES_LABEL,
     TEXT_CART_SUBLABEL,
+    TEXT_CART_TOTAL,
+    TEXT_CART_CHECKOUT,
   },
   home: {
     TEXT_HOME_HERO_STAMP,

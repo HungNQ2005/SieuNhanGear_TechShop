@@ -86,7 +86,22 @@ export default {
     TEXT_LOGIN_ERROR: "Invalid email or password",
     TEXT_COPYRIGHT: "© 2024 SieuNhanGear Vietnam. 256-bit SSL Security.",
   },
-
+  cart: {
+    TEXT_CART_EMPTY: "Your cart is empty.",
+    TEXT_CART_TOTAL: "Total",
+    TEXT_CART_CHECKOUT: "Checkout",
+    TEXT_CART_CONTINUE_SHOPPING: "Continue Shopping",
+    TEXT_CART_DESCRIPTION: "Add some awesome components to your cart!",
+    
+    TEXT_CART_SUMMARY_TITLE: "Order Summary",
+    TEXT_CART_SUBTOTAL: "Subtotal",
+    TEXT_CART_SHIPPING: "Shipping", 
+    TEXT_CART_FREE_SHIPPING: "Free Shipping",
+    TEXT_CART_GRAND_TOTAL: "Grand Total",
+    TEXT_CART_PROCEED_CHECKOUT: "Proceed to Checkout",
+    TEXT_CART_PRODUCT: "Product",
+  },
+  
   home: {
     TEXT_HOME_HERO_STAMP: 'Genuine parts — Nationwide warranty',
     TEXT_HERO_TITLE: 'Upgrade Your\nDesktop & Laptop',
