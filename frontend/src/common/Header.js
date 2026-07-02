@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -9,14 +9,14 @@ import {
   ScrollView,
   ActivityIndicator,
   useWindowDimensions,
-} from 'react-native';
-import { useLocalization } from '../providers/LocalizationProvider';
-import { useFilter } from '../store/FilterContext';
-import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '../constants/routes';
-import { API } from '../constants/apiURL';
-import TextIntl from './TextIntl';
-import api from '../services/api';
+} from "react-native";
+import { useLocalization } from "../providers/LocalizationProvider";
+import { useFilter } from "../store/FilterContext";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../constants/routes";
+import { API } from "../constants/apiURL";
+import TextIntl from "./TextIntl";
+import api from "../services/api";
 import {
   TEXT_APP_TITLE,
   TEXT_CATEGORIES_LABEL,
@@ -32,7 +32,7 @@ import {
   TEXT_HOME_DROPDOWN_ALL_PRODUCT,
   TEXT_HOME_DROPDOWN_CATEGORY,
   TEXT_HOME_DROPDOWN_MANUFACTURER,
-} from '../constants/i18nKeys';
+} from "../constants/i18nKeys";
 import {
   IconGrid,
   IconShippingBox,
@@ -45,9 +45,9 @@ import {
   IconShoppingCart,
   IconBox,
   IconMore,
-} from '../constants/icons';
-import AuthModal from '../features/Auth/Auth';
-
+} from "../constants/icons";
+import AuthModal from "../features/Auth/Auth";
+import { useCart } from "../store/CartContext";
 // ─── Header Component ─────────────────────────────────────────────────────
 export default function Header() {
   const { t, toggleLocale } = useLocalization();
@@ -63,8 +63,8 @@ export default function Header() {
   const { width } = useWindowDimensions();
   const isCompact = width < 1100;
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const [cartCount] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
+  const { totalItems } = useCart();
   const [user, setUser] = useState(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
@@ -82,10 +82,7 @@ export default function Header() {
   useEffect(() => {
     if (dropdownVisible && categories.length === 0) {
       setLoadingDropdown(true);
-      Promise.all([
-        api.get(API.GET_CATEGORY),
-        api.get(API.GET_MANUFACTURER),
-      ])
+      Promise.all([api.get(API.GET_CATEGORY), api.get(API.GET_MANUFACTURER)])
         .then(([catRes, manRes]) => {
           setCategories(Array.isArray(catRes.data) ? catRes.data : []);
           setManufacturers(Array.isArray(manRes.data) ? manRes.data : []);
@@ -176,14 +173,17 @@ export default function Header() {
                 {loadingDropdown ? (
                   <ActivityIndicator color="#0066ff" style={{ padding: 24 }} />
                 ) : (
-                  <ScrollView style={{ maxHeight: 420 }} showsVerticalScrollIndicator={false}>
+                  <ScrollView
+                    style={{ maxHeight: 420 }}
+                    showsVerticalScrollIndicator={false}
+                  >
                     {/* Tất cả sản phẩm */}
                     <Pressable
                       style={[
                         styles.dropdownAllBtn,
                         !selectedCategoryId &&
-                        !selectedManufacturerId &&
-                        styles.dropdownItemActive,
+                          !selectedManufacturerId &&
+                          styles.dropdownItemActive,
                       ]}
                       onPress={() => {
                         clearFilters();
@@ -197,20 +197,25 @@ export default function Header() {
                     </Pressable>
 
                     {/* Danh mục category */}
-                    <TextIntl tx={TEXT_HOME_DROPDOWN_CATEGORY} style={styles.dropdownGroupLabel} />
+                    <TextIntl
+                      tx={TEXT_HOME_DROPDOWN_CATEGORY}
+                      style={styles.dropdownGroupLabel}
+                    />
                     {categories.map((cat) => (
                       <Pressable
                         key={`cat-${cat.id}`}
                         style={[
                           styles.dropdownItem,
-                          selectedCategoryId === cat.id && styles.dropdownItemActive,
+                          selectedCategoryId === cat.id &&
+                            styles.dropdownItemActive,
                         ]}
                         onPress={() => handleSelectCategory(cat.id)}
                       >
                         <Text
                           style={[
                             styles.dropdownItemText,
-                            selectedCategoryId === cat.id && styles.dropdownItemTextActive,
+                            selectedCategoryId === cat.id &&
+                              styles.dropdownItemTextActive,
                           ]}
                         >
                           {cat.name}
@@ -219,20 +224,25 @@ export default function Header() {
                     ))}
 
                     {/* Danh mục manufacturer */}
-                    <TextIntl tx={TEXT_HOME_DROPDOWN_MANUFACTURER} style={styles.dropdownGroupLabel} />
+                    <TextIntl
+                      tx={TEXT_HOME_DROPDOWN_MANUFACTURER}
+                      style={styles.dropdownGroupLabel}
+                    />
                     {manufacturers.map((man) => (
                       <Pressable
                         key={`man-${man.id}`}
                         style={[
                           styles.dropdownItem,
-                          selectedManufacturerId === man.id && styles.dropdownItemActive,
+                          selectedManufacturerId === man.id &&
+                            styles.dropdownItemActive,
                         ]}
                         onPress={() => handleSelectManufacturer(man.id)}
                       >
                         <Text
                           style={[
                             styles.dropdownItemText,
-                            selectedManufacturerId === man.id && styles.dropdownItemTextActive,
+                            selectedManufacturerId === man.id &&
+                              styles.dropdownItemTextActive,
                           ]}
                         >
                           {man.name}
@@ -265,10 +275,16 @@ export default function Header() {
             {!isCompact && (
               <>
                 <View style={styles.actionItem}>
-                  <View style={styles.iconWrapper}><IconPhone /></View>
+                  <View style={styles.iconWrapper}>
+                    <IconPhone />
+                  </View>
                   <View>
-                    <Text style={styles.smallLabel}>{t(TEXT_HOTLINE_LABEL)}</Text>
-                    <Text style={styles.boldValue}>{t(TEXT_HOTLINE_NUMBER)}</Text>
+                    <Text style={styles.smallLabel}>
+                      {t(TEXT_HOTLINE_LABEL)}
+                    </Text>
+                    <Text style={styles.boldValue}>
+                      {t(TEXT_HOTLINE_NUMBER)}
+                    </Text>
                   </View>
                 </View>
 
@@ -276,25 +292,38 @@ export default function Header() {
                   style={styles.actionItem}
                   onPress={() => navigate(ROUTES.SHOWROOM)}
                 >
-                  <View style={styles.iconWrapper}><IconMapPin /></View>
+                  <View style={styles.iconWrapper}>
+                    <IconMapPin />
+                  </View>
                   <View>
-                    <Text style={styles.smallLabel}>{t(TEXT_SHOWROOM_LABEL)}</Text>
-                    <Text style={styles.boldValue}>{t(TEXT_SHOWROOM_SUBLABEL)}</Text>
+                    <Text style={styles.smallLabel}>
+                      {t(TEXT_SHOWROOM_LABEL)}
+                    </Text>
+                    <Text style={styles.boldValue}>
+                      {t(TEXT_SHOWROOM_SUBLABEL)}
+                    </Text>
                   </View>
                 </Pressable>
 
-
                 <Pressable style={styles.actionItem}>
-                  <View style={styles.iconWrapper}><IconShippingBox /></View>
+                  <View style={styles.iconWrapper}>
+                    <IconShippingBox />
+                  </View>
                   <View>
-                    <Text style={styles.smallLabel}>{t(TEXT_TRACK_ORDER_LABEL)}</Text>
-                    <Text style={styles.boldValue}>{t(TEXT_TRACK_ORDER_SUBLABEL)}</Text>
+                    <Text style={styles.smallLabel}>
+                      {t(TEXT_TRACK_ORDER_LABEL)}
+                    </Text>
+                    <Text style={styles.boldValue}>
+                      {t(TEXT_TRACK_ORDER_SUBLABEL)}
+                    </Text>
                   </View>
                 </Pressable>
 
                 <Pressable onPress={toggleLocale} style={styles.actionItem}>
                   <IconGlobe />
-                  <Text style={styles.languageText}>{t(TEXT_CHANGE_LANGUAGE)}</Text>
+                  <Text style={styles.languageText}>
+                    {t(TEXT_CHANGE_LANGUAGE)}
+                  </Text>
                   <IconChevronDown />
                 </Pressable>
               </>
@@ -303,7 +332,11 @@ export default function Header() {
             {/* Compact mode: More button */}
             {isCompact && (
               <>
-                <Pressable ref={moreButtonRef} style={styles.moreButton} onPress={handleOpenMore}>
+                <Pressable
+                  ref={moreButtonRef}
+                  style={styles.moreButton}
+                  onPress={handleOpenMore}
+                >
                   <IconMore />
                 </Pressable>
 
@@ -313,41 +346,64 @@ export default function Header() {
                   animationType="fade"
                   onRequestClose={() => setMoreVisible(false)}
                 >
-                  <Pressable style={styles.modalOverlay} onPress={() => setMoreVisible(false)}>
+                  <Pressable
+                    style={styles.modalOverlay}
+                    onPress={() => setMoreVisible(false)}
+                  >
                     <Pressable
-                      style={[styles.dropdownBox, { top: morePosition.top, left: morePosition.left }]}
+                      style={[
+                        styles.dropdownBox,
+                        { top: morePosition.top, left: morePosition.left },
+                      ]}
                       onPress={(e) => e.stopPropagation()}
                     >
                       <View style={styles.moreItem}>
                         <IconPhone />
                         <View>
-                          <Text style={styles.smallLabel}>{t(TEXT_HOTLINE_LABEL)}</Text>
-                          <Text style={styles.boldValue}>{t(TEXT_HOTLINE_NUMBER)}</Text>
+                          <Text style={styles.smallLabel}>
+                            {t(TEXT_HOTLINE_LABEL)}
+                          </Text>
+                          <Text style={styles.boldValue}>
+                            {t(TEXT_HOTLINE_NUMBER)}
+                          </Text>
                         </View>
                       </View>
 
                       <Pressable style={styles.moreItem}>
                         <IconMapPin />
                         <View>
-                          <Text style={styles.smallLabel}>{t(TEXT_SHOWROOM_LABEL)}</Text>
-                          <Text style={styles.boldValue}>{t(TEXT_SHOWROOM_SUBLABEL)}</Text>
+                          <Text style={styles.smallLabel}>
+                            {t(TEXT_SHOWROOM_LABEL)}
+                          </Text>
+                          <Text style={styles.boldValue}>
+                            {t(TEXT_SHOWROOM_SUBLABEL)}
+                          </Text>
                         </View>
                       </Pressable>
 
                       <Pressable style={styles.moreItem}>
                         <IconShippingBox />
                         <View>
-                          <Text style={styles.smallLabel}>{t(TEXT_TRACK_ORDER_LABEL)}</Text>
-                          <Text style={styles.boldValue}>{t(TEXT_TRACK_ORDER_SUBLABEL)}</Text>
+                          <Text style={styles.smallLabel}>
+                            {t(TEXT_TRACK_ORDER_LABEL)}
+                          </Text>
+                          <Text style={styles.boldValue}>
+                            {t(TEXT_TRACK_ORDER_SUBLABEL)}
+                          </Text>
                         </View>
                       </Pressable>
 
                       <Pressable
-                        onPress={() => { toggleLocale(); setMoreVisible(false); }}
+                        onPress={() => {
+                          toggleLocale();
+                          setMoreVisible(false);
+                        }}
                         style={styles.moreItem}
                       >
                         <IconGlobe />
-                        <Text style={styles.languageText}>{t(TEXT_CHANGE_LANGUAGE)}</Text>
+                        <Text style={styles.languageText}>
+                          {t(TEXT_CHANGE_LANGUAGE)}
+                        </Text>
                       </Pressable>
                     </Pressable>
                   </Pressable>
@@ -385,15 +441,19 @@ export default function Header() {
             </Pressable>
 
             {/* Cart button */}
-            <Pressable style={styles.cartButton}>
+            <Pressable
+              style={styles.cartButton}
+              onPress={() => navigate(ROUTES.CART)}
+            >
               <View style={styles.cartIconWrapper}>
                 <IconShoppingCart />
-                {cartCount > 0 && (
+                {totalItems > 0 && (
                   <View style={styles.cartBadge}>
-                    <Text style={styles.cartBadgeText}>{cartCount}</Text>
+                    <Text style={styles.cartBadgeText}>{totalItems}</Text>
                   </View>
                 )}
               </View>
+
               <Text style={styles.cartText}>{t(TEXT_CART_SUBLABEL)}</Text>
             </Pressable>
           </View>
@@ -556,16 +616,16 @@ const styles = StyleSheet.create({
     whiteSpace: "nowrap",
   },
   moreButton: {
-    backgroundColor: '#2563eb',
+    backgroundColor: "#2563eb",
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 6,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   moreItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 10,
     paddingHorizontal: 16,
     paddingVertical: 12,
