@@ -1,0 +1,407 @@
+{
+  "accounts": [
+    {
+      "id": 1,
+      "name": "Nguyen Van A",
+      "email": "user@gmail.com",
+      "password": "123456",
+      "role_id": 1
+    },
+    {
+      "id": 2,
+      "name": "Tran Thi B",
+      "email": "tranthib@gmail.com",
+      "password": "123456",
+      "role_id": 2
+    },
+    {
+      "id": 3,
+      "name": "Le Minh C",
+      "email": "leminhc@gmail.com",
+      "password": "123456",
+      "role_id": 2
+    },
+    {
+      "id": 4,
+      "name": "Pham Hoang D",
+      "email": "phamhoangd@gmail.com",
+      "password": "123456",
+      "role_id": 2
+    },
+    {
+      "id": 5,
+      "name": "Vo Thi E",
+      "email": "vothie@gmail.com",
+      "password": "123456",
+      "role_id": 2
+    }
+  ],
+  "role": [
+    {
+      "id": 1,
+      "name": "ADMIN"
+    },
+    {
+      "id": 2,
+      "name": "CUSTOMER"
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "Laptop ASUS ROG Strix G16",
+      "rating": 4.8,
+      "price": 35990000,
+      "category_id": 1,
+      "manufacturer_id": 1,
+      "img_URL": "images/product/1.png"
+    },
+    {
+      "id": 2,
+      "name": "Laptop Dell XPS 13 Plus",
+      "rating": 4.7,
+      "price": 42990000,
+      "category_id": 1,
+      "manufacturer_id": 2,
+      "img_URL": "images/product/2.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Laptop MacBook Pro 14 M3",
+      "rating": 4.9,
+      "price": 49990000,
+      "category_id": 1,
+      "manufacturer_id": 3,
+      "img_URL": "images/product/3.png"
+    },
+    {
+      "id": 4,
+      "name": "CPU Intel Core i9-14900K",
+      "rating": 4.7,
+      "price": 14990000,
+      "category_id": 2,
+      "manufacturer_id": 4,
+      "img_URL": ""
+    },
+    {
+      "id": 5,
+      "name": "RAM Kingston Fury 32GB DDR5",
+      "rating": 4.7,
+      "price": 3890000,
+      "category_id": 3,
+      "manufacturer_id": 5,
+      "img_URL": ""
+    },
+    {
+      "id": 6,
+      "name": "SSD Samsung 990 Pro 1TB",
+      "rating": 4.8,
+      "price": 3490000,
+      "category_id": 4,
+      "manufacturer_id": 6,
+      "img_URL": ""
+    },
+    {
+      "id": 7,
+      "name": "Card đồ họa NVIDIA RTX 4070 Ti",
+      "rating": 4.8,
+      "price": 18990000,
+      "category_id": 2,
+      "manufacturer_id": 7,
+      "img_URL": ""
+    },
+    {
+      "id": 8,
+      "name": "Mainboard MSI B760 Tomahawk",
+      "rating": 4.6,
+      "price": 4590000,
+      "category_id": 5,
+      "manufacturer_id": 8,
+      "img_URL": ""
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "Laptop",
+      "description_vi": "Các dòng laptop văn phòng, gaming, đồ họa cao cấp",
+      "description_en": "High-end office, gaming and graphics laptops"
+    },
+    {
+      "id": 2,
+      "name": "CPU",
+      "description_vi": "CPU Intel, AMD cho máy tính để bàn và laptop",
+      "description_en": "Intel and AMD CPUs for desktop and laptop"
+    },
+    {
+      "id": 3,
+      "name": "RAM",
+      "description_vi": "RAM DDR4, DDR5 cho PC và laptop",
+      "description_en": "DDR4, DDR5 RAM for PC and laptop"
+    },
+    {
+      "id": 4,
+      "name": "SSD",
+      "description_vi": "SSD NVMe, SATA tốc độ cao",
+      "description_en": "High-speed NVMe and SATA SSDs"
+    },
+    {
+      "id": 5,
+      "name": "Mainboard",
+      "description_vi": "Bo mạch chủ cho các dòng Intel, AMD",
+      "description_en": "Motherboards for Intel and AMD platforms"
+    },
+    {
+      "id": 6,
+      "name": "PSU",
+      "description_vi": "Nguồn ATX, SFX các công suất khác nhau",
+      "description_en": "ATX and SFX power supplies various wattages"
+    },
+    {
+      "id": 7,
+      "name": "Cooler",
+      "description_vi": "Tản nhiệt khí và tản nhiệt nước cho CPU",
+      "description_en": "Air and liquid CPU coolers"
+    },
+    {
+      "id": 8,
+      "name": "Mouse",
+      "description_vi": "Chuột có dây và không dây cho gaming và văn phòng",
+      "description_en": "Wired and wireless mice for gaming and office"
+    },
+    {
+      "id": 9,
+      "name": "Keyboard",
+      "description_vi": "Bàn phím cơ, membrane, có dây và bluetooth",
+      "description_en": "Mechanical, membrane, wired and bluetooth keyboards"
+    },
+    {
+      "id": 10,
+      "name": "PC - Desktop",
+      "description_vi": "PC nguyên bộ cho gaming, đồ họa và văn phòng",
+      "description_en": "Complete desktop PCs for gaming, graphics and office"
+    },
+    {
+      "id": 11,
+      "name": "Monitor",
+      "description_vi": "Màn hình gaming, đồ họa, văn phòng các kích thước",
+      "description_en": "Gaming, graphics and office monitors various sizes"
+    },
+    {
+      "id": 12,
+      "name": "Headset",
+      "description_vi": "Tai nghe có mic, gaming và nghe nhạc",
+      "description_en": "Headsets with mic, gaming and music"
+    }
+  ],
+  "manufacturers": [
+    {
+      "id": 1,
+      "name": "ASUS",
+      "description_vi": "Nhà sản xuất linh kiện và thiết bị máy tính hàng đầu Đài Loan",
+      "description_en": "Leading Taiwanese computer hardware and electronics manufacturer"
+    },
+    {
+      "id": 2,
+      "name": "Dell",
+      "description_vi": "Tập đoàn công nghệ Mỹ chuyên sản xuất máy tính, màn hình",
+      "description_en": "American technology company specializing in computers and monitors"
+    },
+    {
+      "id": 3,
+      "name": "Apple",
+      "description_vi": "Hãng công nghệ Mỹ nổi tiếng với MacBook và hệ sinh thái",
+      "description_en": "Famous American tech company known for MacBook and ecosystem"
+    },
+    {
+      "id": 4,
+      "name": "Intel",
+      "description_vi": "Nhà sản xuất vi xử lý hàng đầu thế giới",
+      "description_en": "World's leading microprocessor manufacturer"
+    },
+    {
+      "id": 5,
+      "name": "Kingston",
+      "description_vi": "Thương hiệu uy tín về RAM và ổ cứng SSD",
+      "description_en": "Reputable brand for RAM and SSDs"
+    },
+    {
+      "id": 6,
+      "name": "Samsung",
+      "description_vi": "Tập đoàn Hàn Quốc sản xuất SSD, RAM và linh kiện điện tử",
+      "description_en": "Korean conglomerate producing SSDs, RAM and electronic components"
+    },
+    {
+      "id": 7,
+      "name": "NVIDIA",
+      "description_vi": "Hãng sản xuất card đồ họa và GPU hàng đầu",
+      "description_en": "Leading graphics card and GPU manufacturer"
+    },
+    {
+      "id": 8,
+      "name": "MSI",
+      "description_vi": "Nhà sản xuất mainboard, card đồ họa và laptop gaming",
+      "description_en": "Manufacturer of motherboards, graphics cards and gaming laptops"
+    },
+    {
+      "id": 9,
+      "name": "Corsair",
+      "description_vi": "Thương hiệu Mỹ chuyên nguồn, RAM, tản nhiệt và phụ kiện gaming",
+      "description_en": "American brand specializing in PSUs, RAM, coolers and gaming peripherals"
+    },
+    {
+      "id": 10,
+      "name": "Cooler Master",
+      "description_vi": "Nhà sản xuất tản nhiệt, case và nguồn nổi tiếng",
+      "description_en": "Famous manufacturer of coolers, cases and power supplies"
+    },
+    {
+      "id": 11,
+      "name": "Logitech",
+      "description_vi": "Thương hiệu Thụy Sĩ chuyên chuột, bàn phím và phụ kiện máy tính",
+      "description_en": "Swiss brand specializing in mice, keyboards and computer peripherals"
+    },
+    {
+      "id": 12,
+      "name": "Keychron",
+      "description_vi": "Thương hiệu bàn phím cơ chất lượng cao, hỗ trợ đa kết nối",
+      "description_en": "High-quality mechanical keyboard brand with multi-device support"
+    },
+    {
+      "id": 13,
+      "name": "HyperX",
+      "description_vi": "Thương hiệu phụ kiện gaming cao cấp của Kingston",
+      "description_en": "Premium gaming peripherals brand from Kingston"
+    }
+  ],
+  "showroom": [
+    {
+      "id": 1,
+      "name": "SieuNhanGear - Hà Nội",
+      "address": "123 Trần Thái Tông, Cầu Giấy, Hà Nội",
+      "phone": "024 1234 5678",
+      "website": "https://example.com/hn",
+      "latitude": 21.033243,
+      "longitude": 105.800651
+    },
+    {
+      "id": 2,
+      "name": "SieuNhanGear - TP. Hồ Chí Minh",
+      "address": "45 Nguyễn Thị Minh Khai, Quận 1, TP. HCM",
+      "phone": "028 9876 5432",
+      "website": "https://example.com/hcm",
+      "latitude": 10.776889,
+      "longitude": 106.700806
+    },
+    {
+      "id": 3,
+      "name": "SieuNhanGear - Đà Nẵng",
+      "address": "78 Lê Duẩn, Hải Châu, Đà Nẵng",
+      "phone": "0236 555 1234",
+      "website": "https://example.com/dn",
+      "latitude": 16.054407,
+      "longitude": 108.202165
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "account_id": 1,
+      "product_id": 1,
+      "rating": 5,
+      "content": "Laptop chạy rất mượt, thiết kế đẹp và hiệu năng gaming tốt."
+    },
+    {
+      "id": 2,
+      "account_id": 2,
+      "product_id": 1,
+      "rating": 4,
+      "content": "Màn hình chất lượng cao, bàn phím gõ khá thích."
+    },
+    {
+      "id": 3,
+      "account_id": 3,
+      "product_id": 2,
+      "rating": 5,
+      "content": "Máy mỏng nhẹ, phù hợp cho công việc văn phòng."
+    },
+    {
+      "id": 4,
+      "account_id": 4,
+      "product_id": 3,
+      "rating": 5,
+      "content": "MacBook hoạt động cực kỳ ổn định và pin rất lâu."
+    },
+    {
+      "id": 5,
+      "account_id": 5,
+      "product_id": 4,
+      "rating": 4,
+      "content": "CPU mạnh, xử lý đa nhiệm rất tốt."
+    },
+    {
+      "id": 6,
+      "account_id": 1,
+      "product_id": 5,
+      "rating": 4,
+      "content": "RAM tốc độ cao, dễ lắp đặt."
+    },
+    {
+      "id": 7,
+      "account_id": 2,
+      "product_id": 6,
+      "rating": 5,
+      "content": "SSD đọc ghi nhanh, khởi động Windows cực nhanh."
+    },
+    {
+      "id": 8,
+      "account_id": 3,
+      "product_id": 7,
+      "rating": 5,
+      "content": "Card đồ họa chiến game AAA rất tốt."
+    },
+    {
+      "id": 9,
+      "account_id": 4,
+      "product_id": 8,
+      "rating": 4,
+      "content": "Mainboard đầy đủ cổng kết nối và hỗ trợ DDR5."
+    },
+    {
+      "id": 10,
+      "account_id": 5,
+      "product_id": 1,
+      "rating": 5,
+      "content": "Giá hơi cao nhưng chất lượng hoàn toàn xứng đáng."
+    }
+  ],
+  "news": [
+    {
+      "id": "1",
+      "tag": "GPU",
+      "date": "29/05/2026",
+      "title": "RTX 5090 có gì mới?",
+      "image": "images/news/news_1.avif"
+    },
+    {
+      "id": "2",
+      "tag": "LAPTOP",
+      "date": "28/05/2026",
+      "title": "Top laptop gaming đáng mua 2026",
+      "image": "images/news/news_2.avif"
+    },
+    {
+      "id": "3",
+      "tag": "GPU",
+      "date": "BUILD PC",
+      "title": "Build PC gaming 30 triệu",
+      "image": "images/news/news_3.avif"
+    }
+  ],
+  "banners": [
+    {
+      "id": 1,
+      "img_URL": "images/banner/banner_1.jpg"
+    }
+  ]
+}
