@@ -60,7 +60,6 @@ useEffect(() => {
   };
 
   const increaseQuantity = (id) => {
-  console.log("Increase", id);
 
   setItems((current) => {
     const next = current.map((item) =>
@@ -68,9 +67,6 @@ useEffect(() => {
         ? { ...item, quantity: item.quantity + 1 }
         : item
     );
-
-    console.log("Next:", next);
-
     return next;
   });
 };

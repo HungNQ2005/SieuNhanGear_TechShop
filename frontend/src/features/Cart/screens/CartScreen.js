@@ -1,4 +1,4 @@
-console.log("CartScreen render");
+
 import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useNavigate } from "react-router-dom";
@@ -7,14 +7,13 @@ import CartSummary from "../components/CartSummary";
 import { useCart } from "../../../store/CartContext";
 import { ROUTES } from "../../../constants/routes";
 import { useLocalization } from "../../../providers/LocalizationProvider";
-//ss//
 import {
   TEXT_CART_EMPTY,
   TEXT_CART_CONTINUE_SHOPPING,
   TEXT_CART_SUBLABEL,
   TEXT_CART_TITLE,
   TEXT_CART_TOTAL,
-  TEXT_CART_CHECKOUT,
+  TEXT_CART_CHECKOUT, 
   TEXT_CART_DESCRIPTION,
   TEXT_CART_PRODUCT,
 } from "../../../constants/i18nKeys";
@@ -22,7 +21,6 @@ export default function CartScreen() {
   const { items, increaseQuantity, decreaseQuantity, removeItem, totalItems } = useCart();
   const navigate = useNavigate();
   const { t } = useLocalization();
-  
   return (
     <View style={styles.container}>
       <View style={styles.left}>

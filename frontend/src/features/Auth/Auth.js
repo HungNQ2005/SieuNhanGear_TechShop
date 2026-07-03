@@ -11,7 +11,7 @@ import {
   ScrollView,
 } from "react-native";
 import { authModalStyles } from "./AuthModal.styles";
-import { login } from "../../services/mockAuth";
+import { login, register } from "../../services/AuthService";
 import { useLocalization } from "../../providers/LocalizationProvider";
 import TextIntl from "../../common/TextIntl";
 import {
@@ -54,8 +54,7 @@ function InputField({
     <View style={authModalStyles.fieldGroup}>
       <Text style={authModalStyles.fieldLabel}>{label}</Text>
       <View style={authModalStyles.inputShell}>
-        <View style={authModalStyles.inputIcon}>
-        </View>
+        <View style={authModalStyles.inputIcon}></View>
         <TextInput
           value={value}
           onChangeText={onChangeText}
@@ -96,9 +95,7 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
   );
   const subtitle = useMemo(
     () =>
-      activeTab === LOGIN
-        ? t(TEXT_LOGIN_SUBTITLE)
-        : t(TEXT_REGISTER_SUBTITLE),
+      activeTab === LOGIN ? t(TEXT_LOGIN_SUBTITLE) : t(TEXT_REGISTER_SUBTITLE),
     [activeTab, t],
   );
   const cardLayoutStyle = isCompact
@@ -128,14 +125,11 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
     setFormError("");
     setActiveTab(tab);
   };
-
-  const handleLoginSubmit = () => {
-    if (!isLoginFormComplete) {
-      setFormError(t(TEXT_LOGIN_ERROR));
-      return;
-    }
-
-    const user = login(loginForm.email.trim(), loginForm.password.trim());
+  const handleLoginSubmit = async () => {
+    const user = await login(
+        loginForm.email.trim(),
+        loginForm.password.trim()
+    );
 
     if (!user) {
       setFormError(t(TEXT_LOGIN_ERROR));
@@ -205,9 +199,7 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
       </View>
 
       <View style={authModalStyles.leftFooter}>
-        <Text style={authModalStyles.leftFooterText}>
-          {t(TEXT_COPYRIGHT)}
-        </Text>
+        <Text style={authModalStyles.leftFooterText}>{t(TEXT_COPYRIGHT)}</Text>
       </View>
     </View>
   );
@@ -256,7 +248,9 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
         <View style={authModalStyles.rowBetween}>
           <TextIntl tx={TEXT_PASSWORD} style={authModalStyles.fieldLabel} />
           <Pressable>
-            <Text style={authModalStyles.forgotLink}>{t(TEXT_FORGOT_PASSWORD)}</Text>
+            <Text style={authModalStyles.forgotLink}>
+              {t(TEXT_FORGOT_PASSWORD)}
+            </Text>
           </Pressable>
         </View>
         <InputField
@@ -383,7 +377,9 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
       </Pressable>
 
       <View style={authModalStyles.footerLinkRow}>
-        <Text style={authModalStyles.footerHint}>{t(TEXT_ALREADY_HAVE_ACCOUNT)}</Text>
+        <Text style={authModalStyles.footerHint}>
+          {t(TEXT_ALREADY_HAVE_ACCOUNT)}
+        </Text>
         <Pressable onPress={() => handleTabChange(LOGIN)}>
           <Text style={authModalStyles.footerLink}>{t(TEXT_LOGIN)}</Text>
         </Pressable>
