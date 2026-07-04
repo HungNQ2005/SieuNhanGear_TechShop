@@ -1,12 +1,15 @@
 import React from "react";
 import { View, Text, Image, Pressable } from "react-native";
+import { useLocalization } from "../../../providers/LocalizationProvider";
 import {
   TEXT_CART_PRODUCT,
   TEXT_CART_PRODUCT_COUNT,
 } from "../../../constants/i18nKeys";
 import { styles } from "./CartItem.styles";
 import { API } from "../../../constants/apiURL";
+
 export default function CartItem({ item, onIncrease, onDecrease, onRemove }) {
+    const { t } = useLocalization();
   return (
     <View style={styles.card}>
       <Image
@@ -43,7 +46,7 @@ export default function CartItem({ item, onIncrease, onDecrease, onRemove }) {
 
         <Text style={styles.unitPrice}>
           {item.price.toLocaleString()}đ / {item.quantity}{" "}
-          {TEXT_CART_PRODUCT_COUNT}
+          {t(TEXT_CART_PRODUCT_COUNT)}
         </Text>
       </View>
 
