@@ -17,6 +17,7 @@ import { ROUTES } from "../constants/routes";
 import { API } from "../constants/apiURL";
 import TextIntl from "./TextIntl";
 import api from "../services/api";
+import { useCart } from "../store/CartContext";
 import {
   TEXT_APP_TITLE,
   TEXT_CATEGORIES_LABEL,
@@ -47,11 +48,11 @@ import {
   IconMore,
 } from "../constants/icons";
 import AuthModal from "../features/Auth/Auth";
-import { useCart } from "../store/CartContext";
 // ─── Header Component ─────────────────────────────────────────────────────
 export default function Header() {
   const { t, toggleLocale } = useLocalization();
   const navigate = useNavigate();
+  const { loadCart } = useCart();
   const {
     selectedCategoryId,
     setSelectedCategoryId,
@@ -78,7 +79,17 @@ export default function Header() {
   const [moreVisible, setMoreVisible] = useState(false);
   const [morePosition, setMorePosition] = useState({ top: 0, left: 0 });
   const moreButtonRef = useRef(null);
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
 
+    if (savedUser) {
+      const user = JSON.parse(savedUser);
+
+      setUser(user);
+
+      loadCart(user.id);
+    }
+  }, []);
   useEffect(() => {
     if (dropdownVisible && categories.length === 0) {
       setLoadingDropdown(true);
@@ -430,7 +441,10 @@ export default function Header() {
                   <Text>Role: {user.role}</Text>
                   <Pressable
                     onPress={() => {
+                      localStorage.removeItem("user");
+
                       setUser(null);
+
                       setShowUserDropdown(false);
                     }}
                   >
@@ -463,7 +477,15 @@ export default function Header() {
       <AuthModal
         visible={showAuthModal}
         onClose={() => setShowAuthModal(false)}
-        onLoginSuccess={setUser}
+        onLoginSuccess={async (user) => {
+          setUser(user);
+
+          localStorage.setItem("user", JSON.stringify(user));
+
+          await loadCart(user.id);
+
+          setShowAuthModal(false);
+        }}
       />
     </View>
   );

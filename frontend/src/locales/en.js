@@ -101,6 +101,7 @@ export default {
     TEXT_CART_GRAND_TOTAL: "Grand Total",
     TEXT_CART_PROCEED_CHECKOUT: "Proceed to Checkout",
     TEXT_CART_PRODUCT: "Product",
+    TEXT_CART_PRODUCT_COUNT: "pcs",
   },
   
   home: {

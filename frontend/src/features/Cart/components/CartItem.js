@@ -1,23 +1,18 @@
 import React from "react";
+import { View, Text, Image, Pressable } from "react-native";
 import {
-  View,
-  Text,
-  Image,
-  Pressable,
-} from "react-native";
-
+  TEXT_CART_PRODUCT,
+  TEXT_CART_PRODUCT_COUNT,
+} from "../../../constants/i18nKeys";
 import { styles } from "./CartItem.styles";
-
-export default function CartItem({
-  item,
-  onIncrease,
-  onDecrease,
-  onRemove,
-}) {
+import { API } from "../../../constants/apiURL";
+export default function CartItem({ item, onIncrease, onDecrease, onRemove }) {
   return (
     <View style={styles.card}>
       <Image
-        source={{ uri: item.image }}
+        source={{
+          uri: API.BASE_API_URL + item.img_URL,
+        }}
         style={styles.image}
       />
 
@@ -29,21 +24,13 @@ export default function CartItem({
         </Text>
 
         <View style={styles.quantityBox}>
-          <Pressable
-            style={styles.qtyBtn}
-            onPress={() => onDecrease(item.id)}
-          >
+          <Pressable style={styles.qtyBtn} onPress={() => onDecrease(item.id)}>
             <Text style={styles.qtyBtnText}>−</Text>
           </Pressable>
 
-          <Text style={styles.qtyText}>
-            {item.quantity}
-          </Text>
+          <Text style={styles.qtyText}>{item.quantity}</Text>
 
-          <Pressable
-            style={styles.qtyBtn}
-            onPress={() => onIncrease(item.id)}
-          >
+          <Pressable style={styles.qtyBtn} onPress={() => onIncrease(item.id)}>
             <Text style={styles.qtyBtnText}>+</Text>
           </Pressable>
         </View>
@@ -55,14 +42,12 @@ export default function CartItem({
         </Text>
 
         <Text style={styles.unitPrice}>
-          {item.price.toLocaleString()}đ / cái
+          {item.price.toLocaleString()}đ / {item.quantity}{" "}
+          {TEXT_CART_PRODUCT_COUNT}
         </Text>
       </View>
 
-      <Pressable
-        style={styles.removeBtn}
-        onPress={() => onRemove(item.id)}
-      >
+      <Pressable style={styles.removeBtn} onPress={() => onRemove(item.id)}>
         <Text style={styles.removeText}>✕</Text>
       </Pressable>
     </View>

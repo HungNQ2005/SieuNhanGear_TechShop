@@ -89,6 +89,7 @@ export const TEXT_CART_FREE_SHIPPING = "cart.TEXT_CART_FREE_SHIPPING";
 export const TEXT_CART_GRAND_TOTAL = "cart.TEXT_CART_GRAND_TOTAL";
 export const TEXT_CART_PROCEED_CHECKOUT = "cart.TEXT_CART_PROCEED_CHECKOUT";
 export const TEXT_CART_PRODUCT = "cart.TEXT_CART_PRODUCT";
+export const TEXT_CART_PRODUCT_COUNT = "cart.TEXT_CART_PRODUCT_COUNT";
 // ─── Product Page ────────────────────────────────────────────────────────────
 export const TEXT_PRODUCT_DESCRIPTION = 'product.TEXT_DESCRIPTION';
 export const TEXT_PRODUCT_SKU = 'product.TEXT_SKU';

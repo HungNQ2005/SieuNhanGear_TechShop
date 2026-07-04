@@ -104,6 +104,7 @@ export default {
     TEXT_CART_GRAND_TOTAL: "Tổng cộng",
     TEXT_CART_PROCEED_CHECKOUT: "Tiến hành thanh toán",
     TEXT_CART_PRODUCT: "Sản phẩm",
+    TEXT_CART_PRODUCT_COUNT: "cái",
   },
 
   home: {
