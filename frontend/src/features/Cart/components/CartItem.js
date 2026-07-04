@@ -45,7 +45,7 @@ export default function CartItem({ item, onIncrease, onDecrease, onRemove }) {
         </Text>
 
         <Text style={styles.unitPrice}>
-          {item.price.toLocaleString()}đ / {item.quantity}{" "}
+          {item.price.toLocaleString()}đ / 
           {t(TEXT_CART_PRODUCT_COUNT)}
         </Text>
       </View>
