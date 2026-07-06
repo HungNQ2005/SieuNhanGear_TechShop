@@ -18,6 +18,7 @@ export default {
     TEXT_PRODUCT_COUNT: "{{count}} sản phẩm trong giỏ",
     TEXT_CATEGORIES_LABEL: "Danh mục",
     TEXT_CART_SUBLABEL: "Giỏ hàng",
+
     // Footer
     TEXT_FOOTER_DESCRIPTION:
       "Chuỗi bán lẻ linh kiện máy tính chính hãng hàng đầu Việt Nam. Tư vấn xây dựng cấu hình miễn phí.",
@@ -89,6 +90,22 @@ export default {
     TEXT_SHOWROOM_ERROR_LOAD: "Không thể tải dữ liệu showroom.",
   },
 
+
+  cart: {
+    TEXT_CART_EMPTY: "Giỏ hàng của bạn đang trống.",
+    TEXT_CART_TOTAL: "Tổng tiền",
+    TEXT_CART_CHECKOUT: "Thanh toán",
+    TEXT_CART_CONTINUE_SHOPPING: "Tiếp tục mua sắm",
+    TEXT_CART_DESCRIPTION: "Hãy thêm vài sản phẩm vào giỏ hàng!",
+    TEXT_CART_SUMMARY_TITLE: "Tóm tắt đơn hàng",
+    TEXT_CART_SUBTOTAL: "Tạm tính",
+    TEXT_CART_SHIPPING: "Phí vận chuyển",
+    TEXT_CART_FREE_SHIPPING: "Miễn phí",
+    TEXT_CART_GRAND_TOTAL: "Tổng cộng",
+    TEXT_CART_PROCEED_CHECKOUT: "Tiến hành thanh toán",
+    TEXT_CART_PRODUCT: "Sản phẩm",
+    TEXT_CART_PRODUCT_COUNT: "cái",
+  },
 
   home: {
     TEXT_HOME_HERO_STAMP: 'Linh kiện chính hãng — Bảo hành toàn quốc',
