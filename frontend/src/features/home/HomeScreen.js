@@ -79,7 +79,7 @@ export default function HomeScreen({ scrollViewRef }) {
   }
 
   useEffect(() => {
-    api.get('/manufacturers')
+    api.get(API.GET_MANUFACTURER)
       .then(res => {
         const data = Array.isArray(res.data) ? res.data : [];
         setManufacturers(data);
@@ -88,7 +88,7 @@ export default function HomeScreen({ scrollViewRef }) {
         logger.error('Failed to fetch manufacturers', err);
         setManufacturers([]);
       });
-    api.get('/categories')
+    api.get(API.GET_CATEGORY)
       .then(res => {
         const data = Array.isArray(res.data) ? res.data : [];
         setCategories(data);

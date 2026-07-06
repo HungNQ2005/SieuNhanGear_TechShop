@@ -9,7 +9,7 @@ const parseOrigins = (raw) => {
 const env = {
   PORT: Number(process.env.PORT) || 3521,
   NODE_ENV: process.env.NODE_ENV || 'development',
-  MONGODB_URI: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/sieunhan_geargearstore',
+  MONGODB_URI: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/SieuNhanGearDB',
   CORS_ORIGINS: parseOrigins(process.env.CORS_ORIGINS),
 };
 
