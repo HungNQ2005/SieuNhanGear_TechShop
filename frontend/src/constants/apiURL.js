@@ -22,6 +22,9 @@ export const API = {
     GET_CART_BY_ACCOUNT: (accountId) => `api/cart?accountId=${accountId}`,
     CREATE_CART: 'api/cart',
     UPDATE_CART: (id) => `api/cart/${id}`,
-    DELETE_CART: (id) => `api/cart/${id}`
-    
+    DELETE_CART: (id) => `api/cart/${id}`,
+//Order
+    GET_ORDER: "orders",
+    GET_ORDER_BY_ID: (id) => `orders/${id}`,
+    GET_ORDER_BY_CODE: (code) => `orders?code=${code}`,
 };

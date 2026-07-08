@@ -316,7 +316,10 @@ export default function Header() {
                   </View>
                 </Pressable>
 
-                <Pressable style={styles.actionItem}>
+                <Pressable
+    style={styles.actionItem}
+    onPress={() => navigate(ROUTES.ORDER)}
+>
                   <View style={styles.iconWrapper}>
                     <IconShippingBox />
                   </View>

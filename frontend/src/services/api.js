@@ -35,4 +35,17 @@ export const getAccountById = (id) => api.get(API.GET_ACCOUNT_BY_ID(id));
 export const getComments = () => api.get(API.GET_COMMENTS);
 export const getCommentById = (id) => api.get(API.GET_COMMENT_BY_ID(id));
 
+// Orders
+export const getOrders = () =>
+    api.get(API.GET_ORDER);
+
+export const getOrderById = (id) =>
+    api.get(API.GET_ORDER_BY_ID(id));
+
+export const getOrderByCode = async (code) => {
+    const res = await api.get(API.GET_ORDER_BY_CODE(code));
+
+    return res.data.length ? res.data[0] : null;
+};
+
 export default api;
