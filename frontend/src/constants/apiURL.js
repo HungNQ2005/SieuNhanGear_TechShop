@@ -22,6 +22,31 @@ export const API = {
     GET_CART_BY_ACCOUNT: (accountId) => `api/cart?accountId=${accountId}`,
     CREATE_CART: 'api/cart',
     UPDATE_CART: (id) => `api/cart/${id}`,
-    DELETE_CART: (id) => `api/cart/${id}`
+    DELETE_CART: (id) => `api/cart/${id}`,
+
+
+    // Order
+GET_ORDERS: "api/orders",
+GET_ORDER_BY_ID: (id) => `api/orders/${id}`,
+
+CREATE_ORDER: "api/orders",
+UPDATE_ORDER: (id) => `api/orders/${id}`,
+DELETE_ORDER: (id) => `api/orders/${id}`,
+
+// Order Item
+GET_ORDER_ITEMS: "api/orderItems",
+GET_ORDER_ITEMS_BY_ORDER: (orderId) =>
+    `api/orderItems?orderId=${orderId}`,
+
+// Timeline
+GET_ORDER_TIMELINE: "api/orderTimeline",
+GET_ORDER_TIMELINE_BY_ORDER: (orderId) =>
+    `api/orderTimeline?orderId=${orderId}`,
+
+// Status
+GET_ORDER_STATUS: "api/orderStatus",
+
+// Shipping
+GET_SHIPPING_COMPANIES: "api/shippingCompanies",
     
 };

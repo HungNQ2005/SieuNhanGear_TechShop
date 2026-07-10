@@ -12,6 +12,7 @@ import { CartProvider } from './src/store/CartContext';
 import { FilterProvider } from './src/store/FilterContext';
 import ViewShowroom from './src/features/viewShowroom/ViewShowroom';
 import CartScreen from './src/features/Cart/screens/CartScreen';
+import OrderManagementScreen from "./src/features/Auth/Admin/OrderManagement/OrderManagementScreen";
 export default function App() {
 
   const scrollViewRef = useRef(null);
@@ -34,6 +35,7 @@ export default function App() {
                   <Route path={ROUTES.PRODUCT_PAGE} element={<ProductPage hideOuterScroll />} />
                   <Route path={ROUTES.SHOWROOM} element={<ViewShowroom />} />
                   <Route path={ROUTES.CART} element={<CartScreen />} />
+                  <Route path={ROUTES.ORDER_MANAGEMENT} element={<OrderManagementScreen />} />
                 </Routes>
                 <Footer />
 

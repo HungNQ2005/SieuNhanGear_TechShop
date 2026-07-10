@@ -190,4 +190,64 @@ export default {
     TEXT_DESCRIPTION: "Gear PC chất lượng cao, kiểm tra kỹ trước khi bán.",
     TEXT_SKU: "Mã",
   },
+
+  orderManagement: {
+  TEXT_ORDER_TITLE: "Quản lý đơn hàng",
+
+  TEXT_TODAYS_ORDER: "Đơn hôm nay",
+  TEXT_PROCESSING: "Đang xử lý",
+  TEXT_SHIPPING: "Đang giao",
+  TEXT_DELIVERED: "Đã giao",
+  TEXT_CANCELLED: "Đã hủy",
+
+  TEXT_ALL_ORDER: "Tất cả",
+
+  TEXT_ORDER_CODE: "Mã đơn",
+  TEXT_CUSTOMER: "Khách hàng",
+  TEXT_PHONE: "Số điện thoại",
+  TEXT_ADDRESS: "Địa chỉ",
+  TEXT_STATUS: "Trạng thái",
+  TEXT_TOTAL: "Tổng tiền",
+  TEXT_DATE: "Ngày đặt",
+  TEXT_ACTION: "Thao tác",
+
+  TEXT_DETAIL: "Chi tiết",
+  TEXT_TIMELINE: "Lịch sử đơn hàng",
+
+  TEXT_PAYMENT: "Thanh toán",
+  TEXT_PAYMENT_STATUS: "Trạng thái thanh toán",
+
+  TEXT_SHIPPING_COMPANY: "Đơn vị vận chuyển",
+  TEXT_TRACKING_CODE: "Mã vận đơn",
+
+  TEXT_CLOSE: "Đóng",
+  TEXT_DASHBOARD_TOTAL_ORDERS: "Tổng đơn hàng",
+  TEXT_DASHBOARD_PROCESSING: "Đang xử lý",
+  TEXT_DASHBOARD_SHIPPING: "Đang giao",
+  TEXT_DASHBOARD_DELIVERED: "Đã giao",
+  TEXT_DASHBOARD_CANCELLED: "Đã hủy",
+
+  TEXT_ALL_ORDERS: "Tất cả đơn hàng",
+
+  TEXT_ORDER_CODE: "Mã đơn",
+  TEXT_CUSTOMER: "Khách hàng",
+  TEXT_PHONE: "Số điện thoại",
+  TEXT_ADDRESS: "Địa chỉ",
+  TEXT_STATUS: "Trạng thái",
+  TEXT_TOTAL: "Tổng tiền",
+  TEXT_DATE: "Ngày đặt",
+  TEXT_ACTION: "Thao tác",
+
+  TEXT_DETAIL: "Chi tiết",
+  TEXT_CLOSE: "Đóng",
+
+  TEXT_TIMELINE: "Lịch sử đơn hàng",
+
+  TEXT_PAYMENT_METHOD: "Phương thức thanh toán",
+  TEXT_PAYMENT_STATUS: "Trạng thái thanh toán",
+
+  TEXT_SHIPPING_COMPANY: "Đơn vị vận chuyển",
+  TEXT_TRACKING_CODE: "Mã vận đơn",
+  TEXT_ORDERS: "Quản lý đơn hàng",
+}
 };

@@ -188,4 +188,63 @@ export default {
       "High-quality PC gear, tested for durability and performance.",
     TEXT_SKU: "SKU",
   },
+  orderManagement: {
+  TEXT_ORDER_TITLE: "Order Management",
+
+  TEXT_TODAYS_ORDER: "Today's Orders",
+  TEXT_PROCESSING: "Processing",
+  TEXT_SHIPPING: "Shipping",
+  TEXT_DELIVERED: "Delivered",
+  TEXT_CANCELLED: "Cancelled",
+
+  TEXT_ALL_ORDER: "All Orders",
+
+  TEXT_ORDER_CODE: "Order Code",
+  TEXT_CUSTOMER: "Customer",
+  TEXT_PHONE: "Phone",
+  TEXT_ADDRESS: "Address",
+  TEXT_STATUS: "Status",
+  TEXT_TOTAL: "Total",
+  TEXT_DATE: "Created Date",
+  TEXT_ACTION: "Action",
+
+  TEXT_DETAIL: "Detail",
+  TEXT_TIMELINE: "Timeline",
+
+  TEXT_PAYMENT: "Payment",
+  TEXT_PAYMENT_STATUS: "Payment Status",
+
+  TEXT_SHIPPING_COMPANY: "Shipping Company",
+  TEXT_TRACKING_CODE: "Tracking Code",
+
+  TEXT_CLOSE: "Close",
+  TEXT_DASHBOARD_TOTAL_ORDERS: "Total Orders",
+  TEXT_DASHBOARD_PROCESSING: "Processing",
+  TEXT_DASHBOARD_SHIPPING: "Shipping",
+  TEXT_DASHBOARD_DELIVERED: "Delivered",
+  TEXT_DASHBOARD_CANCELLED: "Cancelled",
+
+  TEXT_ALL_ORDERS: "All Orders",
+
+  TEXT_ORDER_CODE: "Order Code",
+  TEXT_CUSTOMER: "Customer",
+  TEXT_PHONE: "Phone",
+  TEXT_ADDRESS: "Address",
+  TEXT_STATUS: "Status",
+  TEXT_TOTAL: "Total",
+  TEXT_DATE: "Created Date",
+  TEXT_ACTION: "Action",
+
+  TEXT_DETAIL: "Detail",
+  TEXT_CLOSE: "Close",
+
+  TEXT_TIMELINE: "Order Timeline",
+
+  TEXT_PAYMENT_METHOD: "Payment Method",
+  TEXT_PAYMENT_STATUS: "Payment Status",
+
+  TEXT_SHIPPING_COMPANY: "Shipping Company",
+  TEXT_TRACKING_CODE: "Tracking Code",
+  TEXT_ORDERS: "Orders Management",
+}
 };
