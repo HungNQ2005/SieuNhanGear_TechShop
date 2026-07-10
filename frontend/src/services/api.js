@@ -88,4 +88,75 @@ export const getOrderStatus = () =>
 
 export const getShippingCompanies = () =>
     api.get(API.GET_SHIPPING_COMPANIES);
+// Checkout
+export const getOrdersByAccount = (accountId) =>
+  api.get(API.GET_ORDER_BY_ACCOUNT(accountId));
+// Vouchers
+export const getVouchers = () => api.get(API.GET_VOUCHERS);
+export const getVoucherById = (id) => api.get(API.GET_VOUCHER_BY_ID(id));
+export const getVoucherByCode = (code) =>
+  api.get(API.GET_VOUCHER_BY_CODE(code));
+export const createVoucher = (voucher) => api.post(API.CREATE_VOUCHER, voucher);
+export const updateVoucher = (id, voucher) =>
+  api.put(API.UPDATE_VOUCHER(id), voucher);
+export const deleteVoucher = (id) => api.delete(API.DELETE_VOUCHER(id));
+
+// Payment Methods
+export const getPaymentMethods = () => api.get(API.GET_PAYMENT_METHODS);
+export const getPaymentMethodById = (id) =>
+  api.get(API.GET_PAYMENT_METHOD_BY_ID(id));
+
+// Address
+const PROVINCE_API_BASE = "https://provinces.open-api.vn/api/v2";
+export const getProvinces = async () => {
+  const response = await fetch(`${PROVINCE_API_BASE}/p/`);
+  const data = await response.json();
+  return { data };
+};
+export const getWardsByProvince = async (provinceCode) => {
+  const response = await fetch(
+    `${PROVINCE_API_BASE}/p/${provinceCode}?depth=2`,
+  );
+  const data = await response.json();
+  return { data: data.wards || [] };
+};
+// Shipping Address
+export const getShippingAddresses = () => api.get(API.GET_SHIPPING_ADDRESS);
+export const getShippingAddressByAccount = (accountId) =>
+  api.get(API.GET_SHIPPING_ADDRESS_BY_ACCOUNT(accountId));
+// Orders
+
+export const getOrderByCode = async (code) => {
+  const orderRes = await api.get(API.GET_ORDER_BY_CODE(code));
+
+  if (!orderRes.data.length) return null;
+
+  const order = orderRes.data[0];
+
+  // Lấy order items
+  const orderItemsRes = await api.get(
+    API.GET_ORDER_ITEMS_BY_ORDER(order.id)
+  );
+
+  // Lấy products
+  const productsRes = await api.get(API.GET_PRODUCT);
+
+  // Ghép thông tin sản phẩm
+  order.items = orderItemsRes.data.map((item) => {
+    const product = productsRes.data.find(
+      (p) => p.id === item.productId
+    );
+
+    return {
+      ...item,
+      name: product?.name,
+      image: product?.img_URL,
+      brand: "",        // nếu chưa có manufacturer thì để tạm
+      specs: "",        // nếu chưa có specs thì để tạm
+      price: item.price ?? product?.price
+    };
+  });
+
+  return order;
+};
 export default api;

@@ -1,20 +1,28 @@
-import { useRef } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet, Platform, View, ScrollView } from 'react-native';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Header from './src/common/Header';
-import Footer from './src/common/Footer';
-import HomeScreen from './src/features/home/HomeScreen';
-import ProductPage from './src/features/product/ProductPage';
-import { ROUTES } from './src/constants/routes';
-import { LocalizationProvider } from './src/providers/LocalizationProvider';
-import { CartProvider } from './src/store/CartContext';
-import { FilterProvider } from './src/store/FilterContext';
-import ViewShowroom from './src/features/viewShowroom/ViewShowroom';
-import CartScreen from './src/features/Cart/screens/CartScreen';
-import OrderManagementScreen from "./src/features/Auth/Admin/OrderManagement/OrderManagementScreen";
-export default function App() {
+import { useRef } from "react";
 
+import { StatusBar } from "expo-status-bar";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Platform,
+  View,
+  ScrollView,
+} from "react-native";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Header from "./src/common/Header";
+import Footer from "./src/common/Footer";
+import HomeScreen from "./src/features/home/HomeScreen";
+import ProductPage from "./src/features/product/ProductPage";
+import { ROUTES } from "./src/constants/routes";
+import { LocalizationProvider } from "./src/providers/LocalizationProvider";
+import { CartProvider } from "./src/store/CartContext";
+import { FilterProvider } from "./src/store/FilterContext";
+import ViewShowroom from "./src/features/viewShowroom/ViewShowroom";
+import CartScreen from "./src/features/Cart/screens/CartScreen";
+import OrderManagementScreen from "./src/features/Auth/Admin/OrderManagement/OrderManagementScreen";
+import CheckoutPage from "./src/features/checkout/CheckoutPage";
+import OrderTrackingScreen from './src/features/order-tracking/screens/OrderTrackingScreen';
+export default function App() {
   const scrollViewRef = useRef(null);
 
   return (
@@ -30,17 +38,30 @@ export default function App() {
                 showsVerticalScrollIndicator={true}
               >
                 <Routes>
-                  <Route path={ROUTES.ROOT} element={<HomeScreen scrollViewRef={scrollViewRef} />} />
-                  <Route path={ROUTES.HOME} element={<HomeScreen scrollViewRef={scrollViewRef} />} />
-                  <Route path={ROUTES.PRODUCT_PAGE} element={<ProductPage hideOuterScroll />} />
+                  <Route
+                    path={ROUTES.ROOT}
+                    element={<HomeScreen scrollViewRef={scrollViewRef} />}
+                  />
+                  <Route
+                    path={ROUTES.HOME}
+                    element={<HomeScreen scrollViewRef={scrollViewRef} />}
+                  />
+                  <Route
+                    path={ROUTES.PRODUCT_PAGE}
+                    element={<ProductPage hideOuterScroll />}
+                  />
                   <Route path={ROUTES.SHOWROOM} element={<ViewShowroom />} />
                   <Route path={ROUTES.CART} element={<CartScreen />} />
-                  <Route path={ROUTES.ORDER_MANAGEMENT} element={<OrderManagementScreen />} />
+                  <Route
+                    path={ROUTES.ORDER_MANAGEMENT}
+                    element={<OrderManagementScreen />}
+                  />
+                  <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
+                  <Route path={ROUTES.ORDER} element={<OrderTrackingScreen />} />
                 </Routes>
                 <Footer />
-
               </ScrollView>
-              <StatusBar style={Platform.OS === 'ios' ? 'dark' : 'light'} />
+              <StatusBar style={Platform.OS === "ios" ? "dark" : "light"} />
             </SafeAreaView>
           </BrowserRouter>
         </CartProvider>
@@ -52,7 +73,7 @@ export default function App() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: "#F8FAFC",
   },
   scrollContent: {
     flexGrow: 1,

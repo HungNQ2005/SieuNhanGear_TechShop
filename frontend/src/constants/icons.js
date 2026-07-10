@@ -138,3 +138,50 @@ export const IconPointToRight = () => (
         <path d="M5 12h14M12 5l7 7-7 7" />
     </svg>
 );
+export const IconShippingAddress = () => (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#2563eb"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
+    <circle cx="12" cy="10" r="3" />
+  </svg>
+);
+export const IconDiscount = () => (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#2563eb"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M20.59 13.41 13.41 20.59a2 2 0 0 1-2.82 0L3 13V4h9l8.59 8.59a2 2 0 0 1 0 2.82z" />
+    <circle cx="7.5" cy="7.5" r="1.5" />
+    <line x1="9" y1="15" x2="15" y2="9" />
+  </svg>
+);
+export const IconPaymentMethod = () => (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#2563eb"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <rect x="2" y="5" width="20" height="14" rx="2" />
+    <line x1="2" y1="10" x2="22" y2="10" />
+    <line x1="6" y1="15" x2="10" y2="15" />
+  </svg>
+);

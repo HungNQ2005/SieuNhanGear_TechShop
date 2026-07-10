@@ -1,3 +1,5 @@
+import { TEXT_CLOSE2 } from "../constants/i18nKeys";
+
 export default {
   common: {
     TEXT_APP_TITLE: "SieuNhanGear",
@@ -246,5 +248,100 @@ export default {
   TEXT_SHIPPING_COMPANY: "Shipping Company",
   TEXT_TRACKING_CODE: "Tracking Code",
   TEXT_ORDERS: "Orders Management",
-}
+},
+checkout: {
+    TEXT_EMPTY_CART: "Your cart is empty",
+    TEXT_CHECKOUT_TITLE: "Checkout",
+    TEXT_SHIPPING_INFO: "Shipping Information",
+    TEXT_DISCOUNT: "Discount Code",
+    TEXT_SHIPPING_METHOD: "Shipping Method",
+    TEXT_PAYMENT_METHOD: "Payment Method",
+    TEXT_DISCOUNT_PLACEHOLDER: "ENTER DISCOUNT CODE...",
+    TEXT_APPLY: "Apply",
+    TEXT_REMOVE: "Remove",
+    TEXT_AVAILABLE_CODES: "Available codes:",
+    TEXT_ORDER_TITLE: "Your Order",
+    TEXT_SUBTOTAL: "Subtotal:",
+    TEXT_SHIPPING_FEE: "Shipping Fee:",
+    TEXT_FREE_SHIPPING: "Free",
+    TEXT_DISCOUNT_LABEL: "Discount:",
+    TEXT_TOTAL: "Total:",
+    TEXT_PLACE_ORDER: "PLACE ORDER",
+    TEXT_REQUIRED_INFO: "Please fill in all shipping information",
+    TEXT_EMPTY_ORDER: "Your cart is empty",
+    TEXT_SUCCESS: "Order Placed Successfully",
+    TEXT_ORDER_CODE: "Order Code",
+    TEXT_TOTAL_AMOUNT: "Total Amount",
+    TEXT_OK: "OK",
+    TEXT_ENTER_DISCOUNT: "Please enter discount code",
+    TEXT_INVALID_DISCOUNT: "Invalid discount code",
+    TEXT_MIN_ORDER: "Order value must be at least {minOrder}đ",
+    TEXT_NOTIFICATION: "Notification",
+    TEXT_ERROR: "An error occurred. Please try again.",
+    TEXT_NAME: "Full Name",
+    TEXT_INVALID_NAME: "Please enter a valid name",
+    TEXT_PHONE: "Phone Number",
+    TEXT_PHONE_PLACEHOLDER: "Enter phone number",
+    TEXT_PROVINCE: "Province / City",
+    TEXT_PROVINCE_PLACEHOLDER: "Select province / city",
+    TEXT_WARD: "Ward / Commune",
+    TEXT_WARD_PLACEHOLDER: "Select ward / commune",
+    TEXT_ADDRESS: "Detailed Address",
+    TEXT_ADDRESS_PLACEHOLDER: "Enter detailed address",
+    TEXT_NAME_PLACEHOLDER: "Enter your full name",
+    TEXT_EMAIL_PLACEHOLDER: "Enter your email address",
+    TEXT_PAYMENT_COD: "Cash on Delivery",
+    TEXT_PAYMENT_COD_DESC: "Pay when receiving your order",
+    TEXT_PAYMENT_BANK_TRANSFER: "Bank Transfer",
+    TEXT_PAYMENT_BANK_TRANSFER_DESC: "Transfer via bank account",
+    TEXT_LOADING: "Processing...",
+    TEXT_EXPIRED: "Expired",
+    TEXT_NO_DATA: "No data",
+    CLOSE_TEXT: "Close",
+  }
+  ,
+  orderTracking: {
+    TEXT_SHIPPING_INFO_TITLE: "Shipping Information",
+    TEXT_SHIPPING_COMPANY_LABEL: "Shipping Company",
+    TEXT_TRACKING_CODE_LABEL: "Tracking Code",
+    TEXT_ADDRESS_LABEL: "Address",
+    TEXT_PHONE_LABEL: "Phone Number",
+
+    TEXT_TITLE: "Track Your Order",
+    TEXT_SUBTITLE:
+      "Enter your order code to view shipping progress, delivery status, and order details.",
+    TEXT_BADGE: "LIVE",
+
+    TEXT_SEARCH_PLACEHOLDER: "#DH-20240528",
+    TEXT_SEARCH_BUTTON: "Track",
+    TEXT_HELPER: "Tip: Order codes usually start with #DH.",
+
+    TEXT_EMPTY_TITLE: "Order not found",
+    TEXT_EMPTY_DESCRIPTION: "Please check your order code and try again.",
+
+    TEXT_ALERT_EMPTY_TITLE: "Missing information",
+    TEXT_ALERT_EMPTY_MESSAGE: "Please enter an order code.",
+
+    TEXT_ALERT_NOT_FOUND_TITLE: "Order not found",
+    TEXT_ALERT_NOT_FOUND_MESSAGE: "The order code does not exist.",
+
+    TEXT_SHIPPING_INFO: "Shipping Information",
+    TEXT_CUSTOMER: "Customer",
+    TEXT_PHONE: "Phone Number",
+    TEXT_ADDRESS: "Delivery Address",
+    TEXT_STATUS: "Status",
+
+    TEXT_TIMELINE: "Order Timeline",
+
+    TEXT_PRODUCTS: "Products",
+    TEXT_SUBTOTAL: "Subtotal",
+    TEXT_SHIPPING: "Shipping",
+    TEXT_FREE_SHIPPING: "Free",
+    TEXT_TOTAL: "Total",
+
+    TEXT_SUPPORT: "Need Help?",
+    TEXT_SUPPORT_SUBTITLE:
+      "Contact our support team if you have any questions about your order.",
+    TEXT_CONTACT: "Contact Support",
+  }
 };

@@ -1,52 +1,75 @@
 export const API = {
-    //Navigate to back-end
-    BASE_API_URL: 'http://localhost:3521/',
-    GET_SHOWROOM: 'api/showroom',
-    GET_CATEGORY: 'api/categories',
-    GET_CATEGORY_BY_ID:(id) => `api/categories/${id}`,
-    GET_MANUFACTURER: 'api/manufacturers',
-    GET_MANUFACTURE_BY_ID: (id) => `api/manufacturers/${id}`,
-    GET_BANNER: 'api/banners',
-    GET_BANNER_BY_ID: (id) => `api/banners/${id}`,
-    GET_PRODUCT: 'api/products',
-    GET_PRODUCT_BY_ID: (id) => `api/products/${id}`,
-    GET_NEWS: 'api/news',
-    GET_NEWS_BY_ID: (id) => `api/news/${id}`,
-    GET_ACCOUNTS: 'api/accounts',
-    GET_ACCOUNT_BY_ID: (id) => `api/accounts/${id}`,
-    GET_COMMENTS: 'api/comments',
-    GET_COMMENT_BY_ID: (id) => `api/comments/${id}`,
-//Cart
-    GET_CART: 'api/cart',
-    GET_CART_BY_ID: (id) => `api/cart/${id}`,
-    GET_CART_BY_ACCOUNT: (accountId) => `api/cart?accountId=${accountId}`,
-    CREATE_CART: 'api/cart',
-    UPDATE_CART: (id) => `api/cart/${id}`,
-    DELETE_CART: (id) => `api/cart/${id}`,
+  //Navigate to back-end
+  BASE_API_URL: "http://localhost:3521/",
+  GET_SHOWROOM: "api/showroom",
+  GET_CATEGORY: "api/categories",
+  GET_CATEGORY_BY_ID: (id) => `api/categories/${id}`,
+  GET_MANUFACTURER: "api/manufacturers",
+  GET_MANUFACTURE_BY_ID: (id) => `api/manufacturers/${id}`,
+  GET_BANNER: "api/banners",
+  GET_BANNER_BY_ID: (id) => `api/banners/${id}`,
+  GET_PRODUCT: "api/products",
+  GET_PRODUCT_BY_ID: (id) => `api/products/${id}`,
+  GET_NEWS: "api/news",
+  GET_NEWS_BY_ID: (id) => `api/news/${id}`,
+  GET_ACCOUNTS: "api/accounts",
+  GET_ACCOUNT_BY_ID: (id) => `api/accounts/${id}`,
+  GET_COMMENTS: "api/comments",
+  GET_COMMENT_BY_ID: (id) => `api/comments/${id}`,
+  //Cart
+  GET_CART: "api/cart",
+  GET_CART_BY_ID: (id) => `api/cart/${id}`,
+  GET_CART_BY_ACCOUNT: (accountId) => `api/cart?accountId=${accountId}`,
+  CREATE_CART: "api/cart",
+  UPDATE_CART: (id) => `api/cart/${id}`,
+  DELETE_CART: (id) => `api/cart/${id}`,
 
+  // Order
+  GET_ORDERS: "api/orders",
+  GET_ORDER_BY_ID: (id) => `api/orders/${id}`,
 
-    // Order
-GET_ORDERS: "api/orders",
-GET_ORDER_BY_ID: (id) => `api/orders/${id}`,
+  CREATE_ORDER: "api/orders",
+  UPDATE_ORDER: (id) => `api/orders/${id}`,
+  DELETE_ORDER: (id) => `api/orders/${id}`,
 
-CREATE_ORDER: "api/orders",
-UPDATE_ORDER: (id) => `api/orders/${id}`,
-DELETE_ORDER: (id) => `api/orders/${id}`,
+  // Order Item
+  GET_ORDER_ITEMS: "api/orderItems",
+  GET_ORDER_ITEMS_BY_ORDER: (orderId) => `api/orderItems?orderId=${orderId}`,
 
-// Order Item
-GET_ORDER_ITEMS: "api/orderItems",
-GET_ORDER_ITEMS_BY_ORDER: (orderId) =>
-    `api/orderItems?orderId=${orderId}`,
-
-// Timeline
-GET_ORDER_TIMELINE: "api/orderTimeline",
-GET_ORDER_TIMELINE_BY_ORDER: (orderId) =>
+  // Timeline
+  GET_ORDER_TIMELINE: "api/orderTimeline",
+  GET_ORDER_TIMELINE_BY_ORDER: (orderId) =>
     `api/orderTimeline?orderId=${orderId}`,
 
-// Status
-GET_ORDER_STATUS: "api/orderStatus",
+  // Status
+  GET_ORDER_STATUS: "api/orderStatus",
 
-// Shipping
-GET_SHIPPING_COMPANIES: "api/shippingCompanies",
-    
+  // Shipping
+  GET_SHIPPING_COMPANIES: "api/shippingCompanies",
+
+  // Checkout
+  GET_ORDERS: "api/orders",
+  GET_ORDER_BY_ID: (id) => `api/orders/${id}`,
+  GET_ORDER_BY_ACCOUNT: (accountId) => `api/orders?accountId=${accountId}`,
+  CREATE_ORDER: "api/orders",
+  UPDATE_ORDER: (id) => `api/orders/${id}`,
+  DELETE_ORDER: (id) => `api/orders/${id}`,
+  // Payment Methods
+  GET_PAYMENT_METHODS: "api/paymentMethods",
+  GET_PAYMENT_METHOD_BY_ID: (id) => `api/paymentMethods/${id}`,
+  // Vouchers
+  GET_VOUCHERS: "api/vouchers",
+  GET_VOUCHER_BY_ID: (id) => `api/vouchers/${id}`,
+  GET_VOUCHER_BY_CODE: (code) => `api/vouchers?code=${code}`,
+  CREATE_VOUCHER: "api/vouchers",
+  UPDATE_VOUCHER: (id) => `api/vouchers/${id}`,
+  DELETE_VOUCHER: (id) => `api/vouchers/${id}`,
+  // Shipping Address
+  GET_SHIPPING_ADDRESS: "api/shippingAddresses",
+  GET_SHIPPING_ADDRESS_BY_ACCOUNT: (accountId) =>
+    `api/shippingAddresses?accountId=${accountId}`,
+  //Order
+    GET_ORDER: "orders",
+    GET_ORDER_BY_ID: (id) => `orders/${id}`,
+    GET_ORDER_BY_CODE: (code) => `orders?code=${code}`,
 };
