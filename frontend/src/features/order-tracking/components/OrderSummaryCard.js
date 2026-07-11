@@ -11,7 +11,6 @@ import styles from "../styles/OrderSummaryCard.style";
 import { API } from "../../../constants/apiURL";
 import { useLocalization } from "../../../providers/LocalizationProvider";
 export default function OrderSummaryCard({ order }) {
-  
   const { t } = useLocalization();
   if (!order) return null;
   const subtotal =
@@ -23,13 +22,15 @@ export default function OrderSummaryCard({ order }) {
   const total = subtotal + shipping;
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>{t(TEXT_ORDER_TRACKING_PRODUCTS)} ({order.items?.length || 0})</Text>
+      <Text style={styles.title}>
+        {t(TEXT_ORDER_TRACKING_PRODUCTS)} ({order.items?.length || 0})
+      </Text>
 
       {order.items?.map((item) => (
         <View key={item.id} style={styles.product}>
           <Image
             source={{
-              uri: `${API.BASE_API_URL}/${item.image}`
+              uri: `${API.BASE_API_URL}/${item.image}`,
             }}
             style={styles.image}
           />
@@ -71,5 +72,4 @@ export default function OrderSummaryCard({ order }) {
       </View>
     </View>
   );
-
 }

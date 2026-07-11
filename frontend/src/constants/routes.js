@@ -8,4 +8,5 @@ export const ROUTES = {
   ORDER_MANAGEMENT: "/admin/orders",
   CHECKOUT: "/checkout",
   ORDER: "/order",
+  ADMIN_ORDER_DETAIL: "/admin/orders/:id",
 };

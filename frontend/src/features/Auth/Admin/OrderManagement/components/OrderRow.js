@@ -3,9 +3,10 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { useLocalization } from "../../../../../providers/LocalizationProvider";
 import { TEXT_DETAIL } from "../../../../../constants/i18nKeys";
 import OrderStatusBadge from "./OrderStatusBadge";
-
+import { useNavigate } from "react-router-dom";
 export default function OrderRow({ order, statusList }) {
   const { t } = useLocalization();
+  const navigate = useNavigate();
   return (
     <View
       style={{
@@ -30,6 +31,7 @@ export default function OrderRow({ order, statusList }) {
         style={{
           flex: 1,
         }}
+      onPress={() => navigate(`/admin/orders/${order.id}`)}
       >
         <Text
           style={{

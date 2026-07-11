@@ -9,9 +9,10 @@ import {
   TEXT_ACTION,
 } from "../../../../../constants/i18nKeys";
 import OrderRow from "./OrderRow";
-
+import { useNavigate } from "react-router-dom";
 export default function OrderTable({ orders , statusList }) {
 const { t } = useLocalization();
+const navigate = useNavigate();
     return (
 
         <View
