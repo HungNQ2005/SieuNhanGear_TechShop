@@ -16,6 +16,9 @@ export const API = {
     GET_ACCOUNT_BY_ID: (id) => `api/accounts/${id}`,
     GET_COMMENTS: 'api/comments',
     GET_COMMENT_BY_ID: (id) => `api/comments/${id}`,
+    //Auth
+    LOGIN: 'api/auth/login',
+    REGISTER: 'api/auth/register',
 //Cart
     GET_CART: 'api/cart',
     GET_CART_BY_ID: (id) => `api/cart/${id}`,

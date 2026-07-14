@@ -17,6 +17,8 @@ const ROUTES = {
 
   AUTH: {
     BASE: '/api/auth',
+    LOGIN: '/login',
+    REGISTER: '/register',
   },
 
   CART: {
@@ -50,7 +52,12 @@ const ROUTES = {
   HOME: {
     BASE: '/api/home',
   },
-};
 
+  ACCOUNT: {
+    BASE: '/api/accounts',
+    NULL: '/',
+    GET_ACCOUNT_BY_ID: '/:id',
+  },
+};
 
 module.exports = { ROUTES };

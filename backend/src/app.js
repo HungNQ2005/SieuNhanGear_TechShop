@@ -13,6 +13,7 @@ const { createCartRouter } = require('./features/cart/routes/cart.routes');
 const { createProductRouter } = require('./features/product/routes/product.routes');
 const { createCategoryRouter } = require('./features/product/routes/category.routes');
 const { createManufacturerRouter } = require('./features/product/routes/manufacturer.routes');
+const { createAccountRouter } = require('./features/auth/routes/account.routes');
 const { createHomeRouter } = require('./features/home/routes/home.routes');
 const { createBannerRouter } = require('./features/home/routes/banner.routes');
 const { notFoundMiddleware } = require('./middlewares/notFound.middleware');
@@ -45,6 +46,7 @@ function createApp() {
   app.use(ROUTES.MANUFACTURER.BASE, createManufacturerRouter());
   app.use(ROUTES.HOME.BASE, createHomeRouter());
   app.use(ROUTES.BANNER.BASE, createBannerRouter());
+  app.use(ROUTES.ACCOUNT.BASE, createAccountRouter());
 
   app.use(notFoundMiddleware);
 

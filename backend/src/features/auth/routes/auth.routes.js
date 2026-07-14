@@ -1,22 +1,18 @@
 const express = require('express');
+const { ROUTES } = require('../../../constants/routes.constants');
+const { register, login } = require('../../../controllers/authController');
 
 // STUB: auth routes (chưa có DB/JWT)
 function createAuthRouter() {
   const router = express.Router();
 
-  // Example endpoints (will be implemented later)
   // POST /api/auth/login
-  router.post('/login', (req, res) => {
-    res.status(501).json({ code: 'NOT_IMPLEMENTED', message: 'Auth login not implemented yet' });
-  });
+  router.post(ROUTES.AUTH.LOGIN, login);
 
   // POST /api/auth/register
-  router.post('/register', (req, res) => {
-    res.status(501).json({ code: 'NOT_IMPLEMENTED', message: 'Auth register not implemented yet' });
-  });
+  router.post(ROUTES.AUTH.REGISTER, register);
 
   return router;
 }
 
 module.exports = { createAuthRouter };
-

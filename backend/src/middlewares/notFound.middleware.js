@@ -8,5 +8,3 @@ function notFoundMiddleware(req, res) {
 }
 
 module.exports = { notFoundMiddleware };
-
-

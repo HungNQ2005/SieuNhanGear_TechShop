@@ -6,6 +6,7 @@ import Header from './src/common/Header';
 import Footer from './src/common/Footer';
 import HomeScreen from './src/features/home/HomeScreen';
 import ProductPage from './src/features/product/ProductPage';
+import ProfileManagerment from './src/features/profileManagerment/screens/ProfileManagerment';
 import { ROUTES } from './src/constants/routes';
 import { LocalizationProvider } from './src/providers/LocalizationProvider';
 import { CartProvider } from './src/store/CartContext';
@@ -34,6 +35,7 @@ export default function App() {
                   <Route path={ROUTES.PRODUCT_PAGE} element={<ProductPage hideOuterScroll />} />
                   <Route path={ROUTES.SHOWROOM} element={<ViewShowroom />} />
                   <Route path={ROUTES.CART} element={<CartScreen />} />
+                  <Route path={ROUTES.PROFILE} element={<ProfileManagerment />} />
                 </Routes>
                 <Footer />
 
