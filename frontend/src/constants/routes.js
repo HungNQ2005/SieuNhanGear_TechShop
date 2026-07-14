@@ -9,4 +9,5 @@ export const ROUTES = {
   CHECKOUT: "/checkout",
   ORDER: "/order",
   ADMIN_ORDER_DETAIL: "/admin/orders/:id",
+  INVENTORY_MANAGEMENT: "/admin/inventory",
 };

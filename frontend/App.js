@@ -23,6 +23,7 @@ import OrderManagementScreen from "./src/features/Auth/Admin/OrderManagement/Ord
 import CheckoutPage from "./src/features/checkout/CheckoutPage";
 import OrderTrackingScreen from './src/features/order-tracking/screens/OrderTrackingScreen';
 import OrderDetailScreen from './src/features/Auth/Admin/OrderManagement/OrderDetail/OrderDetailScreen';
+import InventoryManagementScreen from './src/features/Auth/Admin/InventoryManagement/InventoryManagementScreen';
 export default function App() {
   const scrollViewRef = useRef(null);
 
@@ -60,6 +61,7 @@ export default function App() {
                   <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
                   <Route path={ROUTES.ORDER} element={<OrderTrackingScreen />} />
                   <Route path={ROUTES.ADMIN_ORDER_DETAIL} element={<OrderDetailScreen />} />
+                  <Route path={ROUTES.INVENTORY_MANAGEMENT} element={<InventoryManagementScreen />} />
                 </Routes>
                 <Footer />
               </ScrollView>

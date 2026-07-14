@@ -187,6 +187,71 @@ export const TEXT_SHIPPING_COMPANY = "orderManagement.TEXT_SHIPPING_COMPANY";
 export const TEXT_TRACKING_CODE = "orderManagement.TEXT_TRACKING_CODE";
 export const TEXT_ORDERS = "orderManagement.TEXT_ORDERS";
 
+// ─── Inventory Management ────────────────────────────────────────────────────
+export const TEXT_INVENTORY = "inventory.TEXT_INVENTORY";
+export const TEXT_PRODUCTS_MENU = "inventory.TEXT_PRODUCTS_MENU";
+export const TEXT_VOUCHERS_MENU = "inventory.TEXT_VOUCHERS_MENU";
+export const TEXT_SETTINGS = "inventory.TEXT_SETTINGS";
+export const TEXT_LOGOUT = "inventory.TEXT_LOGOUT";
+export const TEXT_ADMIN_CONSOLE = "inventory.TEXT_ADMIN_CONSOLE";
+export const TEXT_INVENTORY_TITLE = "inventory.TEXT_INVENTORY_TITLE";
+export const TEXT_INVENTORY_SUBTITLE = "inventory.TEXT_INVENTORY_SUBTITLE";
+export const TEXT_INVENTORY_SEARCH_PLACEHOLDER =
+  "inventory.TEXT_INVENTORY_SEARCH_PLACEHOLDER";
+
+export const TEXT_TAB_VIEW_STOCK = "inventory.TEXT_TAB_VIEW_STOCK";
+export const TEXT_TAB_STOCK_HISTORY = "inventory.TEXT_TAB_STOCK_HISTORY";
+export const TEXT_TAB_LOW_STOCK_ALERTS = "inventory.TEXT_TAB_LOW_STOCK_ALERTS";
+
+export const TEXT_FILTER_BY_CATEGORY = "inventory.TEXT_FILTER_BY_CATEGORY";
+export const TEXT_ALL_CATEGORIES = "inventory.TEXT_ALL_CATEGORIES";
+export const TEXT_ALL_WAREHOUSES = "inventory.TEXT_ALL_WAREHOUSES";
+export const TEXT_SHOWING_ITEMS = "inventory.TEXT_SHOWING_ITEMS";
+
+export const TEXT_COL_PRODUCT_NAME = "inventory.TEXT_COL_PRODUCT_NAME";
+export const TEXT_COL_STOCK_LEVEL = "inventory.TEXT_COL_STOCK_LEVEL";
+export const TEXT_COL_LAST_UPDATED = "inventory.TEXT_COL_LAST_UPDATED";
+export const TEXT_COL_WAREHOUSE = "inventory.TEXT_COL_WAREHOUSE";
+export const TEXT_COL_ACTIONS = "inventory.TEXT_COL_ACTIONS";
+
+export const TEXT_STATUS_URGENT = "inventory.TEXT_STATUS_URGENT";
+export const TEXT_STATUS_LOW_STOCK = "inventory.TEXT_STATUS_LOW_STOCK";
+export const TEXT_STATUS_HEALTHY = "inventory.TEXT_STATUS_HEALTHY";
+export const TEXT_UNITS = "inventory.TEXT_UNITS";
+
+export const TEXT_RESTOCK = "inventory.TEXT_RESTOCK";
+export const TEXT_PREVIOUS = "inventory.TEXT_PREVIOUS";
+export const TEXT_NEXT = "inventory.TEXT_NEXT";
+
+export const TEXT_LOW_STOCK_BANNER_TITLE =
+  "inventory.TEXT_LOW_STOCK_BANNER_TITLE";
+export const TEXT_LOW_STOCK_BANNER_SUBTITLE =
+  "inventory.TEXT_LOW_STOCK_BANNER_SUBTITLE";
+export const TEXT_LOW_STOCK_EMPTY = "inventory.TEXT_LOW_STOCK_EMPTY";
+export const TEXT_LOW_STOCK_EMPTY_SUBTITLE =
+  "inventory.TEXT_LOW_STOCK_EMPTY_SUBTITLE";
+
+export const TEXT_HISTORY_TYPE_IMPORT = "inventory.TEXT_HISTORY_TYPE_IMPORT";
+export const TEXT_HISTORY_TYPE_EXPORT = "inventory.TEXT_HISTORY_TYPE_EXPORT";
+export const TEXT_HISTORY_TYPE_ADJUSTMENT =
+  "inventory.TEXT_HISTORY_TYPE_ADJUSTMENT";
+export const TEXT_COL_CHANGE = "inventory.TEXT_COL_CHANGE";
+export const TEXT_COL_QUANTITY_AFTER = "inventory.TEXT_COL_QUANTITY_AFTER";
+export const TEXT_COL_UPDATED_BY = "inventory.TEXT_COL_UPDATED_BY";
+export const TEXT_COL_NOTE = "inventory.TEXT_COL_NOTE";
+
+export const TEXT_RESTOCK_MODAL_TITLE = "inventory.TEXT_RESTOCK_MODAL_TITLE";
+export const TEXT_RESTOCK_MODAL_CURRENT =
+  "inventory.TEXT_RESTOCK_MODAL_CURRENT";
+export const TEXT_RESTOCK_MODAL_QUANTITY_LABEL =
+  "inventory.TEXT_RESTOCK_MODAL_QUANTITY_LABEL";
+export const TEXT_RESTOCK_MODAL_NOTE_LABEL =
+  "inventory.TEXT_RESTOCK_MODAL_NOTE_LABEL";
+export const TEXT_RESTOCK_MODAL_CANCEL = "inventory.TEXT_RESTOCK_MODAL_CANCEL";
+export const TEXT_RESTOCK_MODAL_CONFIRM =
+  "inventory.TEXT_RESTOCK_MODAL_CONFIRM";
+export const TEXT_NO_RESULTS = "inventory.TEXT_NO_RESULTS";
+
 // ─── Checkout Page ───────────────────────────────────────────────────────────
 export const TEXT_CHECKOUT_EMPTY_CART = "checkout.TEXT_EMPTY_CART";
 export const TEXT_CHECKOUT_TITLE = "checkout.TEXT_CHECKOUT_TITLE";

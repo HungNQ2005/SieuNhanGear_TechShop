@@ -159,4 +159,25 @@ export const getOrderByCode = async (code) => {
 
   return order;
 };
+// ==========================
+// Inventory / Warehouses
+// ==========================
+
+export const getWarehouses = () => api.get(API.GET_WAREHOUSES);
+export const getWarehouseById = (id) => api.get(API.GET_WAREHOUSE_BY_ID(id));
+
+export const getStock = () => api.get(API.GET_STOCK);
+export const getStockByProduct = (productId) =>
+  api.get(API.GET_STOCK_BY_PRODUCT(productId));
+export const getStockByWarehouse = (warehouseId) =>
+  api.get(API.GET_STOCK_BY_WAREHOUSE(warehouseId));
+export const updateStock = (id, data) =>
+  api.patch(API.UPDATE_STOCK(id), data);
+
+export const getStockHistory = () => api.get(API.GET_STOCK_HISTORY);
+export const getStockHistoryByProduct = (productId) =>
+  api.get(API.GET_STOCK_HISTORY_BY_PRODUCT(productId));
+export const createStockHistory = (data) =>
+  api.post(API.CREATE_STOCK_HISTORY, data);
+
 export default api;

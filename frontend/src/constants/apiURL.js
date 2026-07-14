@@ -72,4 +72,22 @@ export const API = {
     GET_ORDER: "orders",
     GET_ORDER_BY_ID: (id) => `orders/${id}`,
     GET_ORDER_BY_CODE: (code) => `orders?code=${code}`,
+
+  // ==========================
+  // Inventory / Warehouses
+  // ==========================
+  GET_WAREHOUSES: "api/warehouses",
+  GET_WAREHOUSE_BY_ID: (id) => `api/warehouses/${id}`,
+
+  GET_STOCK: "api/stock",
+  GET_STOCK_BY_ID: (id) => `api/stock/${id}`,
+  GET_STOCK_BY_PRODUCT: (productId) => `api/stock?productId=${productId}`,
+  GET_STOCK_BY_WAREHOUSE: (warehouseId) =>
+    `api/stock?warehouseId=${warehouseId}`,
+  UPDATE_STOCK: (id) => `api/stock/${id}`,
+
+  GET_STOCK_HISTORY: "api/stockHistory",
+  GET_STOCK_HISTORY_BY_PRODUCT: (productId) =>
+    `api/stockHistory?productId=${productId}`,
+  CREATE_STOCK_HISTORY: "api/stockHistory",
 };
