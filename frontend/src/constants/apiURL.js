@@ -90,4 +90,20 @@ export const API = {
   GET_STOCK_HISTORY_BY_PRODUCT: (productId) =>
     `api/stockHistory?productId=${productId}`,
   CREATE_STOCK_HISTORY: "api/stockHistory",
+
+  // ==========================
+  // Specification Templates (Attribute Groups & Attributes)
+  // ==========================
+  GET_ATTRIBUTE_GROUPS: "api/attributeGroups",
+  GET_ATTRIBUTE_GROUP_BY_ID: (id) => `api/attributeGroups/${id}`,
+  CREATE_ATTRIBUTE_GROUP: "api/attributeGroups",
+  UPDATE_ATTRIBUTE_GROUP: (id) => `api/attributeGroups/${id}`,
+  DELETE_ATTRIBUTE_GROUP: (id) => `api/attributeGroups/${id}`,
+
+  GET_ATTRIBUTES: "api/attributes",
+  GET_ATTRIBUTE_BY_ID: (id) => `api/attributes/${id}`,
+  GET_ATTRIBUTES_BY_GROUP: (groupId) => `api/attributes?groupId=${groupId}`,
+  CREATE_ATTRIBUTE: "api/attributes",
+  UPDATE_ATTRIBUTE: (id) => `api/attributes/${id}`,
+  DELETE_ATTRIBUTE: (id) => `api/attributes/${id}`,
 };

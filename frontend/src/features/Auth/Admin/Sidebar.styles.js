@@ -60,6 +60,33 @@ export default StyleSheet.create({
     fontWeight: "700",
   },
 
+  submenuSection: {
+    marginLeft: 30,
+    marginBottom: 6,
+  },
+
+  submenuItem: {
+    paddingVertical: 9,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    marginBottom: 2,
+  },
+
+  submenuItemActive: {
+    backgroundColor: "#EFF6FF",
+  },
+
+  submenuText: {
+    color: "#6B7280",
+    fontSize: 13.5,
+    fontWeight: "600",
+  },
+
+  submenuTextActive: {
+    color: "#2563EB",
+    fontWeight: "700",
+  },
+
   bottomSection: {
     borderTopWidth: 1,
     borderColor: "#E5E7EB",

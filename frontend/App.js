@@ -21,9 +21,10 @@ import ViewShowroom from "./src/features/viewShowroom/ViewShowroom";
 import CartScreen from "./src/features/Cart/screens/CartScreen";
 import OrderManagementScreen from "./src/features/Auth/Admin/OrderManagement/OrderManagementScreen";
 import CheckoutPage from "./src/features/checkout/CheckoutPage";
-import OrderTrackingScreen from './src/features/order-tracking/screens/OrderTrackingScreen';
-import OrderDetailScreen from './src/features/Auth/Admin/OrderManagement/OrderDetail/OrderDetailScreen';
-import InventoryManagementScreen from './src/features/Auth/Admin/InventoryManagement/InventoryManagementScreen';
+import OrderTrackingScreen from "./src/features/order-tracking/screens/OrderTrackingScreen";
+import OrderDetailScreen from "./src/features/Auth/Admin/OrderManagement/OrderDetail/OrderDetailScreen";
+import InventoryManagementScreen from "./src/features/Auth/Admin/InventoryManagement/InventoryManagementScreen";
+import SpecificationsScreen from "./src/features/Auth/Admin/ProductManagement/Specifications/SpecificationsScreen";
 export default function App() {
   const scrollViewRef = useRef(null);
 
@@ -59,9 +60,22 @@ export default function App() {
                     element={<OrderManagementScreen />}
                   />
                   <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
-                  <Route path={ROUTES.ORDER} element={<OrderTrackingScreen />} />
-                  <Route path={ROUTES.ADMIN_ORDER_DETAIL} element={<OrderDetailScreen />} />
-                  <Route path={ROUTES.INVENTORY_MANAGEMENT} element={<InventoryManagementScreen />} />
+                  <Route
+                    path={ROUTES.ORDER}
+                    element={<OrderTrackingScreen />}
+                  />
+                  <Route
+                    path={ROUTES.ADMIN_ORDER_DETAIL}
+                    element={<OrderDetailScreen />}
+                  />
+                  <Route
+                    path={ROUTES.INVENTORY_MANAGEMENT}
+                    element={<InventoryManagementScreen />}
+                  />
+                  <Route
+                    path={ROUTES.PRODUCT_SPECIFICATIONS}
+                    element={<SpecificationsScreen />}
+                  />
                 </Routes>
                 <Footer />
               </ScrollView>

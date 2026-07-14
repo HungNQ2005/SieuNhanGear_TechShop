@@ -10,4 +10,8 @@ export const ROUTES = {
   ORDER: "/order",
   ADMIN_ORDER_DETAIL: "/admin/orders/:id",
   INVENTORY_MANAGEMENT: "/admin/inventory",
+  PRODUCT_MANAGEMENT: "/admin/products/specifications",
+  PRODUCT_SPECIFICATIONS: "/admin/products/specifications",
+  PRODUCT_CATEGORIES: "/admin/products/categories",
+  VOUCHER_MANAGEMENT: "/admin/vouchers",
 };

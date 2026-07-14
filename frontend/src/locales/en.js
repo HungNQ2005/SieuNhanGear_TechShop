@@ -252,6 +252,8 @@ export default {
 inventory: {
   TEXT_INVENTORY: "Inventory",
   TEXT_PRODUCTS_MENU: "Products",
+  TEXT_SPECIFICATIONS_MENU: "Specifications",
+  TEXT_CATEGORIES_MENU: "Categories",
   TEXT_VOUCHERS_MENU: "Vouchers",
   TEXT_SETTINGS: "Settings",
   TEXT_LOGOUT: "Logout",
@@ -399,5 +401,51 @@ checkout: {
     TEXT_SUPPORT_SUBTITLE:
       "Contact our support team if you have any questions about your order.",
     TEXT_CONTACT: "Contact Support",
+  },
+
+  specifications: {
+    TEXT_SPEC_TOPBAR_SEARCH: "Search templates...",
+    TEXT_SPEC_ADMIN_TAG: "ADMIN",
+    TEXT_SPEC_PAGE_TITLE: "Specification Templates",
+    TEXT_SPEC_PAGE_SUBTITLE:
+      "Manage attribute groups for different product types across the hardware catalog.",
+    TEXT_SPEC_ADD_GROUP_BUTTON: "Add New Attribute Group",
+
+    TEXT_SPEC_PRODUCTS_COUNT: "{{count}} products",
+    TEXT_SPEC_EDIT_TEMPLATE: "Edit template",
+    TEXT_SPEC_MORE_ATTRIBUTES: "+{{count}} more",
+    TEXT_SPEC_DUPLICATE_TEMPLATE: "Duplicate template",
+    TEXT_SPEC_DELETE_TEMPLATE: "Delete template",
+
+    TEXT_SPEC_EXPLORER_TITLE: "Global Attribute Explorer",
+    TEXT_SPEC_TOTAL_ATTRIBUTES: "Total: {{count}} attributes",
+    TEXT_SPEC_VIEW_TABLE: "Table",
+    TEXT_SPEC_VIEW_SCHEMA: "Schema",
+    TEXT_SPEC_FILTER: "Filter",
+
+    TEXT_SPEC_COL_ATTRIBUTE_NAME: "Attribute Name",
+    TEXT_SPEC_COL_GROUP: "Group",
+    TEXT_SPEC_COL_DATA_TYPE: "Data Type",
+    TEXT_SPEC_COL_USAGE_COUNT: "Usage Count",
+    TEXT_SPEC_COL_STATUS: "Status",
+    TEXT_SPEC_COL_ACTIONS: "Actions",
+
+    TEXT_SPEC_STATUS_ACTIVE: "Active",
+    TEXT_SPEC_STATUS_PENDING: "Pending",
+    TEXT_SPEC_STATUS_ARCHIVED: "Archived",
+
+    TEXT_SPEC_SHOWING_ATTRIBUTES:
+      "Showing {{from}} to {{to}} of {{total}} attributes",
+    TEXT_SPEC_NO_RESULTS: "No attributes found.",
+    TEXT_SPEC_LOADING: "Loading specification templates...",
+
+    TEXT_SPEC_MODAL_TITLE: "Add New Attribute Group",
+    TEXT_SPEC_MODAL_NAME_LABEL: "Group Name",
+    TEXT_SPEC_MODAL_NAME_PLACEHOLDER: "e.g. Storage Specs",
+    TEXT_SPEC_MODAL_DESC_LABEL: "Description",
+    TEXT_SPEC_MODAL_DESC_PLACEHOLDER: "e.g. SSDs, HDDs, Memory Cards",
+    TEXT_SPEC_MODAL_ICON_LABEL: "Icon",
+    TEXT_SPEC_MODAL_CANCEL: "Cancel",
+    TEXT_SPEC_MODAL_CREATE: "Create Group",
   }
 };

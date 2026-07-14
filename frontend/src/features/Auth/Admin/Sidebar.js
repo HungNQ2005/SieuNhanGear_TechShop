@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./Sidebar.styles";
@@ -7,6 +7,8 @@ import { ROUTES } from "../../../constants/routes";
 import {
   TEXT_ORDERS,
   TEXT_PRODUCTS_MENU,
+  TEXT_SPECIFICATIONS_MENU,
+  TEXT_CATEGORIES_MENU,
   TEXT_INVENTORY,
   TEXT_VOUCHERS_MENU,
   TEXT_SETTINGS,
@@ -20,12 +22,26 @@ import {
   IconTagOutline,
   IconSettingsGear,
   IconLogoutArrow,
+  IconChevronDownGray,
 } from "../../../constants/icons";
 
 export default function Sidebar({ selected, onSelect }) {
   const { t } = useLocalization();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const productChildren = [
+    {
+      id: "specifications",
+      label: t(TEXT_SPECIFICATIONS_MENU),
+      route: ROUTES.PRODUCT_SPECIFICATIONS,
+    },
+    {
+      id: "categories",
+      label: t(TEXT_CATEGORIES_MENU),
+      route: ROUTES.PRODUCT_CATEGORIES,
+    },
+  ];
 
   const menus = [
     {
@@ -39,6 +55,7 @@ export default function Sidebar({ selected, onSelect }) {
       label: t(TEXT_PRODUCTS_MENU),
       route: ROUTES.PRODUCT_MANAGEMENT,
       icon: IconGridOutline,
+      children: productChildren,
     },
     {
       id: "inventory",
@@ -54,14 +71,37 @@ export default function Sidebar({ selected, onSelect }) {
     },
   ];
 
+  const activeChildId = productChildren.find((c) =>
+    location.pathname.startsWith(c.route)
+  )?.id;
+
   const activeId =
     selected ||
+    (activeChildId ? "products" : null) ||
     menus.find((m) => location.pathname.startsWith(m.route))?.id ||
     "";
 
+  const [expanded, setExpanded] = useState(() => ({
+    products: activeId === "products" || Boolean(activeChildId),
+  }));
+
   const handleSelect = (item) => {
+    if (item.children) {
+      setExpanded((prev) => ({ ...prev, [item.id]: !prev[item.id] }));
+      if (!expanded[item.id]) {
+        // Expanding: also navigate to the first child by default
+        if (onSelect) onSelect(item.id);
+        navigate(item.children[0].route);
+      }
+      return;
+    }
     if (onSelect) onSelect(item.id);
     navigate(item.route);
+  };
+
+  const handleSelectChild = (parentId, child) => {
+    if (onSelect) onSelect(child.id);
+    navigate(child.route);
   };
 
   return (
@@ -74,24 +114,76 @@ export default function Sidebar({ selected, onSelect }) {
 
         <View style={styles.menuSection}>
           {menus.map((item) => {
-            const isActive = activeId === item.id;
+            const isActive = activeId === item.id && !item.children;
+            const isParentActive = item.children && activeId === item.id;
             const Icon = item.icon;
+            const isOpen = Boolean(item.children) && Boolean(expanded[item.id]);
+
             return (
-              <TouchableOpacity
-                key={item.id}
-                style={[styles.menuItem, isActive && styles.activeMenu]}
-                onPress={() => handleSelect(item)}
-              >
-                <Icon color={isActive ? "#2563EB" : "#6B7280"} size={18} />
-                <Text
+              <View key={item.id}>
+                <TouchableOpacity
                   style={[
-                    styles.menuText,
-                    isActive && styles.activeText,
+                    styles.menuItem,
+                    (isActive || isParentActive) && styles.activeMenu,
                   ]}
+                  onPress={() => handleSelect(item)}
                 >
-                  {item.label}
-                </Text>
-              </TouchableOpacity>
+                  <Icon
+                    color={isActive || isParentActive ? "#2563EB" : "#6B7280"}
+                    size={18}
+                  />
+                  <Text
+                    style={[
+                      styles.menuText,
+                      (isActive || isParentActive) && styles.activeText,
+                    ]}
+                  >
+                    {item.label}
+                  </Text>
+                  {item.children && (
+                    <View
+                      style={{
+                        marginLeft: "auto",
+                        transform: [{ rotate: isOpen ? "0deg" : "-90deg" }],
+                      }}
+                    >
+                      <IconChevronDownGray
+                        color={isParentActive ? "#2563EB" : "#9CA3AF"}
+                        size={12}
+                      />
+                    </View>
+                  )}
+                </TouchableOpacity>
+
+                {item.children && isOpen && (
+                  <View style={styles.submenuSection}>
+                    {item.children.map((child) => {
+                      const isChildActive = activeChildId
+                        ? activeChildId === child.id
+                        : location.pathname.startsWith(child.route);
+                      return (
+                        <TouchableOpacity
+                          key={child.id}
+                          style={[
+                            styles.submenuItem,
+                            isChildActive && styles.submenuItemActive,
+                          ]}
+                          onPress={() => handleSelectChild(item.id, child)}
+                        >
+                          <Text
+                            style={[
+                              styles.submenuText,
+                              isChildActive && styles.submenuTextActive,
+                            ]}
+                          >
+                            {child.label}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
+                )}
+              </View>
             );
           })}
         </View>

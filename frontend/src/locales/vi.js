@@ -253,6 +253,8 @@ export default {
 inventory: {
   TEXT_INVENTORY: "Kho hàng",
   TEXT_PRODUCTS_MENU: "Sản phẩm",
+  TEXT_SPECIFICATIONS_MENU: "Thông số kỹ thuật",
+  TEXT_CATEGORIES_MENU: "Danh mục",
   TEXT_VOUCHERS_MENU: "Voucher",
   TEXT_SETTINGS: "Cài đặt",
   TEXT_LOGOUT: "Đăng xuất",
@@ -398,5 +400,51 @@ inventory: {
     TEXT_SUPPORT_SUBTITLE:
       "Liên hệ đội ngũ hỗ trợ nếu bạn có bất kỳ thắc mắc nào về đơn hàng.",
     TEXT_CONTACT: "Liên hệ hỗ trợ",
+  },
+
+  specifications: {
+    TEXT_SPEC_TOPBAR_SEARCH: "Tìm kiếm mẫu thông số...",
+    TEXT_SPEC_ADMIN_TAG: "ADMIN",
+    TEXT_SPEC_PAGE_TITLE: "Mẫu thông số kỹ thuật",
+    TEXT_SPEC_PAGE_SUBTITLE:
+      "Quản lý nhóm thuộc tính cho từng loại sản phẩm trong danh mục phần cứng.",
+    TEXT_SPEC_ADD_GROUP_BUTTON: "Thêm nhóm thuộc tính",
+
+    TEXT_SPEC_PRODUCTS_COUNT: "{{count}} sản phẩm",
+    TEXT_SPEC_EDIT_TEMPLATE: "Chỉnh sửa mẫu",
+    TEXT_SPEC_MORE_ATTRIBUTES: "+{{count}} nữa",
+    TEXT_SPEC_DUPLICATE_TEMPLATE: "Nhân bản mẫu",
+    TEXT_SPEC_DELETE_TEMPLATE: "Xoá mẫu",
+
+    TEXT_SPEC_EXPLORER_TITLE: "Danh sách thuộc tính toàn hệ thống",
+    TEXT_SPEC_TOTAL_ATTRIBUTES: "Tổng: {{count}} thuộc tính",
+    TEXT_SPEC_VIEW_TABLE: "Bảng",
+    TEXT_SPEC_VIEW_SCHEMA: "Schema",
+    TEXT_SPEC_FILTER: "Bộ lọc",
+
+    TEXT_SPEC_COL_ATTRIBUTE_NAME: "Tên thuộc tính",
+    TEXT_SPEC_COL_GROUP: "Nhóm",
+    TEXT_SPEC_COL_DATA_TYPE: "Kiểu dữ liệu",
+    TEXT_SPEC_COL_USAGE_COUNT: "Lượt sử dụng",
+    TEXT_SPEC_COL_STATUS: "Trạng thái",
+    TEXT_SPEC_COL_ACTIONS: "Thao tác",
+
+    TEXT_SPEC_STATUS_ACTIVE: "Hoạt động",
+    TEXT_SPEC_STATUS_PENDING: "Chờ duyệt",
+    TEXT_SPEC_STATUS_ARCHIVED: "Đã lưu trữ",
+
+    TEXT_SPEC_SHOWING_ATTRIBUTES:
+      "Hiển thị {{from}} đến {{to}} trong {{total}} thuộc tính",
+    TEXT_SPEC_NO_RESULTS: "Không tìm thấy thuộc tính nào.",
+    TEXT_SPEC_LOADING: "Đang tải mẫu thông số kỹ thuật...",
+
+    TEXT_SPEC_MODAL_TITLE: "Thêm nhóm thuộc tính mới",
+    TEXT_SPEC_MODAL_NAME_LABEL: "Tên nhóm",
+    TEXT_SPEC_MODAL_NAME_PLACEHOLDER: "vd: Thông số lưu trữ",
+    TEXT_SPEC_MODAL_DESC_LABEL: "Mô tả",
+    TEXT_SPEC_MODAL_DESC_PLACEHOLDER: "vd: SSD, HDD, thẻ nhớ",
+    TEXT_SPEC_MODAL_ICON_LABEL: "Biểu tượng",
+    TEXT_SPEC_MODAL_CANCEL: "Huỷ",
+    TEXT_SPEC_MODAL_CREATE: "Tạo nhóm",
   }
 };

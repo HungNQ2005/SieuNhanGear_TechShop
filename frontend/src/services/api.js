@@ -180,4 +180,27 @@ export const getStockHistoryByProduct = (productId) =>
 export const createStockHistory = (data) =>
   api.post(API.CREATE_STOCK_HISTORY, data);
 
+// ==========================
+// Specification Templates (Attribute Groups & Attributes)
+// ==========================
+
+export const getAttributeGroups = () => api.get(API.GET_ATTRIBUTE_GROUPS);
+export const getAttributeGroupById = (id) =>
+  api.get(API.GET_ATTRIBUTE_GROUP_BY_ID(id));
+export const createAttributeGroup = (data) =>
+  api.post(API.CREATE_ATTRIBUTE_GROUP, data);
+export const updateAttributeGroup = (id, data) =>
+  api.patch(API.UPDATE_ATTRIBUTE_GROUP(id), data);
+export const deleteAttributeGroup = (id) =>
+  api.delete(API.DELETE_ATTRIBUTE_GROUP(id));
+
+export const getAttributes = () => api.get(API.GET_ATTRIBUTES);
+export const getAttributeById = (id) => api.get(API.GET_ATTRIBUTE_BY_ID(id));
+export const getAttributesByGroup = (groupId) =>
+  api.get(API.GET_ATTRIBUTES_BY_GROUP(groupId));
+export const createAttribute = (data) => api.post(API.CREATE_ATTRIBUTE, data);
+export const updateAttribute = (id, data) =>
+  api.patch(API.UPDATE_ATTRIBUTE(id), data);
+export const deleteAttribute = (id) => api.delete(API.DELETE_ATTRIBUTE(id));
+
 export default api;

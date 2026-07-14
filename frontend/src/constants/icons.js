@@ -268,3 +268,70 @@ export const IconPaymentMethod = () => (
     <line x1="6" y1="15" x2="10" y2="15" />
   </svg>
 );
+// ─── Specification Templates icons ─────────────────────────────────────────
+export const IconMouseDevice = ({ color = "#2563EB", size = 20 }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="6" y="2" width="12" height="20" rx="6" />
+        <line x1="12" y1="2" x2="12" y2="10" />
+    </svg>
+);
+
+export const IconMonitorDevice = ({ color = "#2563EB", size = 20 }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2" />
+        <line x1="8" y1="21" x2="16" y2="21" />
+        <line x1="12" y1="17" x2="12" y2="21" />
+    </svg>
+);
+
+export const IconHeadphoneDevice = ({ color = "#2563EB", size = 20 }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 14v-2a9 9 0 0 1 18 0v2" />
+        <rect x="1" y="14" width="6" height="8" rx="2" />
+        <rect x="17" y="14" width="6" height="8" rx="2" />
+    </svg>
+);
+
+export const IconPlusCircle = ({ color = "#fff", size = 16 }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="16" />
+        <line x1="8" y1="12" x2="16" y2="12" />
+    </svg>
+);
+
+export const IconPencilEdit = ({ color = "#6B7280", size = 15 }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 20h9" />
+        <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+    </svg>
+);
+
+export const IconDotsVertical = ({ color = "#9CA3AF", size = 18 }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="5" r="1" />
+        <circle cx="12" cy="12" r="1" />
+        <circle cx="12" cy="19" r="1" />
+    </svg>
+);
+
+export const IconBellOutline = ({ color = "#6B7280", size = 18 }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+    </svg>
+);
+
+export const IconHelpCircle = ({ color = "#6B7280", size = 18 }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+        <line x1="12" y1="17" x2="12.01" y2="17" />
+    </svg>
+);
+
+export const IconMoonToggle = ({ color = "#6B7280", size = 18 }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+    </svg>
+);

@@ -190,6 +190,8 @@ export const TEXT_ORDERS = "orderManagement.TEXT_ORDERS";
 // ─── Inventory Management ────────────────────────────────────────────────────
 export const TEXT_INVENTORY = "inventory.TEXT_INVENTORY";
 export const TEXT_PRODUCTS_MENU = "inventory.TEXT_PRODUCTS_MENU";
+export const TEXT_SPECIFICATIONS_MENU = "inventory.TEXT_SPECIFICATIONS_MENU";
+export const TEXT_CATEGORIES_MENU = "inventory.TEXT_CATEGORIES_MENU";
 export const TEXT_VOUCHERS_MENU = "inventory.TEXT_VOUCHERS_MENU";
 export const TEXT_SETTINGS = "inventory.TEXT_SETTINGS";
 export const TEXT_LOGOUT = "inventory.TEXT_LOGOUT";
@@ -527,3 +529,60 @@ checkout: {
       TEXT_PHONE_LABEL: TEXT_ORDER_TRACKING_PHONE_LABEL,
     },
 };
+
+// ─── Specification Templates ───────────────────────────────────────────────
+export const TEXT_SPEC_TOPBAR_SEARCH = "specifications.TEXT_SPEC_TOPBAR_SEARCH";
+export const TEXT_SPEC_ADMIN_TAG = "specifications.TEXT_SPEC_ADMIN_TAG";
+export const TEXT_SPEC_PAGE_TITLE = "specifications.TEXT_SPEC_PAGE_TITLE";
+export const TEXT_SPEC_PAGE_SUBTITLE = "specifications.TEXT_SPEC_PAGE_SUBTITLE";
+export const TEXT_SPEC_ADD_GROUP_BUTTON =
+  "specifications.TEXT_SPEC_ADD_GROUP_BUTTON";
+
+export const TEXT_SPEC_PRODUCTS_COUNT = "specifications.TEXT_SPEC_PRODUCTS_COUNT";
+export const TEXT_SPEC_EDIT_TEMPLATE = "specifications.TEXT_SPEC_EDIT_TEMPLATE";
+export const TEXT_SPEC_MORE_ATTRIBUTES =
+  "specifications.TEXT_SPEC_MORE_ATTRIBUTES";
+export const TEXT_SPEC_DUPLICATE_TEMPLATE =
+  "specifications.TEXT_SPEC_DUPLICATE_TEMPLATE";
+export const TEXT_SPEC_DELETE_TEMPLATE =
+  "specifications.TEXT_SPEC_DELETE_TEMPLATE";
+
+export const TEXT_SPEC_EXPLORER_TITLE = "specifications.TEXT_SPEC_EXPLORER_TITLE";
+export const TEXT_SPEC_TOTAL_ATTRIBUTES =
+  "specifications.TEXT_SPEC_TOTAL_ATTRIBUTES";
+export const TEXT_SPEC_VIEW_TABLE = "specifications.TEXT_SPEC_VIEW_TABLE";
+export const TEXT_SPEC_VIEW_SCHEMA = "specifications.TEXT_SPEC_VIEW_SCHEMA";
+export const TEXT_SPEC_FILTER = "specifications.TEXT_SPEC_FILTER";
+
+export const TEXT_SPEC_COL_ATTRIBUTE_NAME =
+  "specifications.TEXT_SPEC_COL_ATTRIBUTE_NAME";
+export const TEXT_SPEC_COL_GROUP = "specifications.TEXT_SPEC_COL_GROUP";
+export const TEXT_SPEC_COL_DATA_TYPE = "specifications.TEXT_SPEC_COL_DATA_TYPE";
+export const TEXT_SPEC_COL_USAGE_COUNT =
+  "specifications.TEXT_SPEC_COL_USAGE_COUNT";
+export const TEXT_SPEC_COL_STATUS = "specifications.TEXT_SPEC_COL_STATUS";
+export const TEXT_SPEC_COL_ACTIONS = "specifications.TEXT_SPEC_COL_ACTIONS";
+
+export const TEXT_SPEC_STATUS_ACTIVE = "specifications.TEXT_SPEC_STATUS_ACTIVE";
+export const TEXT_SPEC_STATUS_PENDING = "specifications.TEXT_SPEC_STATUS_PENDING";
+export const TEXT_SPEC_STATUS_ARCHIVED =
+  "specifications.TEXT_SPEC_STATUS_ARCHIVED";
+
+export const TEXT_SPEC_SHOWING_ATTRIBUTES =
+  "specifications.TEXT_SPEC_SHOWING_ATTRIBUTES";
+export const TEXT_SPEC_NO_RESULTS = "specifications.TEXT_SPEC_NO_RESULTS";
+export const TEXT_SPEC_LOADING = "specifications.TEXT_SPEC_LOADING";
+
+export const TEXT_SPEC_MODAL_TITLE = "specifications.TEXT_SPEC_MODAL_TITLE";
+export const TEXT_SPEC_MODAL_NAME_LABEL =
+  "specifications.TEXT_SPEC_MODAL_NAME_LABEL";
+export const TEXT_SPEC_MODAL_NAME_PLACEHOLDER =
+  "specifications.TEXT_SPEC_MODAL_NAME_PLACEHOLDER";
+export const TEXT_SPEC_MODAL_DESC_LABEL =
+  "specifications.TEXT_SPEC_MODAL_DESC_LABEL";
+export const TEXT_SPEC_MODAL_DESC_PLACEHOLDER =
+  "specifications.TEXT_SPEC_MODAL_DESC_PLACEHOLDER";
+export const TEXT_SPEC_MODAL_ICON_LABEL =
+  "specifications.TEXT_SPEC_MODAL_ICON_LABEL";
+export const TEXT_SPEC_MODAL_CANCEL = "specifications.TEXT_SPEC_MODAL_CANCEL";
+export const TEXT_SPEC_MODAL_CREATE = "specifications.TEXT_SPEC_MODAL_CREATE";
