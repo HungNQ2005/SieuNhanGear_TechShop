@@ -58,6 +58,8 @@ export default {
     TEXT_FOOTER_SECURE_PAYMENT: "Thanh toán bảo mật SSL 256-bit",
 
     TEXT_LOGIN: "Đăng nhập",
+    TEXT_EDIT: "Sửa",
+    TEXT_DELETE: "Xóa",
     TEXT_REGISTER: "Đăng ký",
     TEXT_LOGIN_SUBTITLE: "Nhập thông tin tài khoản của bạn",
     TEXT_REGISTER_SUBTITLE: "Tạo tài khoản mới để mua sắm nhanh hơn",
@@ -309,6 +311,39 @@ export default {
     TEXT_RESTOCK_MODAL_CANCEL: "Hủy",
     TEXT_RESTOCK_MODAL_CONFIRM: "Lưu",
     TEXT_NO_RESULTS: "Không tìm thấy sản phẩm phù hợp.",
+  },
+  voucherManagement: {
+    TEXT_VOUCHER_TITLE: "Quản lý Voucher",
+    TEXT_VOUCHER_SUBTITLE: "Tạo và quản lý các voucher giảm giá.",
+    TEXT_VOUCHER_SEARCH: "Tìm theo mã voucher...",
+    TEXT_VOUCHER_CREATE: "Tạo Voucher",
+
+    TEXT_VOUCHER_STATUS: "Trạng thái",
+    TEXT_VOUCHER_ALL: "Tất cả",
+
+    TEXT_VOUCHER_COL_CODE: "Mã",
+    TEXT_VOUCHER_COL_DESCRIPTION: "Mô tả",
+    TEXT_VOUCHER_COL_DISCOUNT_VALUE: "Giảm giá",
+    TEXT_VOUCHER_COL_MIN_ORDER: "Đơn tối thiểu",
+    TEXT_VOUCHER_COL_STATUS: "Trạng thái",
+    TEXT_VOUCHER_COL_ACTIONS: "Thao tác",
+
+    TEXT_VOUCHER_TOTAL: "Tổng số Voucher",
+    TEXT_VOUCHER_ACTIVE: "Đang hoạt động",
+    TEXT_VOUCHER_INACTIVE: "Ngừng hoạt động",
+    TEXT_VOUCHER_USED: "Đã sử dụng",
+
+    TEXT_VOUCHER_STATUS_ACTIVE: "Hoạt động",
+    TEXT_VOUCHER_STATUS_INACTIVE: "Ngừng hoạt động",
+
+    TEXT_VOUCHER_MODAL_TITLE: "Voucher",
+    TEXT_VOUCHER_MODAL_CODE: "Mã voucher",
+    TEXT_VOUCHER_MODAL_DESCRIPTION: "Mô tả",
+    TEXT_VOUCHER_MODAL_VALUE: "Phần trăm giảm giá (%)",
+    TEXT_VOUCHER_MODAL_MIN_ORDER: "Giá trị đơn tối thiểu",
+    TEXT_VOUCHER_MODAL_ACTIVE: "Kích hoạt",
+    TEXT_VOUCHER_MODAL_CANCEL: "Hủy",
+    TEXT_VOUCHER_MODAL_SAVE: "Lưu",
   },
   checkout: {
     TEXT_NAME: "Họ và tên",

@@ -29,6 +29,7 @@ import ManageShowroom from "./src/features/Auth/Admin/Admin System/ShowroomManag
 import ManageAccount from "./src/features/Auth/Admin/Admin System/AccounManagement/screens/ManageAccount";
 import ProductsScreen from "./src/features/Auth/Admin/ProductManagement/Products/ProductsScreen";
 import CategoriesScreen from "./src/features/Auth/Admin/ProductManagement/Categories/CategoriesScreen";
+import VoucherManagementScreen from "./src/features/Auth/Admin/VoucherManagement/VoucherManagementScreen"; 
 export default function App() {
   const scrollViewRef = useRef(null);
 
@@ -95,6 +96,10 @@ export default function App() {
                   <Route
                     path={ROUTES.PRODUCT_CATEGORIES}
                     element={<CategoriesScreen />}
+                  />
+                  <Route
+                    path={ROUTES.ADMIN_VOUCHER}
+                    element={<VoucherManagementScreen />}
                   />
                 </Routes>
                 <Footer />

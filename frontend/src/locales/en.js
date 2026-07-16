@@ -58,6 +58,8 @@ export default {
     TEXT_FOOTER_SECURE_PAYMENT: "SSL 256-bit Secure Payment",
 
     TEXT_LOGIN: "Login",
+    TEXT_EDIT: "Edit",
+    TEXT_DELETE: "Delete",
     TEXT_REGISTER: "Register",
     TEXT_LOGIN_SUBTITLE: "Enter your account information",
     TEXT_REGISTER_SUBTITLE: "Create a new account for faster shopping",
@@ -311,6 +313,39 @@ export default {
     TEXT_RESTOCK_MODAL_CANCEL: "Cancel",
     TEXT_RESTOCK_MODAL_CONFIRM: "Save",
     TEXT_NO_RESULTS: "No matching products found.",
+  },
+  voucherManagement: {
+    TEXT_VOUCHER_TITLE: "Voucher Management",
+    TEXT_VOUCHER_SUBTITLE: "Create and manage discount vouchers.",
+    TEXT_VOUCHER_SEARCH: "Search by voucher code...",
+    TEXT_VOUCHER_CREATE: "Create Voucher",
+
+    TEXT_VOUCHER_STATUS: "Status",
+    TEXT_VOUCHER_ALL: "All",
+
+    TEXT_VOUCHER_COL_CODE: "Code",
+    TEXT_VOUCHER_COL_DESCRIPTION: "Description",
+    TEXT_VOUCHER_COL_DISCOUNT_VALUE: "Discount",
+    TEXT_VOUCHER_COL_MIN_ORDER: "Min. Order",
+    TEXT_VOUCHER_COL_STATUS: "Status",
+    TEXT_VOUCHER_COL_ACTIONS: "Actions",
+
+    TEXT_VOUCHER_TOTAL: "Total Vouchers",
+    TEXT_VOUCHER_ACTIVE: "Active",
+    TEXT_VOUCHER_INACTIVE: "Inactive",
+    TEXT_VOUCHER_USED: "Used",
+
+    TEXT_VOUCHER_STATUS_ACTIVE: "Active",
+    TEXT_VOUCHER_STATUS_INACTIVE: "Inactive",
+
+    TEXT_VOUCHER_MODAL_TITLE: "Voucher",
+    TEXT_VOUCHER_MODAL_CODE: "Voucher Code",
+    TEXT_VOUCHER_MODAL_DESCRIPTION: "Description",
+    TEXT_VOUCHER_MODAL_VALUE: "Discount Percentage (%)",
+    TEXT_VOUCHER_MODAL_MIN_ORDER: "Minimum Order Value",
+    TEXT_VOUCHER_MODAL_ACTIVE: "Active",
+    TEXT_VOUCHER_MODAL_CANCEL: "Cancel",
+    TEXT_VOUCHER_MODAL_SAVE: "Save",
   },
   checkout: {
     TEXT_EMPTY_CART: "Your cart is empty",

@@ -19,4 +19,5 @@ export const ROUTES = {
   ADMIN_SHOWROOM: "/admin/showroom",
   ADMIN_ACCOUNTS: "/admin/account",
   ADMIN_PRODUCT: "/admin/products",
+  ADMIN_VOUCHER: "/admin/vouchers",
 };

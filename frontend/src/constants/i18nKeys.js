@@ -60,6 +60,8 @@ export const TEXT_HOME_DROPDOWN_MANUFACTURER =
 
 // ─── Auth Modal ──────────────────────────────────────────────────────────────
 export const TEXT_LOGIN = "common.TEXT_LOGIN";
+export const TEXT_EDIT = "common.TEXT_EDIT";
+export const TEXT_DELETE = "common.TEXT_DELETE";
 export const TEXT_REGISTER = "common.TEXT_REGISTER";
 export const TEXT_LOGIN_SUBTITLE = "common.TEXT_LOGIN_SUBTITLE";
 export const TEXT_REGISTER_SUBTITLE = "common.TEXT_REGISTER_SUBTITLE";
@@ -253,6 +255,55 @@ export const TEXT_RESTOCK_MODAL_CANCEL = "inventory.TEXT_RESTOCK_MODAL_CANCEL";
 export const TEXT_RESTOCK_MODAL_CONFIRM =
   "inventory.TEXT_RESTOCK_MODAL_CONFIRM";
 export const TEXT_NO_RESULTS = "inventory.TEXT_NO_RESULTS";
+
+// ─── Voucher Management ──────────────────────────────────────────────────────
+export const TEXT_VOUCHER_TITLE = "voucherManagement.TEXT_VOUCHER_TITLE";
+export const TEXT_VOUCHER_SUBTITLE = "voucherManagement.TEXT_VOUCHER_SUBTITLE";
+export const TEXT_VOUCHER_SEARCH = "voucherManagement.TEXT_VOUCHER_SEARCH";
+export const TEXT_VOUCHER_CREATE = "voucherManagement.TEXT_VOUCHER_CREATE";
+
+export const TEXT_VOUCHER_STATUS = "voucherManagement.TEXT_VOUCHER_STATUS";
+export const TEXT_VOUCHER_ALL = "voucherManagement.TEXT_VOUCHER_ALL";
+
+export const TEXT_VOUCHER_COL_CODE = "voucherManagement.TEXT_VOUCHER_COL_CODE";
+export const TEXT_VOUCHER_COL_DESCRIPTION =
+  "voucherManagement.TEXT_VOUCHER_COL_DESCRIPTION";
+export const TEXT_VOUCHER_COL_DISCOUNT_VALUE =
+  "voucherManagement.TEXT_VOUCHER_COL_DISCOUNT_VALUE";
+export const TEXT_VOUCHER_COL_MIN_ORDER =
+  "voucherManagement.TEXT_VOUCHER_COL_MIN_ORDER";
+export const TEXT_VOUCHER_COL_STATUS =
+  "voucherManagement.TEXT_VOUCHER_COL_STATUS";
+export const TEXT_VOUCHER_COL_ACTIONS =
+  "voucherManagement.TEXT_VOUCHER_COL_ACTIONS";
+
+export const TEXT_VOUCHER_TOTAL = "voucherManagement.TEXT_VOUCHER_TOTAL";
+export const TEXT_VOUCHER_ACTIVE = "voucherManagement.TEXT_VOUCHER_ACTIVE";
+export const TEXT_VOUCHER_INACTIVE = "voucherManagement.TEXT_VOUCHER_INACTIVE";
+export const TEXT_VOUCHER_USED = "voucherManagement.TEXT_VOUCHER_USED";
+
+export const TEXT_VOUCHER_STATUS_ACTIVE =
+  "voucherManagement.TEXT_VOUCHER_STATUS_ACTIVE";
+export const TEXT_VOUCHER_STATUS_INACTIVE =
+  "voucherManagement.TEXT_VOUCHER_STATUS_INACTIVE";
+
+export const TEXT_VOUCHER_MODAL_TITLE =
+  "voucherManagement.TEXT_VOUCHER_MODAL_TITLE";
+export const TEXT_VOUCHER_MODAL_CODE =
+  "voucherManagement.TEXT_VOUCHER_MODAL_CODE";
+export const TEXT_VOUCHER_MODAL_DESCRIPTION =
+  "voucherManagement.TEXT_VOUCHER_MODAL_DESCRIPTION";
+export const TEXT_VOUCHER_MODAL_VALUE =
+  "voucherManagement.TEXT_VOUCHER_MODAL_VALUE";
+export const TEXT_VOUCHER_MODAL_MIN_ORDER =
+  "voucherManagement.TEXT_VOUCHER_MODAL_MIN_ORDER";
+export const TEXT_VOUCHER_MODAL_ACTIVE =
+  "voucherManagement.TEXT_VOUCHER_MODAL_ACTIVE";
+export const TEXT_VOUCHER_MODAL_CANCEL =
+  "voucherManagement.TEXT_VOUCHER_MODAL_CANCEL";
+export const TEXT_VOUCHER_MODAL_SAVE =
+  "voucherManagement.TEXT_VOUCHER_MODAL_SAVE";
+
 
 // ─── Checkout Page ───────────────────────────────────────────────────────────
 export const TEXT_CHECKOUT_EMPTY_CART = "checkout.TEXT_EMPTY_CART";
