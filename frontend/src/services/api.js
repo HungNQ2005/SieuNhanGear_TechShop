@@ -14,10 +14,11 @@ export const getBannerById = (id) => api.get(API.GET_BANNER_BY_ID(id));
 // Products
 export const getProducts = () => api.get(API.GET_PRODUCT);
 export const getProductById = (id) => api.get(API.GET_PRODUCT_BY_ID(id));
-
-// Categories
-export const getCategories = () => api.get(API.GET_CATEGORY);
-export const getCategoryById = (id) => api.get(API.GET_CATEGORY_BY_ID(id));
+// NEW (merged from product-management-feature): CRUD cho trang Products
+export const createProduct = (data) => api.post(API.CREATE_PRODUCT, data);
+export const updateProduct = (id, data) =>
+  api.patch(API.UPDATE_PRODUCT(id), data);
+export const deleteProduct = (id) => api.delete(API.DELETE_PRODUCT(id));
 
 // Manufacturers
 export const getManufacturers = () => api.get(API.GET_MANUFACTURER);
@@ -223,5 +224,11 @@ export const updateShowroom = (id, data) =>
   api.put(`${API.GET_SHOWROOM}/${id}`, data);
 
 export const deleteShowroom = (id) => api.delete(`${API.GET_SHOWROOM}/${id}`);
-
+// Categories
+export const getCategories = () => api.get(API.GET_CATEGORY);
+export const getCategoryById = (id) => api.get(API.GET_CATEGORY_BY_ID(id));
+export const createCategory = (data) => api.post(API.CREATE_CATEGORY, data);
+export const updateCategory = (id, data) =>
+  api.patch(API.UPDATE_CATEGORY(id), data);
+export const deleteCategory = (id) => api.delete(API.DELETE_CATEGORY(id));
 export default api;

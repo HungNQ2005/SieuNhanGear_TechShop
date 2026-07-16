@@ -629,4 +629,94 @@ export default {
     TEXT_DELETE_FAILED: "Failed to delete showroom.",
     TEXT_SAVE_FAILED: "Failed to save showroom.",
   },
+
+  // ─── Product Management (merged from product-management-feature) ───────
+  productsPage: {
+    TEXT_PROD_TOPBAR_SEARCH: "Search components, SKUs...",
+    TEXT_PROD_PAGE_TITLE: "Product Management",
+    TEXT_PROD_PAGE_SUBTITLE:
+      "Manage high-performance electronic gear and inventory logistics.",
+    TEXT_PROD_ADD_BUTTON: "New Product",
+    TEXT_PROD_FILTERS_BUTTON: "Filters",
+    TEXT_PROD_FILTER_ALL_CATEGORIES: "All Categories",
+
+    TEXT_PROD_TABLE_TITLE: "All Products",
+
+    TEXT_PROD_COL_DETAILS: "Product Details",
+    TEXT_PROD_COL_CATEGORY: "Category",
+    TEXT_PROD_COL_PRICE: "Unit Price",
+    TEXT_PROD_COL_STATUS: "Status",
+    TEXT_PROD_COL_ACTIONS: "Actions",
+
+    TEXT_PROD_STATUS_ACTIVE: "Active",
+    TEXT_PROD_STATUS_DRAFTING: "Drafting",
+    TEXT_PROD_STATUS_OUT_OF_STOCK: "Out of Stock",
+
+    TEXT_PROD_SHOWING: "Showing {{from}} to {{to}} of {{total}} products",
+    TEXT_PROD_NO_RESULTS: "No products found.",
+    TEXT_PROD_LOADING: "Loading products...",
+
+    TEXT_PROD_MODAL_TITLE_CREATE: "Add New Product",
+    TEXT_PROD_MODAL_TITLE_EDIT: "Edit Product",
+    TEXT_PROD_MODAL_NAME_LABEL: "Product Name",
+    TEXT_PROD_MODAL_NAME_PLACEHOLDER: "e.g. Vector Precision Mouse X1",
+    TEXT_PROD_MODAL_SUBTITLE_LABEL: "Short Description",
+    TEXT_PROD_MODAL_SUBTITLE_PLACEHOLDER: "e.g. v2.4 - Wireless Edition",
+    TEXT_PROD_MODAL_CATEGORY_LABEL: "Category",
+    TEXT_PROD_MODAL_PRICE_LABEL: "Unit Price (đ)",
+    TEXT_PROD_MODAL_IMAGE_LABEL: "Image URL",
+    TEXT_PROD_MODAL_IMAGE_PLACEHOLDER: "images/product/1.png",
+    TEXT_PROD_MODAL_STATUS_LABEL: "Status",
+    TEXT_PROD_MODAL_CANCEL: "Cancel",
+    TEXT_PROD_MODAL_CREATE: "Create Product",
+    TEXT_PROD_MODAL_SAVE: "Save Changes",
+
+    TEXT_PROD_DELETE_TITLE: "Delete Product",
+    TEXT_PROD_DELETE_MESSAGE:
+      "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
+    TEXT_PROD_DELETE_CANCEL: "Cancel",
+    TEXT_PROD_DELETE_CONFIRM: "Delete",
+  },
+  categoriesPage: {
+    TEXT_CAT_TOPBAR_SEARCH: "Search categories...",
+    TEXT_CAT_PAGE_TITLE: "Category Management",
+    TEXT_CAT_PAGE_SUBTITLE:
+      "Organize and classify your high-performance electronic gear.",
+    TEXT_CAT_ADD_BUTTON: "Create New Category",
+
+    TEXT_CAT_TABLE_TITLE: "All Categories",
+
+    TEXT_CAT_COL_NAME: "Category Name",
+    TEXT_CAT_COL_SUBCATEGORIES: "Sub-categories",
+    TEXT_CAT_COL_PRODUCTS: "Products",
+    TEXT_CAT_COL_STATUS: "Status",
+    TEXT_CAT_COL_ACTIONS: "Actions",
+
+    TEXT_CAT_ITEMS_COUNT: "{{count}} Items",
+    TEXT_CAT_SKUS_COUNT: "{{count}} SKUs",
+
+    TEXT_CAT_STATUS_ACTIVE: "Active",
+    TEXT_CAT_STATUS_HIDDEN: "Hidden",
+
+    TEXT_CAT_SHOWING: "Showing {{from}}-{{to}} of {{total}} categories",
+    TEXT_CAT_NO_RESULTS: "No categories found.",
+    TEXT_CAT_LOADING: "Loading categories...",
+
+    TEXT_CAT_MODAL_TITLE_CREATE: "Create New Category",
+    TEXT_CAT_MODAL_TITLE_EDIT: "Edit Category",
+    TEXT_CAT_MODAL_NAME_LABEL: "Category Name",
+    TEXT_CAT_MODAL_NAME_PLACEHOLDER: "e.g. Keyboards",
+    TEXT_CAT_MODAL_SUBCATEGORIES_LABEL: "Sub-categories Count",
+    TEXT_CAT_MODAL_ICON_LABEL: "Icon",
+    TEXT_CAT_MODAL_STATUS_LABEL: "Status",
+    TEXT_CAT_MODAL_CANCEL: "Cancel",
+    TEXT_CAT_MODAL_CREATE: "Create Category",
+    TEXT_CAT_MODAL_SAVE: "Save Changes",
+
+    TEXT_CAT_DELETE_TITLE: "Delete Category",
+    TEXT_CAT_DELETE_MESSAGE:
+      "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
+    TEXT_CAT_DELETE_CANCEL: "Cancel",
+    TEXT_CAT_DELETE_CONFIRM: "Delete",
+  }
 };

@@ -10,22 +10,29 @@ export const API = {
 
   GET_CATEGORY: "api/categories",
   GET_CATEGORY_BY_ID: (id) => `api/categories/${id}`,
+  CREATE_CATEGORY: "api/categories",
+  UPDATE_CATEGORY: (id) => `api/categories/${id}`,
+  DELETE_CATEGORY: (id) => `api/categories/${id}`,
+
   GET_MANUFACTURER: "api/manufacturers",
   GET_MANUFACTURE_BY_ID: (id) => `api/manufacturers/${id}`,
   GET_BANNER: "api/banners",
   GET_BANNER_BY_ID: (id) => `api/banners/${id}`,
   GET_PRODUCT: "api/products",
   GET_PRODUCT_BY_ID: (id) => `api/products/${id}`,
+  CREATE_PRODUCT: "api/products",
+  UPDATE_PRODUCT: (id) => `api/products/${id}`,
+  DELETE_PRODUCT: (id) => `api/products/${id}`,
   GET_NEWS: "api/news",
   GET_NEWS_BY_ID: (id) => `api/news/${id}`,
-  
- // Account
+
+  // Account
   GET_ACCOUNTS: "api/accounts",
   GET_ACCOUNT_BY_ID: (id) => `api/accounts/${id}`,
   CREATE_ACCOUNT: "api/accounts",
   UPDATE_ACCOUNT: (id) => `api/accounts/${id}`,
   DELETE_ACCOUNT: (id) => `api/accounts/${id}`,
-  
+
   GET_COMMENTS: "api/comments",
   GET_COMMENT_BY_ID: (id) => `api/comments/${id}`,
   //Cart
@@ -81,9 +88,9 @@ export const API = {
   GET_SHIPPING_ADDRESS_BY_ACCOUNT: (accountId) =>
     `api/shippingAddresses?accountId=${accountId}`,
   //Order
-    GET_ORDER: "orders",
-    GET_ORDER_BY_ID: (id) => `orders/${id}`,
-    GET_ORDER_BY_CODE: (code) => `orders?code=${code}`,
+  GET_ORDER: "orders",
+  GET_ORDER_BY_ID: (id) => `orders/${id}`,
+  GET_ORDER_BY_CODE: (code) => `orders?code=${code}`,
 
   // ==========================
   // Inventory / Warehouses

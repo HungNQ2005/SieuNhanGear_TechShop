@@ -22,6 +22,8 @@ export default function StockTable({ rows, onRestock }) {
         borderWidth: 1,
         borderColor: "#E5E7EB",
         overflow: "hidden",
+        zIndex: 1,
+        elevation: 1,
       }}
     >
       <View

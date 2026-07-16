@@ -625,4 +625,93 @@ export default {
     TEXT_DELETE_FAILED: "Không thể xóa showroom.",
     TEXT_SAVE_FAILED: "Lưu showroom thất bại.",
   },
+
+  // ─── Product Management (merged from product-management-feature) ───────
+  productsPage: {
+    TEXT_PROD_TOPBAR_SEARCH: "Tìm kiếm linh kiện, SKU...",
+    TEXT_PROD_PAGE_TITLE: "Quản lý sản phẩm",
+    TEXT_PROD_PAGE_SUBTITLE:
+      "Quản lý thiết bị điện tử hiệu năng cao và hậu cần kho hàng.",
+    TEXT_PROD_ADD_BUTTON: "Thêm sản phẩm",
+    TEXT_PROD_FILTERS_BUTTON: "Bộ lọc",
+    TEXT_PROD_FILTER_ALL_CATEGORIES: "Tất cả danh mục",
+
+    TEXT_PROD_TABLE_TITLE: "Tất cả sản phẩm",
+
+    TEXT_PROD_COL_DETAILS: "Thông tin sản phẩm",
+    TEXT_PROD_COL_CATEGORY: "Danh mục",
+    TEXT_PROD_COL_PRICE: "Đơn giá",
+    TEXT_PROD_COL_STATUS: "Trạng thái",
+    TEXT_PROD_COL_ACTIONS: "Thao tác",
+
+    TEXT_PROD_STATUS_ACTIVE: "Hoạt động",
+    TEXT_PROD_STATUS_DRAFTING: "Bản nháp",
+    TEXT_PROD_STATUS_OUT_OF_STOCK: "Hết hàng",
+
+    TEXT_PROD_SHOWING: "Hiển thị {{from}}-{{to}} trong {{total}} sản phẩm",
+    TEXT_PROD_NO_RESULTS: "Không tìm thấy sản phẩm nào.",
+    TEXT_PROD_LOADING: "Đang tải sản phẩm...",
+
+    TEXT_PROD_MODAL_TITLE_CREATE: "Thêm sản phẩm mới",
+    TEXT_PROD_MODAL_TITLE_EDIT: "Chỉnh sửa sản phẩm",
+    TEXT_PROD_MODAL_NAME_LABEL: "Tên sản phẩm",
+    TEXT_PROD_MODAL_NAME_PLACEHOLDER: "vd: Vector Precision Mouse X1",
+    TEXT_PROD_MODAL_SUBTITLE_LABEL: "Mô tả ngắn",
+    TEXT_PROD_MODAL_SUBTITLE_PLACEHOLDER: "vd: v2.4 - Bản Wireless",
+    TEXT_PROD_MODAL_CATEGORY_LABEL: "Danh mục",
+    TEXT_PROD_MODAL_PRICE_LABEL: "Đơn giá (đ)",
+    TEXT_PROD_MODAL_IMAGE_LABEL: "URL hình ảnh",
+    TEXT_PROD_MODAL_IMAGE_PLACEHOLDER: "images/product/1.png",
+    TEXT_PROD_MODAL_STATUS_LABEL: "Trạng thái",
+    TEXT_PROD_MODAL_CANCEL: "Huỷ",
+    TEXT_PROD_MODAL_CREATE: "Tạo sản phẩm",
+    TEXT_PROD_MODAL_SAVE: "Lưu thay đổi",
+
+    TEXT_PROD_DELETE_TITLE: "Xóa sản phẩm",
+    TEXT_PROD_DELETE_MESSAGE:
+      "Bạn có chắc chắn muốn xóa \"{{name}}\"? Hành động này không thể hoàn tác.",
+    TEXT_PROD_DELETE_CANCEL: "Huỷ",
+    TEXT_PROD_DELETE_CONFIRM: "Xóa",
+  },categoriesPage: {
+    TEXT_CAT_TOPBAR_SEARCH: "Tìm kiếm danh mục...",
+    TEXT_CAT_PAGE_TITLE: "Quản lý danh mục",
+    TEXT_CAT_PAGE_SUBTITLE:
+      "Sắp xếp và phân loại các thiết bị điện tử hiệu năng cao của bạn.",
+    TEXT_CAT_ADD_BUTTON: "Tạo danh mục mới",
+
+    TEXT_CAT_TABLE_TITLE: "Tất cả danh mục",
+
+    TEXT_CAT_COL_NAME: "Tên danh mục",
+    TEXT_CAT_COL_SUBCATEGORIES: "Danh mục con",
+    TEXT_CAT_COL_PRODUCTS: "Sản phẩm",
+    TEXT_CAT_COL_STATUS: "Trạng thái",
+    TEXT_CAT_COL_ACTIONS: "Thao tác",
+
+    TEXT_CAT_ITEMS_COUNT: "{{count}} mục",
+    TEXT_CAT_SKUS_COUNT: "{{count}} SKU",
+
+    TEXT_CAT_STATUS_ACTIVE: "Hoạt động",
+    TEXT_CAT_STATUS_HIDDEN: "Đã ẩn",
+
+    TEXT_CAT_SHOWING: "Hiển thị {{from}}-{{to}} trong {{total}} danh mục",
+    TEXT_CAT_NO_RESULTS: "Không tìm thấy danh mục nào.",
+    TEXT_CAT_LOADING: "Đang tải danh mục...",
+
+    TEXT_CAT_MODAL_TITLE_CREATE: "Tạo danh mục mới",
+    TEXT_CAT_MODAL_TITLE_EDIT: "Chỉnh sửa danh mục",
+    TEXT_CAT_MODAL_NAME_LABEL: "Tên danh mục",
+    TEXT_CAT_MODAL_NAME_PLACEHOLDER: "vd: Bàn phím",
+    TEXT_CAT_MODAL_SUBCATEGORIES_LABEL: "Số danh mục con",
+    TEXT_CAT_MODAL_ICON_LABEL: "Biểu tượng",
+    TEXT_CAT_MODAL_STATUS_LABEL: "Trạng thái",
+    TEXT_CAT_MODAL_CANCEL: "Huỷ",
+    TEXT_CAT_MODAL_CREATE: "Tạo danh mục",
+    TEXT_CAT_MODAL_SAVE: "Lưu thay đổi",
+
+    TEXT_CAT_DELETE_TITLE: "Xóa danh mục",
+    TEXT_CAT_DELETE_MESSAGE:
+      "Bạn có chắc chắn muốn xóa \"{{name}}\"? Hành động này không thể hoàn tác.",
+    TEXT_CAT_DELETE_CANCEL: "Huỷ",
+    TEXT_CAT_DELETE_CONFIRM: "Xóa",
+  }
 };

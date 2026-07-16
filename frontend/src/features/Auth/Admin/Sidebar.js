@@ -88,11 +88,12 @@ export default function Sidebar({ selected, onSelect }) {
   const handleSelect = (item) => {
     if (item.children) {
       setExpanded((prev) => ({ ...prev, [item.id]: !prev[item.id] }));
-      if (!expanded[item.id]) {
-        // Expanding: also navigate to the first child by default
-        if (onSelect) onSelect(item.id);
-        navigate(item.children[0].route);
-      }
+      // CHANGED (merged from product-management-feature): parent items with
+      // children (e.g. "Products") now own a real page of their own, so
+      // clicking the parent navigates there directly instead of jumping
+      // straight into the first child.
+      if (onSelect) onSelect(item.id);
+      navigate(item.route);
       return;
     }
     if (onSelect) onSelect(item.id);

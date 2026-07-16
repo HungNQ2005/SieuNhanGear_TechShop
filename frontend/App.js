@@ -27,6 +27,8 @@ import InventoryManagementScreen from "./src/features/Auth/Admin/InventoryManage
 import SpecificationsScreen from "./src/features/Auth/Admin/ProductManagement/Specifications/SpecificationsScreen";
 import ManageShowroom from "./src/features/Auth/Admin/Admin System/ShowroomManagement/screens/ManageShowroom";
 import ManageAccount from "./src/features/Auth/Admin/Admin System/AccounManagement/screens/ManageAccount";
+import ProductsScreen from "./src/features/Auth/Admin/ProductManagement/Products/ProductsScreen";
+import CategoriesScreen from "./src/features/Auth/Admin/ProductManagement/Categories/CategoriesScreen";
 export default function App() {
   const scrollViewRef = useRef(null);
 
@@ -85,6 +87,14 @@ export default function App() {
                   <Route
                     path={ROUTES.ADMIN_ACCOUNTS}
                     element={<ManageAccount />}
+                  />
+                  <Route
+                    path={ROUTES.ADMIN_PRODUCT}
+                    element={<ProductsScreen />}
+                  />
+                  <Route
+                    path={ROUTES.PRODUCT_CATEGORIES}
+                    element={<CategoriesScreen />}
                   />
                 </Routes>
                 <Footer />

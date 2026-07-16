@@ -988,3 +988,114 @@ export const TEXT_SPEC_MODAL_ICON_LABEL =
   "specifications.TEXT_SPEC_MODAL_ICON_LABEL";
 export const TEXT_SPEC_MODAL_CANCEL = "specifications.TEXT_SPEC_MODAL_CANCEL";
 export const TEXT_SPEC_MODAL_CREATE = "specifications.TEXT_SPEC_MODAL_CREATE";
+
+// ─── Product Management (merged from product-management-feature) ──────────
+export const TEXT_PROD_TOPBAR_SEARCH = "productsPage.TEXT_PROD_TOPBAR_SEARCH";
+export const TEXT_PROD_PAGE_TITLE = "productsPage.TEXT_PROD_PAGE_TITLE";
+export const TEXT_PROD_PAGE_SUBTITLE = "productsPage.TEXT_PROD_PAGE_SUBTITLE";
+export const TEXT_PROD_ADD_BUTTON = "productsPage.TEXT_PROD_ADD_BUTTON";
+export const TEXT_PROD_FILTERS_BUTTON =
+  "productsPage.TEXT_PROD_FILTERS_BUTTON";
+export const TEXT_PROD_FILTER_ALL_CATEGORIES =
+  "productsPage.TEXT_PROD_FILTER_ALL_CATEGORIES";
+
+export const TEXT_PROD_TABLE_TITLE = "productsPage.TEXT_PROD_TABLE_TITLE";
+
+export const TEXT_PROD_COL_DETAILS = "productsPage.TEXT_PROD_COL_DETAILS";
+export const TEXT_PROD_COL_CATEGORY = "productsPage.TEXT_PROD_COL_CATEGORY";
+export const TEXT_PROD_COL_PRICE = "productsPage.TEXT_PROD_COL_PRICE";
+export const TEXT_PROD_COL_STATUS = "productsPage.TEXT_PROD_COL_STATUS";
+export const TEXT_PROD_COL_ACTIONS = "productsPage.TEXT_PROD_COL_ACTIONS";
+
+export const TEXT_PROD_STATUS_ACTIVE = "productsPage.TEXT_PROD_STATUS_ACTIVE";
+export const TEXT_PROD_STATUS_DRAFTING =
+  "productsPage.TEXT_PROD_STATUS_DRAFTING";
+export const TEXT_PROD_STATUS_OUT_OF_STOCK =
+  "productsPage.TEXT_PROD_STATUS_OUT_OF_STOCK";
+
+export const TEXT_PROD_SHOWING = "productsPage.TEXT_PROD_SHOWING";
+export const TEXT_PROD_NO_RESULTS = "productsPage.TEXT_PROD_NO_RESULTS";
+export const TEXT_PROD_LOADING = "productsPage.TEXT_PROD_LOADING";
+
+export const TEXT_PROD_MODAL_TITLE_CREATE =
+  "productsPage.TEXT_PROD_MODAL_TITLE_CREATE";
+export const TEXT_PROD_MODAL_TITLE_EDIT =
+  "productsPage.TEXT_PROD_MODAL_TITLE_EDIT";
+export const TEXT_PROD_MODAL_NAME_LABEL =
+  "productsPage.TEXT_PROD_MODAL_NAME_LABEL";
+export const TEXT_PROD_MODAL_NAME_PLACEHOLDER =
+  "productsPage.TEXT_PROD_MODAL_NAME_PLACEHOLDER";
+export const TEXT_PROD_MODAL_SUBTITLE_LABEL =
+  "productsPage.TEXT_PROD_MODAL_SUBTITLE_LABEL";
+export const TEXT_PROD_MODAL_SUBTITLE_PLACEHOLDER =
+  "productsPage.TEXT_PROD_MODAL_SUBTITLE_PLACEHOLDER";
+export const TEXT_PROD_MODAL_CATEGORY_LABEL =
+  "productsPage.TEXT_PROD_MODAL_CATEGORY_LABEL";
+export const TEXT_PROD_MODAL_PRICE_LABEL =
+  "productsPage.TEXT_PROD_MODAL_PRICE_LABEL";
+export const TEXT_PROD_MODAL_IMAGE_LABEL =
+  "productsPage.TEXT_PROD_MODAL_IMAGE_LABEL";
+export const TEXT_PROD_MODAL_IMAGE_PLACEHOLDER =
+  "productsPage.TEXT_PROD_MODAL_IMAGE_PLACEHOLDER";
+export const TEXT_PROD_MODAL_STATUS_LABEL =
+  "productsPage.TEXT_PROD_MODAL_STATUS_LABEL";
+export const TEXT_PROD_MODAL_CANCEL = "productsPage.TEXT_PROD_MODAL_CANCEL";
+export const TEXT_PROD_MODAL_CREATE = "productsPage.TEXT_PROD_MODAL_CREATE";
+export const TEXT_PROD_MODAL_SAVE = "productsPage.TEXT_PROD_MODAL_SAVE";
+
+export const TEXT_PROD_DELETE_TITLE = "productsPage.TEXT_PROD_DELETE_TITLE";
+export const TEXT_PROD_DELETE_MESSAGE =
+  "productsPage.TEXT_PROD_DELETE_MESSAGE";
+export const TEXT_PROD_DELETE_CANCEL = "productsPage.TEXT_PROD_DELETE_CANCEL";
+export const TEXT_PROD_DELETE_CONFIRM =
+  "productsPage.TEXT_PROD_DELETE_CONFIRM";
+
+  // ─── Category Management ───────────────────────────────────────────────────
+export const TEXT_CAT_TOPBAR_SEARCH = "categoriesPage.TEXT_CAT_TOPBAR_SEARCH";
+export const TEXT_CAT_PAGE_TITLE = "categoriesPage.TEXT_CAT_PAGE_TITLE";
+export const TEXT_CAT_PAGE_SUBTITLE = "categoriesPage.TEXT_CAT_PAGE_SUBTITLE";
+export const TEXT_CAT_ADD_BUTTON = "categoriesPage.TEXT_CAT_ADD_BUTTON";
+
+export const TEXT_CAT_TABLE_TITLE = "categoriesPage.TEXT_CAT_TABLE_TITLE";
+
+export const TEXT_CAT_COL_NAME = "categoriesPage.TEXT_CAT_COL_NAME";
+export const TEXT_CAT_COL_SUBCATEGORIES =
+  "categoriesPage.TEXT_CAT_COL_SUBCATEGORIES";
+export const TEXT_CAT_COL_PRODUCTS = "categoriesPage.TEXT_CAT_COL_PRODUCTS";
+export const TEXT_CAT_COL_STATUS = "categoriesPage.TEXT_CAT_COL_STATUS";
+export const TEXT_CAT_COL_ACTIONS = "categoriesPage.TEXT_CAT_COL_ACTIONS";
+
+export const TEXT_CAT_ITEMS_COUNT = "categoriesPage.TEXT_CAT_ITEMS_COUNT";
+export const TEXT_CAT_SKUS_COUNT = "categoriesPage.TEXT_CAT_SKUS_COUNT";
+
+export const TEXT_CAT_STATUS_ACTIVE = "categoriesPage.TEXT_CAT_STATUS_ACTIVE";
+export const TEXT_CAT_STATUS_HIDDEN = "categoriesPage.TEXT_CAT_STATUS_HIDDEN";
+
+export const TEXT_CAT_SHOWING = "categoriesPage.TEXT_CAT_SHOWING";
+export const TEXT_CAT_NO_RESULTS = "categoriesPage.TEXT_CAT_NO_RESULTS";
+export const TEXT_CAT_LOADING = "categoriesPage.TEXT_CAT_LOADING";
+
+export const TEXT_CAT_MODAL_TITLE_CREATE =
+  "categoriesPage.TEXT_CAT_MODAL_TITLE_CREATE";
+export const TEXT_CAT_MODAL_TITLE_EDIT =
+  "categoriesPage.TEXT_CAT_MODAL_TITLE_EDIT";
+export const TEXT_CAT_MODAL_NAME_LABEL =
+  "categoriesPage.TEXT_CAT_MODAL_NAME_LABEL";
+export const TEXT_CAT_MODAL_NAME_PLACEHOLDER =
+  "categoriesPage.TEXT_CAT_MODAL_NAME_PLACEHOLDER";
+export const TEXT_CAT_MODAL_SUBCATEGORIES_LABEL =
+  "categoriesPage.TEXT_CAT_MODAL_SUBCATEGORIES_LABEL";
+export const TEXT_CAT_MODAL_ICON_LABEL =
+  "categoriesPage.TEXT_CAT_MODAL_ICON_LABEL";
+export const TEXT_CAT_MODAL_STATUS_LABEL =
+  "categoriesPage.TEXT_CAT_MODAL_STATUS_LABEL";
+export const TEXT_CAT_MODAL_CANCEL = "categoriesPage.TEXT_CAT_MODAL_CANCEL";
+export const TEXT_CAT_MODAL_CREATE = "categoriesPage.TEXT_CAT_MODAL_CREATE";
+export const TEXT_CAT_MODAL_SAVE = "categoriesPage.TEXT_CAT_MODAL_SAVE";
+
+export const TEXT_CAT_DELETE_TITLE = "categoriesPage.TEXT_CAT_DELETE_TITLE";
+export const TEXT_CAT_DELETE_MESSAGE =
+  "categoriesPage.TEXT_CAT_DELETE_MESSAGE";
+export const TEXT_CAT_DELETE_CANCEL = "categoriesPage.TEXT_CAT_DELETE_CANCEL";
+export const TEXT_CAT_DELETE_CONFIRM =
+  "categoriesPage.TEXT_CAT_DELETE_CONFIRM";

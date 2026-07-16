@@ -47,6 +47,8 @@ export default function StockFilterBar({
         flexWrap: "wrap",
         gap: 12,
         marginBottom: 16,
+        zIndex: 10,
+        elevation: 10,
       }}
     >
       <View style={{ flexDirection: "row", gap: 12, flexWrap: "wrap" }}>
