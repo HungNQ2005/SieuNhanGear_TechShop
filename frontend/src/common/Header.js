@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   useWindowDimensions,
 } from "react-native";
+import UserDropdown from "../features/Auth/UserDropdown/UserDropdown";
 import { useLocalization } from "../providers/LocalizationProvider";
 import { useFilter } from "../store/FilterContext";
 import { useNavigate } from "react-router-dom";
@@ -109,7 +110,16 @@ export default function Header() {
     });
     setDropdownVisible(true);
   };
+  const handleLogout = async () => {
+    localStorage.removeItem("user");
 
+    setUser(null);
+    setShowUserDropdown(false);
+
+    await loadCart(null);
+
+    navigate(ROUTES.HOME);
+  };
   const handleOpenMore = () => {
     moreButtonRef.current?.measure((x, y, w, height, pageX, pageY) => {
       setMorePosition({ top: pageY + height + 4, left: pageX });
@@ -316,7 +326,10 @@ export default function Header() {
                   </View>
                 </Pressable>
 
-                <Pressable style={styles.actionItem}>
+                <Pressable
+                  style={styles.actionItem}
+                  onPress={() => navigate(ROUTES.ORDER)}
+                >
                   <View style={styles.iconWrapper}>
                     <IconShippingBox />
                   </View>
@@ -436,21 +449,11 @@ export default function Header() {
               <IconUser />
               {user && <Text style={styles.userName}>{user.name}</Text>}
               {showUserDropdown && user && (
-                <View style={styles.userDropdown}>
-                  <Text style={styles.dropdownName}>{user.name}</Text>
-                  <Text>Role: {user.role}</Text>
-                  <Pressable
-                    onPress={() => {
-                      localStorage.removeItem("user");
-
-                      setUser(null);
-
-                      setShowUserDropdown(false);
-                    }}
-                  >
-                    <Text style={{ color: "red" }}>Đăng xuất</Text>
-                  </Pressable>
-                </View>
+                <UserDropdown
+                  user={user}
+                  onClose={() => setShowUserDropdown(false)}
+                  onLogout={handleLogout}
+                />
               )}
             </Pressable>
 
@@ -497,6 +500,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     borderBottomWidth: 1,
     borderBottomColor: "#e5e7eb",
+    position: "relative",
+    zIndex: 9999,
+    elevation: 9999,
   },
   innerContainer: {
     maxWidth: 1280,
@@ -598,10 +604,11 @@ const styles = StyleSheet.create({
     color: "#374151",
   },
   iconButton: {
+    position: "relative",
     paddingHorizontal: 12,
     paddingVertical: 4,
     alignItems: "center",
-    position: "relative",
+    zIndex: 1000,
   },
   cartButton: {
     flexDirection: "row",
@@ -708,15 +715,19 @@ const styles = StyleSheet.create({
   },
   userDropdown: {
     position: "absolute",
-    top: 30,
+    top: "100%",
     right: 0,
+
     backgroundColor: "#fff",
+    borderRadius: 8,
     borderWidth: 1,
     borderColor: "#ddd",
-    borderRadius: 8,
-    padding: 12,
+
     minWidth: 180,
-    zIndex: 999,
+    padding: 12,
+
+    zIndex: 9999,
+    elevation: 10, // nếu chạy native
   },
   dropdownName: {
     fontWeight: "bold",
