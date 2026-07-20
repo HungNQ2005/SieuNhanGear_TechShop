@@ -76,4 +76,11 @@ export default StyleSheet.create({
     fontWeight: "600",
     fontSize: 15,
   },
+
+  avatarImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#E2E8F0',
+  },
 });

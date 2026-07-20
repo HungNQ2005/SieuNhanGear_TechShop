@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const { env } = require('./config/env');
 const { ROUTES } = require('./constants/routes.constants');
@@ -10,7 +11,11 @@ const { createHealthRouter } = require('./routes/health.routes');
 const { createAuthRouter } = require('./features/auth/routes/auth.routes');
 const { createCartRouter } = require('./features/cart/routes/cart.routes');
 const { createProductRouter } = require('./features/product/routes/product.routes');
+const { createCategoryRouter } = require('./features/product/routes/category.routes');
+const { createManufacturerRouter } = require('./features/product/routes/manufacturer.routes');
+const { createAccountRouter } = require('./features/auth/routes/account.routes');
 const { createHomeRouter } = require('./features/home/routes/home.routes');
+const { createBannerRouter } = require('./features/home/routes/banner.routes');
 const { notFoundMiddleware } = require('./middlewares/notFound.middleware');
 const { errorMiddleware } = require('./middlewares/error.middleware');
 
@@ -24,6 +29,9 @@ function createApp() {
   }));
   app.use(express.json());
 
+  // Serve static files from the "src/asset/images" directory
+  app.use('/src/asset/images', express.static(path.join(__dirname, '../src/asset/images')));
+
   app.get('/', (req, res) => {
     res.json({ name: 'sieunhangearstore-backend', status: 'ok' });
   });
@@ -34,7 +42,11 @@ function createApp() {
   app.use(ROUTES.AUTH.BASE, createAuthRouter());
   app.use(ROUTES.CART.BASE, createCartRouter());
   app.use(ROUTES.PRODUCT.BASE, createProductRouter());
+  app.use(ROUTES.CATEGORY.BASE, createCategoryRouter());
+  app.use(ROUTES.MANUFACTURER.BASE, createManufacturerRouter());
   app.use(ROUTES.HOME.BASE, createHomeRouter());
+  app.use(ROUTES.BANNER.BASE, createBannerRouter());
+  app.use(ROUTES.ACCOUNT.BASE, createAccountRouter());
 
   app.use(notFoundMiddleware);
 
@@ -44,5 +56,3 @@ function createApp() {
 }
 
 module.exports = { createApp };
-
-

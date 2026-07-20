@@ -33,6 +33,11 @@ export const API = {
   UPDATE_ACCOUNT: (id) => `api/accounts/${id}`,
   DELETE_ACCOUNT: (id) => `api/accounts/${id}`,
 
+  // Auth
+  AUTH_LOGIN: "api/auth/login",
+  AUTH_LOGOUT: "api/auth/logout",
+  AUTH_REGISTER: "api/auth/register",
+
   GET_COMMENTS: "api/comments",
   GET_COMMENT_BY_ID: (id) => `api/comments/${id}`,
   //Cart
