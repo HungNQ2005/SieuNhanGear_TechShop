@@ -39,5 +39,3 @@ const catalogController = {
 };
 
 module.exports = { catalogController };
-
-

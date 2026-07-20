@@ -8,6 +8,13 @@ export const ROUTES = {
   ORDER_MANAGEMENT: "/admin/orders",
   CHECKOUT: "/checkout",
   ORDER: "/order",
+  //Profile
+  PROFILE: "/profile",
+  PROFILE_INFOMATION: "/profile/information",
+  PROFILE_FAVORITE_PROFUCT: "/profile/favorite",
+  PROFILE_ORDER_HISTORY: "/profile/order",
+  PROFILE_LOGOUT: "/profile/logout",
+  //Admin
   ADMIN_ORDER_DETAIL: "/admin/orders/:id",
   INVENTORY_MANAGEMENT: "/admin/inventory",
   // CHANGED (merged from product-management-feature): Products giờ có màn

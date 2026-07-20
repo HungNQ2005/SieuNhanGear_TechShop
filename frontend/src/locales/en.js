@@ -124,6 +124,7 @@ export default {
     TEXT_HOME_HERO_STATUS_5: "Warranty",
     TEXT_HOME_ADD_TO_CART: "Add to Cart",
     TEXT_HOME_EMPTY_PRODUCTS: "No products available at the moment.",
+    TEXT_HOME_ERROR_FETCH_PRODUCTS: "Internal error occurred while fetching data. Please try again later.",
     TEXT_HOME_CATEGORY: "Category",
     TEXT_HOME_EXPLORE_BY_CATEGORY: "Explore by Category",
     TEXT_HOME_FEATURED_ALL_PRODUCTS: "All",

@@ -1,29 +1,46 @@
 import { API } from "../constants/apiURL";
 export const login = async (email, password) => {
-    const response = await fetch(
-        `${API.BASE_API_URL}${API.GET_ACCOUNTS}?email=${email}&password=${password}`
-    );
+    try {
+        const response = await fetch(`${API.BASE_API_URL}${API.AUTH_LOGIN}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+        });
 
-    if (!response.ok) {
-        throw new Error("Cannot connect to server");
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            return null;
+        }
+
+        if (result.token) {
+            localStorage.setItem("token", result.token);
+        }
+
+        return result.data;
+    } catch (error) {
+        console.error("Login error:", error);
+        return null;
     }
-
-    const users = await response.json();
-
-    return users.length > 0 ? users[0] : null;
 };
 
 export const register = async (user) => {
-    const response = await fetch(
-        `${API.BASE_API_URL}${API.GET_ACCOUNTS}`,
-        {
+    try {
+        const response = await fetch(`${API.BASE_API_URL}${API.AUTH_REGISTER}`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(user),
-        }
-    );
+        });
 
-    return await response.json();
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || "Registration failed");
+        }
+
+        return result.data;
+    } catch (error) {
+        console.error("Register error:", error);
+        throw error;
+    }
 };

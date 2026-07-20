@@ -127,8 +127,8 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
   };
   const handleLoginSubmit = async () => {
     const user = await login(
-        loginForm.email.trim(),
-        loginForm.password.trim()
+      loginForm.email.trim(),
+      loginForm.password.trim()
     );
 
     if (!user) {
@@ -145,7 +145,7 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
     resetAndClose();
   };
 
-  const handleRegisterSubmit = () => {
+  const handleRegisterSubmit = async () => {
     if (!isRegisterFormComplete) {
       setFormError(t(TEXT_REGISTER_ERROR));
       return;
@@ -156,8 +156,21 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
       return;
     }
 
-    setFormError("");
-    resetAndClose();
+    try {
+      const newUser = await register({
+        name: registerForm.name,
+        email: registerForm.email,
+        password: registerForm.password,
+        // Thêm các thông tin như phone, gender,... nếu cần.
+      });
+
+      setActiveTab(LOGIN);
+      setFormError("");
+      // Có thể tự động điền email cho tiện
+      setLoginForm(prev => ({ ...prev, email: registerForm.email }));
+    } catch (error) {
+      setFormError(error.message || t(TEXT_REGISTER_ERROR));
+    }
   };
 
   const renderLeftPanel = () => (
