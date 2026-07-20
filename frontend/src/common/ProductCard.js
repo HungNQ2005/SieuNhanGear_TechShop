@@ -56,6 +56,20 @@ export default function ProductCard({ product, manufacturers = [], categories = 
     setFav(isNowFav);
   };
 
+  const getProductImageUri = (url) => {
+    if (!url) return null;
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+      return url;
+    }
+    const baseUrl = API.BASE_API_URL.endsWith('/')
+      ? API.BASE_API_URL.slice(0, -1)
+      : API.BASE_API_URL;
+    const path = url.startsWith('/') ? url : `/${url}`;
+    return `${baseUrl}${path}`;
+  };
+
+  const imageUri = getProductImageUri(product.img_URL);
+
   return (
     <TouchableOpacity
       style={styles.card}
@@ -64,9 +78,9 @@ export default function ProductCard({ product, manufacturers = [], categories = 
     >
       {/* Product image */}
       <View style={styles.imageContainer}>
-        {product.img_URL ? (
+        {imageUri ? (
           <Image
-            source={{ uri: `${API.BASE_API_URL}${product.img_URL}` }}
+            source={{ uri: imageUri }}
             style={styles.image}
             resizeMode="cover"
           />

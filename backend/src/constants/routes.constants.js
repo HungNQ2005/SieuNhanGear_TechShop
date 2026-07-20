@@ -35,6 +35,12 @@ const ROUTES = {
     GET_MANUFACTURER_BY_ID: "/:id",
   },
 
+  NEWS: {
+    BASE: "/api/news",
+    NULL: "/",
+    GET_NEWS_BY_ID: "/:id",
+  },
+
   HOME: {
     BASE: "/api/home",
   },

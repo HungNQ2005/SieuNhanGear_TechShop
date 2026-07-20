@@ -30,6 +30,8 @@ const { createOrderRouter } = require("./routes/order.routes");
 const { createPromotionRouter } = require("./routes/promotion.routes");
 const { createSpecificationRouter } = require("./routes/specification.routes");
 const { createBannerRouter } = require("./routes/banner.routes");
+const { createManufacturerRouter } = require("./features/product/routes/manufacturer.routes");
+const { createNewsRouter } = require("./routes/news.routes");
 const { createStatisticRouter } = require("./routes/statistic.routes");
 
 function createApp() {
@@ -63,6 +65,8 @@ function createApp() {
   app.use(ROUTES.VOUCHER.BASE, createVoucherRouter());
 
   app.use(ROUTES.CATEGORY.BASE, createCategoryRouter());
+  app.use(ROUTES.MANUFACTURER.BASE, createManufacturerRouter());
+  app.use(ROUTES.NEWS.BASE, createNewsRouter());
 
   app.use(ROUTES.WAREHOUSE.BASE, createWarehouseRouter());
   app.use(ROUTES.STOCK.BASE, createStockRouter());

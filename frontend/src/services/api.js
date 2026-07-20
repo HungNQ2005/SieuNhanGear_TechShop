@@ -62,53 +62,53 @@ export const getCommentById = (id) => api.get(API.GET_COMMENT_BY_ID(id));
 // ==========================
 
 export const getOrders = () =>
-    api.get(API.GET_ORDERS);
+  api.get(API.GET_ORDERS);
 
 export const getOrderById = (id) =>
-    api.get(API.GET_ORDER_BY_ID(id));
+  api.get(API.GET_ORDER_BY_ID(id));
 
 export const createOrder = (data) =>
-    api.post(API.CREATE_ORDER, data);
+  api.post(API.CREATE_ORDER, data);
 
 export const updateOrder = (id, data) =>
-    api.patch(API.UPDATE_ORDER(id), data);
+  api.patch(API.UPDATE_ORDER(id), data);
 
 export const deleteOrder = (id) =>
-    api.delete(API.DELETE_ORDER(id));
+  api.delete(API.DELETE_ORDER(id));
 
 // ==========================
 // Order Items
 // ==========================
 
 export const getOrderItems = () =>
-    api.get(API.GET_ORDER_ITEMS);
+  api.get(API.GET_ORDER_ITEMS);
 
 export const getOrderItemsByOrder = (orderId) =>
-    api.get(API.GET_ORDER_ITEMS_BY_ORDER(orderId));
+  api.get(API.GET_ORDER_ITEMS_BY_ORDER(orderId));
 
 // ==========================
 // Timeline
 // ==========================
 
 export const getOrderTimeline = () =>
-    api.get(API.GET_ORDER_TIMELINE);
+  api.get(API.GET_ORDER_TIMELINE);
 
 export const getOrderTimelineByOrder = (orderId) =>
-    api.get(API.GET_ORDER_TIMELINE_BY_ORDER(orderId));
+  api.get(API.GET_ORDER_TIMELINE_BY_ORDER(orderId));
 
 // ==========================
 // Order Status
 // ==========================
 
 export const getOrderStatus = () =>
-    api.get(API.GET_ORDER_STATUS);
+  api.get(API.GET_ORDER_STATUS);
 
 // ==========================
 // Shipping
 // ==========================
 
 export const getShippingCompanies = () =>
-    api.get(API.GET_SHIPPING_COMPANIES);
+  api.get(API.GET_SHIPPING_COMPANIES);
 // Checkout
 export const getOrdersByAccount = (accountId) =>
   api.get(API.GET_ORDER_BY_ACCOUNT(accountId));
