@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
-import { View, ScrollView, StyleSheet, TouchableOpacity, Alert, Text, ActivityIndicator } from 'react-native';
+import { View, ScrollView, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 import TextIntl from '../../common/TextIntl';
 import Banner from '../../common/Banner';
 import HotProductCard from '../../common/HotProductCard';
@@ -22,9 +22,8 @@ import {
   TEXT_HOME_HERO_TITLE,
   TEXT_HOME_HERO_SUBTITLE,
   TEXT_HOME_FEATURED_PRODUCTS,
-  TEXT_PRODUCT_COUNT,
-  TEXT_NO_PRODUCTS,
   TEXT_HOME_HERO_SHOPPING_BUTTON,
+  TEXT_HOME_ERROR_FETCH_PRODUCTS,
   TEXT_HOME_HERO_BUILD_CONFIG_BUTTON,
   TEXT_HOME_HERO_STATUS_1,
   TEXT_HOME_HERO_STATUS_2,
@@ -39,7 +38,8 @@ import {
 } from '../../constants/icons';
 
 export default function HomeScreen({ scrollViewRef }) {
-  const { addToCart, totalItems } = useCart()
+  // ----- Tất cả Hook được gọi ở đây (trước mọi điều kiện return) -----
+  const { addToCart, totalItems } = useCart();
   const [products, setProducts] = useState([]);
   const [loadProducts, setLoadProducts] = useState(true);
   const [manufacturers, setManufacturers] = useState([]);
@@ -50,6 +50,7 @@ export default function HomeScreen({ scrollViewRef }) {
   const [error, setError] = useState(null);
   const { locale, t } = useLocalization();
 
+  // useEffect 1: fetch products
   useEffect(() => {
     setError(null);
     setLoadProducts(true);
@@ -69,36 +70,59 @@ export default function HomeScreen({ scrollViewRef }) {
       })
       .catch(err => {
         setError('TEXT_HOME_ERROR_FETCH_PRODUCTS');
-        logger.error('Failed to fetch products', err);
+        console.error('Failed to fetch products', err);
       })
       .finally(() => setLoadProducts(false));
   }, []);
 
-  if (error) {
-    return <View><TextIntl tx={error} /></View>;
-  }
-
+  // useEffect 2: fetch manufacturers và categories
   useEffect(() => {
-    api.get('/manufacturers')
+    api.get(API.GET_MANUFACTURER)
       .then(res => {
         const data = Array.isArray(res.data) ? res.data : [];
         setManufacturers(data);
       })
       .catch(err => {
-        logger.error('Failed to fetch manufacturers', err);
+        console.error('Failed to fetch manufacturers', err);
         setManufacturers([]);
       });
-    api.get('/categories')
+    api.get(API.GET_CATEGORY)
       .then(res => {
         const data = Array.isArray(res.data) ? res.data : [];
         setCategories(data);
       })
       .catch(err => {
-        logger.error('Failed to fetch categories', err);
+        console.error('Failed to fetch categories', err);
         setCategories([]);
       });
   }, []);
 
+  // Các useMemo
+  const filteredProducts = useMemo(() => {
+    let result = products;
+    if (selectedCategoryId) {
+      result = result.filter(p => String(p.category_id) === String(selectedCategoryId));
+    }
+    if (selectedManufacturerId) {
+      result = result.filter(p => String(p.manufacturer_id) === String(selectedManufacturerId));
+    }
+    return result;
+  }, [products, selectedCategoryId, selectedManufacturerId]);
+
+  const categoriesWithDetails = useMemo(() => {
+    if (!categories.length || !products.length) return [];
+    return categories.map(cat => {
+      const productCount = products.filter(p => String(p.category_id) === String(cat.id)).length;
+      const description = locale === 'vi' ? cat.description_vi : cat.description_en;
+      return {
+        ...cat,
+        description: description || '',
+        productCount,
+      };
+    });
+  }, [categories, products, locale]);
+
+  // Các hàm xử lý (không phải Hook)
   const scrollToProducts = () => {
     if (scrollViewRef.current && productsSectionY) {
       scrollViewRef.current.scrollTo({ y: productsSectionY, animated: true });
@@ -116,40 +140,9 @@ export default function HomeScreen({ scrollViewRef }) {
 
   const handleSelectCategory = (categoryId) => {
     setSelectedCategoryId(categoryId === selectedCategoryId ? null : categoryId);
-    setTimeout(() => {
-    }, 100);
   };
 
-  const filteredProducts = useMemo(() => {
-    let result = products;
-
-    if (selectedCategoryId) {
-      result = result.filter(p => String(p.category_id) === String(selectedCategoryId));
-    }
-
-    if (selectedManufacturerId) {
-      result = result.filter(p => String(p.manufacturer_id) === String(selectedManufacturerId));
-    }
-
-    return result;
-  }, [products, selectedCategoryId, selectedManufacturerId]);
-
-  const categoriesWithDetails = useMemo(() => {
-    if (!categories.length || !products.length) return [];
-    return categories.map(cat => {
-      const productCount = products.filter(p => String(p.category_id) === String(cat.id)).length;
-      const description = locale === 'vi' ? cat.description_vi : cat.description_en;
-      return {
-        ...cat,
-        description: description || '',
-        productCount,
-      };
-    });
-  }, [categories, products, locale]);
-
-  const getCategoryIcon = (categoryId, categoryName) => {
-    // Trả về component SVG tương ứng
-    // Dưới đây là một số icon mẫu, bạn có thể thay bằng icon phù hợp
+  const getCategoryIcon = (categoryId) => {
     const iconProps = { width: 32, height: 32, viewBox: "0 0 24 24", fill: "none", stroke: "#0066ff", strokeWidth: 1.5 };
     switch (Number(categoryId)) {
       case 1:
@@ -167,6 +160,18 @@ export default function HomeScreen({ scrollViewRef }) {
     }
   };
 
+  // ----- Early return chỉ sau khi tất cả Hook đã được gọi -----
+  if (error) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+        <Text style={{ fontSize: 16, color: 'red', textAlign: 'center' }}>
+          <TextIntl tx={TEXT_HOME_ERROR_FETCH_PRODUCTS} style={{ fontSize: 16, color: 'red', textAlign: 'center' }} />
+        </Text>
+      </View>
+    );
+  }
+
+  // ----- Render chính -----
   return (
     <View style={styles.page}>
       <Banner style={styles.banner}>
@@ -256,15 +261,14 @@ export default function HomeScreen({ scrollViewRef }) {
               activeOpacity={0.8}
             >
               <View style={styles.categoryIconWrapper}>
-                {getCategoryIcon(cat.id, cat.name)}
+                {getCategoryIcon(cat.id)}
               </View>
               <Text style={styles.categoryCardTitle}>{cat.name}</Text>
               <Text style={styles.categoryCardDesc} numberOfLines={1}>
                 {cat.description}
               </Text>
               <Text style={styles.categoryCardCount}>
-                {cat.productCount} {cat.productCount === 1 ? '' : ''}
-                <TextIntl tx={TEXT_HOME_PRODUCTS_COUNT} />
+                {cat.productCount} <TextIntl tx={TEXT_HOME_PRODUCTS_COUNT} />
               </Text>
             </TouchableOpacity>
           ))}
@@ -290,11 +294,8 @@ export default function HomeScreen({ scrollViewRef }) {
       </View>
 
       <FlashSale
-        onViewAll={() => {
-        }}
-        onAddToCart={(product) => {
-          addToCart(product);
-        }}
+        onViewAll={() => { }}
+        onAddToCart={(product) => { addToCart(product); }}
       />
 
       <News />

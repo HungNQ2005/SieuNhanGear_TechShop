@@ -124,6 +124,7 @@ export default {
     TEXT_HOME_HERO_STATUS_5: "Bảo hành",
     TEXT_HOME_ADD_TO_CART: "Thêm vào giỏ",
     TEXT_HOME_EMPTY_PRODUCTS: "Hiện tại không có sản phẩm nào.",
+    TEXT_HOME_ERROR_FETCH_PRODUCTS: "Không thể tải dữ liệu. Vui lòng thử lại sau.",
     TEXT_HOME_CATEGORY: "Danh mục",
     TEXT_HOME_EXPLORE_BY_CATEGORY: "Khám phá theo danh mục",
     TEXT_HOME_FEATURED_ALL_PRODUCTS: "Tất cả",
