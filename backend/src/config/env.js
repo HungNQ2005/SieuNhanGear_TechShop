@@ -1,7 +1,8 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 
 const parseOrigins = (raw) => {
-  if (!raw) return '*';
+  if (!raw || raw === '*') return '*';
   const list = raw.split(',').map((s) => s.trim()).filter(Boolean);
   return list.length ? list : '*';
 };

@@ -16,12 +16,12 @@ const { createManufacturerRouter } = require('./features/product/routes/manufact
 const { createAccountRouter } = require('./features/auth/routes/account.routes');
 const { createHomeRouter } = require('./features/home/routes/home.routes');
 const { createBannerRouter } = require('./features/home/routes/banner.routes');
-const { createProvinceRouter } = require('./routes/province.routes');
 const { createOrdersRouter } = require('./features/order/routes/orders.routes');
 const { notFoundMiddleware } = require('./middlewares/notFound.middleware');
 const { errorMiddleware } = require('./middlewares/error.middleware');
-//const { createVoucherRouter } = require("./routes/voucher.routes");
+const { createVoucherRouter } = require("./routes/voucher.routes");
 const { createShowroomRouter } = require("./routes/showroom.routes");
+const { createAIRouter } = require('./features/ai/ai.routes');
 
 
 function createApp() {
@@ -31,7 +31,13 @@ function createApp() {
     origin: env.CORS_ORIGINS,
     credentials: true,
   }));
-  app.use(express.json());
+  app.use(express.json({ limit: '5mb' }));
+  app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+      return res.status(400).json({ code: 'INVALID_JSON', message: 'Request body must be valid JSON.' });
+    }
+    return next(err);
+  });
 
   // Serve static files from the "src/asset/images" directory
   app.use('/src/asset/images', express.static(path.join(__dirname, '../src/asset/images')));
@@ -51,16 +57,12 @@ function createApp() {
   app.use(ROUTES.HOME.BASE, createHomeRouter());
   app.use(ROUTES.BANNER.BASE, createBannerRouter());
   app.use(ROUTES.ACCOUNT.BASE, createAccountRouter());
-  app.use(ROUTES.SHOWROOM.BASE, createShowroomRouter());
-
-  // Orders
   app.use('/api/orders', createOrdersRouter());
-
-  // Proxy provinces API to avoid CORS issues
-  app.use('/api', createProvinceRouter());
+  app.use('/api/ai', createAIRouter());
+  app.use(ROUTES.SHOWROOM.BASE, createShowroomRouter());
+  app.use(ROUTES.VOUCHER.BASE, createVoucherRouter());
 
   app.use(notFoundMiddleware);
-
   app.use(errorMiddleware);
 
   return app;

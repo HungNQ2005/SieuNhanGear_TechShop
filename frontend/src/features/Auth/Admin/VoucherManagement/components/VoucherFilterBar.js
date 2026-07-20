@@ -7,6 +7,8 @@ import {
   TEXT_VOUCHER_STATUS,
   TEXT_VOUCHER_ALL,
   TEXT_SHOWING_ITEMS,
+  TEXT_VOUCHER_STATUS_ACTIVE,
+  TEXT_VOUCHER_STATUS_INACTIVE,
 } from "../../../../../constants/i18nKeys";
 
 import { IconFilter } from "../../../../../constants/icons";
@@ -24,8 +26,8 @@ export default function VoucherFilterBar({
 
   const statusOptions = [
     { value: "all", label: t(TEXT_VOUCHER_ALL) },
-    { value: "active", label: "Active" },
-    { value: "inactive", label: "Inactive" },
+    { value: "active", label: t(TEXT_VOUCHER_STATUS_ACTIVE) },
+    { value: "inactive", label: t(TEXT_VOUCHER_STATUS_INACTIVE) },
   ];
 
   const showingText = t(TEXT_SHOWING_ITEMS)

@@ -254,9 +254,11 @@ export default function CheckoutPage() {
         items: safeItems.map((it) => ({ productId: it.id, price: it.price || 0, quantity: it.quantity || 1 })),
       };
       const { data: createdOrder } = await createOrder(orderPayload);
-      clearCart();
       setNotifMessage('Đặt hàng thành công! Mã đơn: ' + (createdOrder.code || createdOrder.id || ''));
       setNotifVisible(true);
+      setTimeout(() => {
+        clearCart();
+      }, 0);
     } catch (_) {}
     setSubmitting(false);
   };

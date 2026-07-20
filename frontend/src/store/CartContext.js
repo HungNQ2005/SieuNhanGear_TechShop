@@ -6,7 +6,7 @@ import React, {
   useEffect,
 } from "react";
 import { getProducts } from "../services/api";
-import { getCartByAccount } from "../services/CartService";
+import { createCart, getCartByAccount, updateCart } from "../services/CartService";
 const CartContext = createContext({
   items: [],
   addToCart: () => {},
@@ -20,52 +20,109 @@ const CartContext = createContext({
 
 export function CartProvider({ children }) {
   const [items, setItems] = useState([]);
-  const loadCart = async (accountId) => {
+  const [accountId, setAccountId] = useState(null);
+
+  useEffect(() => {
     try {
-      const cart = await getCartByAccount(accountId);
+      const savedUser = localStorage.getItem("user");
+      if (savedUser) {
+        const user = JSON.parse(savedUser);
+        const resolvedAccountId = user._id || user.id;
+        if (resolvedAccountId) {
+          setAccountId(resolvedAccountId);
+        }
+      }
+    } catch (_) {}
+  }, []);
+
+  const normalizeCartPayload = (payload) => {
+    if (Array.isArray(payload)) return payload;
+    if (payload && Array.isArray(payload.items)) return payload.items;
+    if (payload && payload.data) return normalizeCartPayload(payload.data);
+    return [];
+  };
+
+  const syncCartToServer = async (nextItems, resolvedAccountId = accountId) => {
+    if (!resolvedAccountId) return;
+
+    try {
+      const payloadItems = (nextItems || []).map((item) => ({
+        productId: item.productId ?? item.id,
+        quantity: Number(item.quantity ?? 1),
+        price: Number(item.price ?? 0),
+      }));
+
+      await createCart(resolvedAccountId, payloadItems);
+    } catch (err) {
+      console.error("Sync cart failed:", err);
+    }
+  };
+
+  const loadCart = async (resolvedAccountId) => {
+    const activeAccountId = resolvedAccountId || accountId;
+    if (!activeAccountId) {
+      setItems([]);
+      return;
+    }
+
+    try {
+      const cartPayload = await getCartByAccount(activeAccountId);
+      const cartItems = normalizeCartPayload(cartPayload);
 
       const productRes = await getProducts();
-      const products = productRes.data;
+      const products = Array.isArray(productRes?.data) ? productRes.data : [];
 
-      const items = cart.map((cartItem) => {
-        const product = products.find((p) => p.id === cartItem.productId);
+      const normalizedItems = cartItems
+        .map((cartItem) => {
+          const productId = cartItem.productId ?? cartItem.product?.id;
+          const product = products.find((p) => p.id === productId);
 
-        return {
-          ...product,
-          quantity: cartItem.quantity,
-          accountId: cartItem.accountId,
-          cartId: cartItem.id,
-        };
+          if (!product) return null;
+
+          return {
+            ...product,
+            quantity: Number(cartItem.quantity ?? cartItem.qty ?? 1),
+            accountId: activeAccountId ?? cartPayload?.userId ?? null,
+            cartId: cartItem.id ?? cartItem._id ?? null,
+            productId,
+          };
+        })
+        .filter(Boolean);
+
+      setItems((current) => {
+        if (!normalizedItems.length) {
+          return current.length ? current : [];
+        }
+        return normalizedItems;
       });
-
-      setItems(items);
     } catch (err) {
       console.error("Load cart failed:", err);
+      setItems((current) => current);
     }
   };
 
   const addToCart = (product) => {
     setItems((current) => {
       const existing = current.find((item) => item.id === product.id);
+      const next = existing
+        ? current.map((item) =>
+            item.id === product.id
+              ? {
+                  ...item,
+                  quantity: item.quantity + 1,
+                }
+              : item,
+          )
+        : [
+            ...current,
+            {
+              ...product,
+              quantity: 1,
+            },
+          ];
 
-      if (existing) {
-        return current.map((item) =>
-          item.id === product.id
-            ? {
-                ...item,
-                quantity: item.quantity + 1,
-              }
-            : item,
-        );
-      }
-
-      return [
-        ...current,
-        {
-          ...product,
-          quantity: 1,
-        },
-      ];
+      syncCartToServer(next, accountId);
+      return next;
     });
   };
 
@@ -74,26 +131,34 @@ export function CartProvider({ children }) {
       const next = current.map((item) =>
         item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
       );
+      syncCartToServer(next, accountId);
       return next;
     });
   };
 
   const decreaseQuantity = (id) => {
-    setItems((current) =>
-      current
+    setItems((current) => {
+      const next = current
         .map((item) =>
           item.id === id ? { ...item, quantity: item.quantity - 1 } : item,
         )
-        .filter((item) => item.quantity > 0),
-    );
+        .filter((item) => item.quantity > 0);
+      syncCartToServer(next, accountId);
+      return next;
+    });
   };
 
   const removeItem = (id) => {
-    setItems((current) => current.filter((item) => item.id !== id));
+    setItems((current) => {
+      const next = current.filter((item) => item.id !== id);
+      syncCartToServer(next, accountId);
+      return next;
+    });
   };
 
   const clearCart = () => {
     setItems([]);
+    syncCartToServer([], accountId);
   };
 
   const value = useMemo(
@@ -115,7 +180,6 @@ export function CartProvider({ children }) {
     }),
     [items],
   );
-  console.log("CartContext items:", items);
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 

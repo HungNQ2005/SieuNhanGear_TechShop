@@ -10,14 +10,23 @@ function generateOrderCode() {
 const createOrder = async (req, res) => {
   try {
     const {
-      customerName,
-      phone,
-      address,
       items,
       subtotal,
       shippingFee = 0,
       totalPrice,
       paymentMethod,
+      discountCode,
+      discountAmount = 0,
+      customerName,
+      receiverName,
+      email,
+      phone,
+      address,
+      province,
+      provinceCode,
+      ward,
+      wardCode,
+      status,
     } = req.body;
 
     // accountId nên lấy từ req.user do middleware auth đã xác thực
@@ -27,18 +36,32 @@ const createOrder = async (req, res) => {
       return res.status(400).json({ message: 'items are required' });
     }
 
+    const normalizedItems = (items || []).map((item) => ({
+      productId: item.productId ?? item.id,
+      price: Number(item.price ?? 0),
+      quantity: Number(item.quantity ?? item.qty ?? 1),
+    }));
+
     const order = new Order({
       code: generateOrderCode(),
       accountId,
-      customerName,
+      customerName: customerName || receiverName || req.body.name || '',
+      email,
       phone,
       address,
-      items,
-      subtotal,
-      shippingFee,
-      totalPrice,
+      province,
+      provinceCode,
+      ward,
+      wardCode,
+      items: normalizedItems,
+      subtotal: Number(subtotal ?? 0),
+      shippingFee: Number(shippingFee ?? 0),
+      totalPrice: Number(totalPrice ?? subtotal ?? 0),
       paymentMethod,
+      discountCode,
+      discountAmount: Number(discountAmount ?? 0),
       paymentStatus: 'Pending',
+      status: status || 'Pending',
     });
 
     await order.save();

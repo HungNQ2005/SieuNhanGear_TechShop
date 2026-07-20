@@ -31,6 +31,8 @@ import ProductsScreen from "./src/features/Auth/Admin/ProductManagement/Products
 import CategoriesScreen from "./src/features/Auth/Admin/ProductManagement/Categories/CategoriesScreen";
 import VoucherManagementScreen from "./src/features/Auth/Admin/VoucherManagement/VoucherManagementScreen";
 import ProfileManagerment from "./src/features/profileManagerment/screens/ProfileManagerment";
+import AIChatWidget from "./src/features/ai/AIChatWidget";
+
 export default function App() {
   const scrollViewRef = useRef(null);
 
@@ -110,6 +112,7 @@ export default function App() {
                 <Footer />
               </ScrollView>
               <StatusBar style={Platform.OS === "ios" ? "dark" : "light"} />
+              <AIChatWidget />
             </SafeAreaView>
           </BrowserRouter>
         </CartProvider>
