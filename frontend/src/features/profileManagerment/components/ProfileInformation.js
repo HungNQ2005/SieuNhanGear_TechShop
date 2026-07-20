@@ -45,6 +45,7 @@ export default function ProfileInformation({ accountId }) {
         phone: '',
         dateOfBirth: '',
         address: '',
+        avatarURL: '',
     });
 
     const validatePassword = (pwd) => {
@@ -87,6 +88,7 @@ export default function ProfileInformation({ accountId }) {
                     phone: data.phone || '',
                     dateOfBirth: data.dateOfBirth ? String(data.dateOfBirth).split('T')[0] : '',
                     address: data.address || '',
+                    avatarURL: data.avatarURL || '',
                 });
             } else {
                 setError('Không thể tải thông tin cá nhân');
@@ -106,25 +108,39 @@ export default function ProfileInformation({ accountId }) {
     const handleSave = async () => {
         setSaving(true);
         try {
+            let dobIso = undefined;
+            if (editForm.dateOfBirth && editForm.dateOfBirth.trim()) {
+                const parsedDate = new Date(editForm.dateOfBirth.trim());
+                if (!isNaN(parsedDate.getTime())) {
+                    dobIso = parsedDate.toISOString();
+                }
+            }
+
             const payload = {
                 name: editForm.name.trim(),
                 phone: editForm.phone.trim() || undefined,
-                dateOfBirth: editForm.dateOfBirth ? new Date(editForm.dateOfBirth).toISOString() : undefined,
+                dateOfBirth: dobIso,
                 address: editForm.address.trim() || undefined,
+                avatarURL: editForm.avatarURL.trim() || undefined,
             };
 
             const response = await api.put(`/api/auth/me`, payload);
             const updated = response.data?.account || response.data?.data || response.data;
-
-            setAccount(updated);
-            if (typeof localStorage !== 'undefined') {
-                localStorage.setItem("user", JSON.stringify(updated));
+            if (updated && typeof updated === 'object') {
+                setAccount(updated);
+                if (typeof localStorage !== 'undefined') {
+                    localStorage.setItem("user", JSON.stringify(updated));
+                    if (typeof window !== 'undefined') {
+                        window.dispatchEvent(new Event("userUpdated"));
+                    }
+                }
             }
             setEditForm({
                 name: updated.name || '',
                 phone: updated.phone || '',
                 dateOfBirth: updated.dateOfBirth ? String(updated.dateOfBirth).split('T')[0] : '',
                 address: updated.address || '',
+                avatarURL: updated.avatarURL || '',
             });
             setIsEditing(false);
             if (typeof window !== 'undefined') {
@@ -180,6 +196,7 @@ export default function ProfileInformation({ accountId }) {
             phone: account?.phone || '',
             dateOfBirth: account?.dateOfBirth ? String(account.dateOfBirth).split('T')[0] : '',
             address: account?.address || '',
+            avatarURL: account?.avatarURL || '',
         });
         setIsEditing(false);
     };

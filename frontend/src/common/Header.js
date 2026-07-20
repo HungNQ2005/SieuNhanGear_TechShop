@@ -19,6 +19,7 @@ import { ROUTES } from "../constants/routes";
 import { API } from "../constants/apiURL";
 import TextIntl from "./TextIntl";
 import api from "../services/api";
+import { getAvatarUri } from "../utils/avatar";
 import { useCart } from "../store/CartContext";
 import {
   TEXT_APP_TITLE,
@@ -82,12 +83,29 @@ export default function Header() {
   const [morePosition, setMorePosition] = useState({ top: 0, left: 0 });
   const moreButtonRef = useRef(null);
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      const user = JSON.parse(savedUser);
-      setUser(user);
-      const accountId = user._id || user.id;
-      if (accountId) loadCart(accountId);
+    const updateUserFromStorage = () => {
+      const savedUser = localStorage.getItem("user");
+      if (savedUser) {
+        try {
+          const parsed = JSON.parse(savedUser);
+          setUser(parsed);
+          const accountId = parsed._id || parsed.id;
+          if (accountId) loadCart(accountId);
+        } catch (e) {
+          console.error("Failed to parse saved user", e);
+        }
+      }
+    };
+
+    updateUserFromStorage();
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("userUpdated", updateUserFromStorage);
+      window.addEventListener("storage", updateUserFromStorage);
+      return () => {
+        window.removeEventListener("userUpdated", updateUserFromStorage);
+        window.removeEventListener("storage", updateUserFromStorage);
+      };
     }
   }, []);
   useEffect(() => {
@@ -446,9 +464,9 @@ export default function Header() {
                 }
               }}
             >
-              {user && user.avatarURL ? (
+              {user && getAvatarUri(user.avatarURL) ? (
                 <Image
-                  source={{ uri: `${API.BASE_API_URL}${user.avatarURL}` }}
+                  source={{ uri: getAvatarUri(user.avatarURL) }}
                   style={styles.avatarImage}
                 />
               ) : (

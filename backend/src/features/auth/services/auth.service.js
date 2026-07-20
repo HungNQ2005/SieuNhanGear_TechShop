@@ -18,7 +18,7 @@ function toSafeAccount(account) {
 
 const authService = {
   // UC-01 Register: chỉ tạo tài khoản Customer (role "user")
-  async register({ name, email, password, phone }) {
+  async register({ name, email, password, phone, gender, dateOfBirth, address, avatarURL }) {
     const errors = [];
     if (!name || !String(name).trim()) errors.push("name is required");
     if (!email || !EMAIL_REGEX.test(String(email).trim())) errors.push("a valid email is required");
@@ -39,6 +39,10 @@ const authService = {
       name: String(name).trim(),
       email: normalizedEmail,
       phone: phone ? String(phone).trim() : "",
+      gender: gender || undefined,
+      dateOfBirth: dateOfBirth || undefined,
+      address: address ? String(address).trim() : "",
+      avatarURL: avatarURL ? String(avatarURL).trim() : "",
       role: "user",
       passwordHash: hashPassword(String(password)),
     });
@@ -73,7 +77,7 @@ const authService = {
   },
 
   // UC-03 Manage Profile (CRU) - user tự cập nhật thông tin của mình, không được đổi role
-  async updateProfile(userId, { name, phone, password }) {
+  async updateProfile(userId, { name, phone, password, gender, dateOfBirth, address, avatarURL }) {
     const errors = [];
     if (name !== undefined && !String(name).trim()) errors.push("name cannot be empty");
     if (password !== undefined && String(password).length < MIN_PASSWORD_LENGTH) {
@@ -86,6 +90,10 @@ const authService = {
     const payload = {};
     if (name !== undefined) payload.name = String(name).trim();
     if (phone !== undefined) payload.phone = String(phone).trim();
+    if (gender !== undefined) payload.gender = gender;
+    if (dateOfBirth !== undefined) payload.dateOfBirth = dateOfBirth;
+    if (address !== undefined) payload.address = String(address).trim();
+    if (avatarURL !== undefined) payload.avatarURL = String(avatarURL).trim();
     if (password) payload.passwordHash = hashPassword(String(password));
 
     const account = await accountRepository.update(userId, payload);

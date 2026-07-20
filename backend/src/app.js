@@ -41,7 +41,8 @@ function createApp() {
       credentials: true,
     }),
   );
-  app.use(express.json());
+  app.use(express.json({ limit: "10mb" }));
+  app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
   // Serve static files from the "src/asset/images" directory
   app.use('/src/asset/images', express.static(path.join(__dirname, 'asset/images')));

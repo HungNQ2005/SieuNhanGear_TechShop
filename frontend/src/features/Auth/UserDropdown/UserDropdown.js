@@ -5,21 +5,24 @@ import { API } from "../../../constants/apiURL";
 import { ROUTES } from "../../../constants/routes";
 import styles from "./UserDropdown.styles";
 
+import { getAvatarUri } from "../../../utils/avatar";
+
 export default function UserDropdown({ user, onClose, onLogout }) {
   const navigate = useNavigate();
+  const avatarUri = getAvatarUri(user?.avatarURL);
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        {user.avatarURL ? (
+        {avatarUri ? (
           <Image
-            source={{ uri: `${API.BASE_API_URL}${user.avatarURL}` }}
+            source={{ uri: avatarUri }}
             style={styles.avatarImage}
           />
         ) : (
           <View style={styles.avatar}>
             <Text style={styles.avatarText}>
-              {user.name.charAt(0).toUpperCase()}
+              {user?.name ? user.name.charAt(0).toUpperCase() : "U"}
             </Text>
           </View>
         )}

@@ -47,6 +47,10 @@ function sanitizePayload(data) {
   if (data.name !== undefined) payload.name = String(data.name).trim();
   if (data.email !== undefined) payload.email = String(data.email).trim().toLowerCase();
   if (data.phone !== undefined) payload.phone = String(data.phone).trim();
+  if (data.gender !== undefined) payload.gender = data.gender;
+  if (data.dateOfBirth !== undefined) payload.dateOfBirth = data.dateOfBirth;
+  if (data.address !== undefined) payload.address = String(data.address).trim();
+  if (data.avatarURL !== undefined) payload.avatarURL = String(data.avatarURL).trim();
   if (data.role !== undefined) payload.role = data.role;
   return payload;
 }
