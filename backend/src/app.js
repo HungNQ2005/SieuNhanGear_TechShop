@@ -1,31 +1,42 @@
-const express = require('express');
-const cors = require('cors');
+const express = require("express");
+const cors = require("cors");
 
-const { env } = require('./config/env');
-const { ROUTES } = require('./constants/routes.constants');
-const { createCatalogRouter } = require('./features/catalog/routes/catalog.routes');
+const { env } = require("./config/env");
+const { ROUTES } = require("./constants/routes.constants");
+const {
+  createCatalogRouter,
+} = require("./features/catalog/routes/catalog.routes");
 
-const { createHealthRouter } = require('./routes/health.routes');
+const { createHealthRouter } = require("./routes/health.routes");
 
-const { createAuthRouter } = require('./features/auth/routes/auth.routes');
-const { createCartRouter } = require('./features/cart/routes/cart.routes');
-const { createProductRouter } = require('./features/product/routes/product.routes');
-const { createHomeRouter } = require('./features/home/routes/home.routes');
-const { notFoundMiddleware } = require('./middlewares/notFound.middleware');
-const { errorMiddleware } = require('./middlewares/error.middleware');
-
-
+const { createAuthRouter } = require("./features/auth/routes/auth.routes");
+const { createCartRouter } = require("./features/cart/routes/cart.routes");
+const {
+  createProductRouter,
+} = require("./features/product/routes/product.routes");
+const { createHomeRouter } = require("./features/home/routes/home.routes");
+const { notFoundMiddleware } = require("./middlewares/notFound.middleware");
+const { errorMiddleware } = require("./middlewares/error.middleware");
+const { createVoucherRouter } = require("./routes/voucher.routes");
+const { createShowroomRouter } = require("./routes/showroom.routes");
+const { createCategoryRouter } = require("./routes/category.routes");
+const { createWarehouseRouter } = require("./routes/warehouse.routes");
+const { createStockRouter } = require("./routes/stock.routes");
+const { createStockHistoryRouter } = require("./routes/stockHistory.routes");
+const { createAccountRouter } = require("./routes/account.routes");
 function createApp() {
   const app = express();
 
-  app.use(cors({
-    origin: env.CORS_ORIGINS,
-    credentials: true,
-  }));
+  app.use(
+    cors({
+      origin: env.CORS_ORIGINS,
+      credentials: true,
+    }),
+  );
   app.use(express.json());
 
-  app.get('/', (req, res) => {
-    res.json({ name: 'sieunhangearstore-backend', status: 'ok' });
+  app.get("/", (req, res) => {
+    res.json({ name: "sieunhangearstore-backend", status: "ok" });
   });
 
   app.use(ROUTES.HEALTH.BASE, createHealthRouter());
@@ -36,6 +47,16 @@ function createApp() {
   app.use(ROUTES.PRODUCT.BASE, createProductRouter());
   app.use(ROUTES.HOME.BASE, createHomeRouter());
 
+  app.use(ROUTES.SHOWROOM.BASE, createShowroomRouter());
+  app.use(ROUTES.VOUCHER.BASE, createVoucherRouter());
+
+  app.use(ROUTES.CATEGORY.BASE, createCategoryRouter());
+
+  app.use(ROUTES.WAREHOUSE.BASE, createWarehouseRouter());
+  app.use(ROUTES.STOCK.BASE, createStockRouter());
+  app.use(ROUTES.STOCK_HISTORY.BASE, createStockHistoryRouter());
+  app.use(ROUTES.ACCOUNT.BASE, createAccountRouter());
+
   app.use(notFoundMiddleware);
 
   app.use(errorMiddleware);
@@ -44,5 +65,3 @@ function createApp() {
 }
 
 module.exports = { createApp };
-
-

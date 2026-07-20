@@ -105,10 +105,10 @@ export const API = {
     `api/stock?warehouseId=${warehouseId}`,
   UPDATE_STOCK: (id) => `api/stock/${id}`,
 
-  GET_STOCK_HISTORY: "api/stockHistory",
+  GET_STOCK_HISTORY: "api/stock-history",
   GET_STOCK_HISTORY_BY_PRODUCT: (productId) =>
-    `api/stockHistory?productId=${productId}`,
-  CREATE_STOCK_HISTORY: "api/stockHistory",
+    `api/stock-history?productId=${productId}`,
+  CREATE_STOCK_HISTORY: "api/stock-history",
 
   // ==========================
   // Specification Templates (Attribute Groups & Attributes)

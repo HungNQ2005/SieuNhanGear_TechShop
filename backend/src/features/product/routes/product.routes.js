@@ -1,21 +1,25 @@
-const express = require('express');
+const express = require("express");
+const { productController } = require("../../../controllers/product.controller");
 
-// STUB: product search/browse routes (chưa có DB)
 function createProductRouter() {
   const router = express.Router();
 
-  // GET /api/products (search/browse)
-  router.get('/', (req, res) => {
-    res.status(501).json({ code: 'NOT_IMPLEMENTED', message: 'Product listing/search not implemented yet' });
-  });
+  // GET /api/products (hỗ trợ filter ?category_id=)
+  router.get("/", productController.getAll);
 
-  // GET /api/products/:productId
-  router.get('/:productId', (req, res) => {
-    res.status(501).json({ code: 'NOT_IMPLEMENTED', message: 'Get product detail not implemented yet' });
-  });
+  // GET /api/products/:id
+  router.get("/:id", productController.getById);
+
+  // POST /api/products
+  router.post("/", productController.create);
+
+  // PUT /api/products/:id
+  router.put("/:id", productController.update);
+
+  // DELETE /api/products/:id
+  router.delete("/:id", productController.delete);
 
   return router;
 }
 
 module.exports = { createProductRouter };
-

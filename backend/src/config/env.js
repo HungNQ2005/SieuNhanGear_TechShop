@@ -1,17 +1,20 @@
-require('dotenv').config();
+require("dotenv").config();
 
 const parseOrigins = (raw) => {
-  if (!raw) return '*';
-  const list = raw.split(',').map((s) => s.trim()).filter(Boolean);
-  return list.length ? list : '*';
+  if (!raw) return "*";
+  const list = raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  return list.length ? list : "*";
 };
 
 const env = {
   PORT: Number(process.env.PORT) || 3521,
-  NODE_ENV: process.env.NODE_ENV || 'development',
-  MONGODB_URI: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/sieunhan_geargearstore',
+  NODE_ENV: process.env.NODE_ENV || "development",
+  MONGODB_URI:
+    process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/SieuNhanGearDB",
   CORS_ORIGINS: parseOrigins(process.env.CORS_ORIGINS),
 };
 
 module.exports = { env };
-
