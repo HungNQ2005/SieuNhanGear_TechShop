@@ -44,7 +44,7 @@ function createApp() {
   app.use(express.json());
 
   // Serve static files from the "src/asset/images" directory
-  app.use('/src/asset/images', express.static(path.join(__dirname, '../src/asset/images')));
+  app.use('/src/asset/images', express.static(path.join(__dirname, 'asset/images')));
 
   app.get("/", (req, res) => {
     res.json({ name: "sieunhangearstore-backend", status: "ok" });
