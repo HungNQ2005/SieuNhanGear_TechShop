@@ -9,6 +9,7 @@ import {
   ScrollView,
   ActivityIndicator,
   useWindowDimensions,
+  Image,
 } from "react-native";
 import UserDropdown from "../features/Auth/UserDropdown/UserDropdown";
 import { useLocalization } from "../providers/LocalizationProvider";
@@ -82,13 +83,11 @@ export default function Header() {
   const moreButtonRef = useRef(null);
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
-
     if (savedUser) {
       const user = JSON.parse(savedUser);
-
       setUser(user);
-
-      loadCart(user.id);
+      const accountId = user._id || user.id;
+      if (accountId) loadCart(accountId);
     }
   }, []);
   useEffect(() => {
@@ -204,8 +203,8 @@ export default function Header() {
                       style={[
                         styles.dropdownAllBtn,
                         !selectedCategoryId &&
-                          !selectedManufacturerId &&
-                          styles.dropdownItemActive,
+                        !selectedManufacturerId &&
+                        styles.dropdownItemActive,
                       ]}
                       onPress={() => {
                         clearFilters();
@@ -229,7 +228,7 @@ export default function Header() {
                         style={[
                           styles.dropdownItem,
                           selectedCategoryId === cat.id &&
-                            styles.dropdownItemActive,
+                          styles.dropdownItemActive,
                         ]}
                         onPress={() => handleSelectCategory(cat.id)}
                       >
@@ -237,7 +236,7 @@ export default function Header() {
                           style={[
                             styles.dropdownItemText,
                             selectedCategoryId === cat.id &&
-                              styles.dropdownItemTextActive,
+                            styles.dropdownItemTextActive,
                           ]}
                         >
                           {cat.name}
@@ -256,7 +255,7 @@ export default function Header() {
                         style={[
                           styles.dropdownItem,
                           selectedManufacturerId === man.id &&
-                            styles.dropdownItemActive,
+                          styles.dropdownItemActive,
                         ]}
                         onPress={() => handleSelectManufacturer(man.id)}
                       >
@@ -264,7 +263,7 @@ export default function Header() {
                           style={[
                             styles.dropdownItemText,
                             selectedManufacturerId === man.id &&
-                              styles.dropdownItemTextActive,
+                            styles.dropdownItemTextActive,
                           ]}
                         >
                           {man.name}
@@ -447,8 +446,14 @@ export default function Header() {
                 }
               }}
             >
-              <IconUser />
-              {user && <Text style={styles.userName}>{user.name}</Text>}
+              {user && user.avatarURL ? (
+                <Image
+                  source={{ uri: `${API.BASE_API_URL}${user.avatarURL}` }}
+                  style={styles.avatarImage}
+                />
+              ) : (
+                <IconUser />
+              )}
               {showUserDropdown && user && (
                 <UserDropdown
                   user={user}
@@ -482,12 +487,21 @@ export default function Header() {
         visible={showAuthModal}
         onClose={() => setShowAuthModal(false)}
         onLoginSuccess={async (user) => {
-          setUser(user);
-
-          localStorage.setItem("user", JSON.stringify(user));
-
-          await loadCart(user.id);
-
+          // Lấy thêm thông tin chi tiết từ API để có avatarURL
+          const accountId = user._id || user.id;
+          try {
+            const response = await api.get(API.GET_ACCOUNT_BY_ID(accountId));
+            const fullUser = response.data.data;
+            setUser(fullUser);
+            localStorage.setItem("user", JSON.stringify(fullUser));
+            await loadCart(accountId);
+          } catch (error) {
+            console.error("Failed to fetch full user info:", error);
+            // Fallback: vẫn dùng user cũ
+            setUser(user);
+            localStorage.setItem("user", JSON.stringify(user));
+            await loadCart(accountId);
+          }
           setShowAuthModal(false);
         }}
       />
@@ -738,5 +752,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginLeft: 4,
     color: "#111827",
+  },
+  avatarImage: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    marginRight: 4,
   },
 });

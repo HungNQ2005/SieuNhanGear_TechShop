@@ -1,13 +1,11 @@
 const mongoose = require("mongoose");
 
 // Khớp với demo_data.json (accounts) và Admin System > AccountManagement:
-// { id, name, email, phone, role }, role: user | product_manager | sales_staff | system_admin
+// { id, name, email, phone, role }, role: user | product_manager | sales_staff | system_admin | customer
 const accountSchema = new mongoose.Schema(
   {
     id: {
       type: Number,
-      required: true,
-      unique: true,
       index: true,
     },
     name: {
@@ -28,15 +26,35 @@ const accountSchema = new mongoose.Schema(
       trim: true,
       default: "",
     },
+    gender: {
+      type: String,
+      enum: ["Male", "Female", "Other"],
+    },
+    dateOfBirth: {
+      type: Date,
+    },
+    address: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    avatarURL: {
+      type: String,
+      trim: true,
+      default: "",
+    },
     // Lưu dạng "salt:hash" (xem src/utils/password.js), không bao giờ trả về cho client
     passwordHash: {
       type: String,
-      required: true,
+      select: false,
+    },
+    password: {
+      type: String,
       select: false,
     },
     role: {
       type: String,
-      enum: ["user", "product_manager", "sales_staff", "system_admin"],
+      enum: ["user", "product_manager", "sales_staff", "system_admin", "customer"],
       default: "user",
     },
   },
@@ -50,6 +68,7 @@ accountSchema.set("toJSON", {
     delete ret._id;
     delete ret.__v;
     delete ret.passwordHash;
+    delete ret.password;
     return ret;
   },
 });

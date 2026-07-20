@@ -63,7 +63,7 @@ export default function FlashSale({ onAddToCart, onViewAll }) {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await api.get('/products');
+                const response = await api.get(API.GET_PRODUCT);
                 const allProducts = response.data;
                 if (allProducts?.length) {
                     const shuffled = [...allProducts];

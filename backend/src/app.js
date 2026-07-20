@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 
 const { env } = require("./config/env");
 const { ROUTES } = require("./constants/routes.constants");
@@ -30,6 +31,7 @@ const { createPromotionRouter } = require("./routes/promotion.routes");
 const { createSpecificationRouter } = require("./routes/specification.routes");
 const { createBannerRouter } = require("./routes/banner.routes");
 const { createStatisticRouter } = require("./routes/statistic.routes");
+
 function createApp() {
   const app = express();
 
@@ -40,6 +42,9 @@ function createApp() {
     }),
   );
   app.use(express.json());
+
+  // Serve static files from the "src/asset/images" directory
+  app.use('/src/asset/images', express.static(path.join(__dirname, '../src/asset/images')));
 
   app.get("/", (req, res) => {
     res.json({ name: "sieunhangearstore-backend", status: "ok" });

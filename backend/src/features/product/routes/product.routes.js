@@ -12,13 +12,13 @@ function createProductRouter() {
   router.get("/:id", productController.getById);
 
   // POST /api/products (UC-19 Manage Products)
-  router.post("/", authenticate, authorize("product_manager"), productController.create);
+  router.post("/", authenticate, authorize("product_manager", "system_admin"), productController.create);
 
   // PUT /api/products/:id
-  router.put("/:id", authenticate, authorize("product_manager"), productController.update);
+  router.put("/:id", authenticate, authorize("product_manager", "system_admin"), productController.update);
 
   // DELETE /api/products/:id
-  router.delete("/:id", authenticate, authorize("product_manager"), productController.delete);
+  router.delete("/:id", authenticate, authorize("product_manager", "system_admin"), productController.delete);
 
   return router;
 }

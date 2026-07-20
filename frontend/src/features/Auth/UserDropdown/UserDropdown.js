@@ -1,6 +1,7 @@
 import React from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, Image } from "react-native";
 import { useNavigate } from "react-router-dom";
+import { API } from "../../../constants/apiURL";
 import { ROUTES } from "../../../constants/routes";
 import styles from "./UserDropdown.styles";
 
@@ -10,11 +11,18 @@ export default function UserDropdown({ user, onClose, onLogout }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>
-            {user.name.charAt(0).toUpperCase()}
-          </Text>
-        </View>
+        {user.avatarURL ? (
+          <Image
+            source={{ uri: `${API.BASE_API_URL}${user.avatarURL}` }}
+            style={styles.avatarImage}
+          />
+        ) : (
+          <View style={styles.avatar}>
+            <Text style={styles.avatarText}>
+              {user.name.charAt(0).toUpperCase()}
+            </Text>
+          </View>
+        )}
 
         <View>
           <Text style={styles.name}>{user.name}</Text>

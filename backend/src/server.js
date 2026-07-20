@@ -13,8 +13,7 @@ async function start() {
   const app = createApp();
 
   app.listen(env.PORT, () => {
-    // eslint-disable-next-line no-console
-    console.log(`[backend] listening on port ${env.PORT}`);
+    console.log(`Server running at http://localhost:${env.PORT}`);
   });
 }
 

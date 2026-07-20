@@ -14,6 +14,9 @@ const ROUTES = {
 
   AUTH: {
     BASE: "/api/auth",
+    LOGIN: "/login",
+    LOGOUT: "/logout",
+    REGISTER: "/register",
   },
 
   CART: {
@@ -22,6 +25,14 @@ const ROUTES = {
 
   PRODUCT: {
     BASE: "/api/products",
+    NULL: "/",
+    GET_PRODUCT_BY_ID: "/:id",
+  },
+
+  MANUFACTURER: {
+    BASE: "/api/manufacturers",
+    NULL: "/",
+    GET_MANUFACTURER_BY_ID: "/:id",
   },
 
   HOME: {
@@ -38,6 +49,8 @@ const ROUTES = {
 
   CATEGORY: {
     BASE: "/api/categories",
+    NULL: "/",
+    GET_CATEGORY_BY_ID: "/:id",
   },
 
   WAREHOUSE: {
@@ -54,6 +67,8 @@ const ROUTES = {
 
   ACCOUNT: {
     BASE: "/api/accounts",
+    NULL: "/",
+    GET_ACCOUNT_BY_ID: "/:id",
   },
 
   COMMENT: {
@@ -74,6 +89,8 @@ const ROUTES = {
 
   BANNER: {
     BASE: "/api/banners",
+    NULL: "/",
+    GET_BANNER_BY_ID: "/:id",
   },
 
   STATISTIC: {

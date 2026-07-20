@@ -1,52 +1,45 @@
 import { API } from "../constants/apiURL";
+
 export const login = async (email, password) => {
-    const response = await fetch(
-        `${API.BASE_API_URL}api/auth/login`,
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, password }),
-        }
-    );
+    const url = API.AUTH_LOGIN ? `${API.BASE_API_URL}${API.AUTH_LOGIN}` : `${API.BASE_API_URL}api/auth/login`;
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json().catch(() => ({}));
 
     if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || "Email hoặc mật khẩu không chính xác");
+        throw new Error(data.message || "Email hoặc mật khẩu không chính xác");
     }
-
-    const data = await response.json();
 
     if (data && data.token && typeof localStorage !== "undefined") {
         localStorage.setItem("token", data.token);
     }
 
-    return data && data.account ? data.account : null;
+    return (data && (data.account || data.data)) ? (data.account || data.data) : null;
 };
 
 export const register = async (user) => {
-    const response = await fetch(
-        `${API.BASE_API_URL}api/auth/register`,
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(user),
-        }
-    );
+    const url = API.AUTH_REGISTER ? `${API.BASE_API_URL}${API.AUTH_REGISTER}` : `${API.BASE_API_URL}api/auth/register`;
+    const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user),
+    });
+
+    const data = await response.json().catch(() => ({}));
 
     if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || "Registration failed");
+        throw new Error(data.message || "Registration failed");
     }
-
-    const data = await response.json();
 
     if (data && data.token && typeof localStorage !== "undefined") {
         localStorage.setItem("token", data.token);
     }
 
-    return data && data.account ? data.account : null;
+    return (data && (data.account || data.data)) ? (data.account || data.data) : null;
 };
