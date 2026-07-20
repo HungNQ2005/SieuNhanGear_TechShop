@@ -55,6 +55,30 @@ const ROUTES = {
   ACCOUNT: {
     BASE: "/api/accounts",
   },
+
+  COMMENT: {
+    BASE: "/api/comments",
+  },
+
+  ORDER: {
+    BASE: "/api/orders",
+  },
+
+  PROMOTION: {
+    BASE: "/api/promotions",
+  },
+
+  SPECIFICATION: {
+    BASE: "/api/specifications",
+  },
+
+  BANNER: {
+    BASE: "/api/banners",
+  },
+
+  STATISTIC: {
+    BASE: "/api/statistics",
+  },
 };
 
 module.exports = { ROUTES };

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { View, ScrollView, Text, TouchableOpacity } from "react-native";
+import { useNavigate } from "react-router-dom";
 
 import Sidebar from "../../Sidebar";
 import AdminTopBar from "../../AdminTopBar";
@@ -69,6 +70,7 @@ const FALLBACK_ATTRIBUTES = [
 
 export default function SpecificationsScreen() {
   const { t } = useLocalization();
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
   const [groups, setGroups] = useState([]);
@@ -106,8 +108,13 @@ export default function SpecificationsScreen() {
   }, []);
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    if (!user || (user.role !== "product_manager" && user.role !== "system_admin")) {
+      navigate("/");
+      return;
+    }
     loadData();
-  }, [loadData]);
+  }, [loadData, navigate]);
 
   // ─── Join attributes with their group + preview chips per group ──────────
   const groupMap = useMemo(() => new Map(groups.map((g) => [g.id, g])), [groups]);

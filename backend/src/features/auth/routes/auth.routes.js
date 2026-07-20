@@ -1,22 +1,23 @@
 const express = require('express');
+const { authController } = require('../controllers/auth.controller');
+const { authenticate } = require('../../../middlewares/auth.middleware');
 
-// STUB: auth routes (chưa có DB/JWT)
 function createAuthRouter() {
   const router = express.Router();
 
-  // Example endpoints (will be implemented later)
-  // POST /api/auth/login
-  router.post('/login', (req, res) => {
-    res.status(501).json({ code: 'NOT_IMPLEMENTED', message: 'Auth login not implemented yet' });
-  });
+  // POST /api/auth/register (UC-01) - luôn tạo tài khoản Customer (role "user")
+  router.post('/register', authController.register);
 
-  // POST /api/auth/register
-  router.post('/register', (req, res) => {
-    res.status(501).json({ code: 'NOT_IMPLEMENTED', message: 'Auth register not implemented yet' });
-  });
+  // POST /api/auth/login (UC-02) - dùng chung cho mọi role, trả về JWT kèm role
+  router.post('/login', authController.login);
+
+  // GET /api/auth/me - lấy thông tin tài khoản đang đăng nhập (cần Bearer token)
+  router.get('/me', authenticate, authController.me);
+
+  // PUT /api/auth/me (UC-03 Manage Profile) - cập nhật thông tin của chính mình
+  router.put('/me', authenticate, authController.updateMe);
 
   return router;
 }
 
 module.exports = { createAuthRouter };
-

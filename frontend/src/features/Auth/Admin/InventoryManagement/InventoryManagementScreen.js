@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { View, ScrollView, Text } from "react-native";
+import { useNavigate } from "react-router-dom";
 
 import Sidebar from "../Sidebar";
 import InventoryHeader from "./components/InventoryHeader";
@@ -34,6 +35,7 @@ function computeStatus(quantity, criticalThreshold, lowStockThreshold) {
 
 export default function InventoryManagementScreen() {
   const { t } = useLocalization();
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
@@ -75,8 +77,13 @@ export default function InventoryManagementScreen() {
   }, []);
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    if (!user || (user.role !== "product_manager" && user.role !== "system_admin")) {
+      navigate("/");
+      return;
+    }
     loadData();
-  }, [loadData]);
+  }, [loadData, navigate]);
 
   // ─── Joined stock rows (product + category + warehouse + computed status) ──
   const joinedStock = useMemo(() => {

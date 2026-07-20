@@ -1,8 +1,12 @@
 const express = require("express");
 const { accountController } = require("../controllers/account.controller");
+const { authenticate, authorize } = require("../middlewares/auth.middleware");
 
+// UC-24 Manage Staff Accounts: chỉ System Admin được xem/tạo/sửa/xoá tài khoản
 function createAccountRouter() {
   const router = express.Router();
+
+  router.use(authenticate, authorize("system_admin"));
 
   // GET /api/accounts
   router.get("/", accountController.getAll);

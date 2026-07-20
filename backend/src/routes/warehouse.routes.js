@@ -1,5 +1,6 @@
 const express = require("express");
 const { warehouseController } = require("../controllers/warehouse.controller");
+const { authenticate, authorize } = require("../middlewares/auth.middleware");
 
 function createWarehouseRouter() {
   const router = express.Router();
@@ -11,13 +12,13 @@ function createWarehouseRouter() {
   router.get("/:id", warehouseController.getById);
 
   // POST /api/warehouses
-  router.post("/", warehouseController.create);
+  router.post("/", authenticate, authorize("product_manager"), warehouseController.create);
 
   // PUT /api/warehouses/:id
-  router.put("/:id", warehouseController.update);
+  router.put("/:id", authenticate, authorize("product_manager"), warehouseController.update);
 
   // DELETE /api/warehouses/:id
-  router.delete("/:id", warehouseController.delete);
+  router.delete("/:id", authenticate, authorize("product_manager"), warehouseController.delete);
 
   return router;
 }

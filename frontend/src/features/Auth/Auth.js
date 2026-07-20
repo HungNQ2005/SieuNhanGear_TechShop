@@ -48,13 +48,19 @@ function InputField({
   onChangeText,
   placeholder,
   secureTextEntry,
+  leftIcon,
   rightIcon,
+  onRightIconPress,
 }) {
   return (
     <View style={authModalStyles.fieldGroup}>
-      <Text style={authModalStyles.fieldLabel}>{label}</Text>
+      {label ? <Text style={authModalStyles.fieldLabel}>{label}</Text> : null}
       <View style={authModalStyles.inputShell}>
-        <View style={authModalStyles.inputIcon}></View>
+        {leftIcon ? (
+          <View style={authModalStyles.inputIcon}>
+            <Text style={authModalStyles.inputIconText}>{leftIcon}</Text>
+          </View>
+        ) : null}
         <TextInput
           value={value}
           onChangeText={onChangeText}
@@ -65,9 +71,13 @@ function InputField({
           autoCapitalize="none"
         />
         {rightIcon ? (
-          <View style={authModalStyles.inputTrailing}>
+          <Pressable
+            style={authModalStyles.inputTrailing}
+            onPress={onRightIconPress}
+            disabled={!onRightIconPress}
+          >
             <Text style={authModalStyles.trailingText}>{rightIcon}</Text>
-          </View>
+          </Pressable>
         ) : null}
       </View>
     </View>
@@ -81,6 +91,8 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
   const [activeTab, setActiveTab] = useState(LOGIN);
   const [rememberMe, setRememberMe] = useState(true);
   const [formError, setFormError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loginForm, setLoginForm] = useState({ email: "", password: "" });
   const [registerForm, setRegisterForm] = useState({
     name: "",
@@ -125,39 +137,104 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
     setFormError("");
     setActiveTab(tab);
   };
-  const handleLoginSubmit = async () => {
-    const user = await login(
-        loginForm.email.trim(),
-        loginForm.password.trim()
-    );
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!user) {
-      setFormError(t(TEXT_LOGIN_ERROR));
+  const handleLoginSubmit = async () => {
+    const email = loginForm.email.trim();
+    const password = loginForm.password.trim();
+
+    if (!email) {
+      setFormError("Vui lòng nhập Email");
       return;
     }
 
-    onLoginSuccess?.(user);
+    if (!EMAIL_REGEX.test(email)) {
+      setFormError("Định dạng Email không hợp lệ (ví dụ: user@example.com)");
+      return;
+    }
 
-    console.log("Đăng nhập thành công");
-    console.log(user);
+    if (!password) {
+      setFormError("Vui lòng nhập mật khẩu");
+      return;
+    }
+
+    if (password.length < 6) {
+      setFormError("Mật khẩu phải chứa ít nhất 6 ký tự");
+      return;
+    }
 
     setFormError("");
-    resetAndClose();
+
+    try {
+      const user = await login(email, password);
+
+      if (!user) {
+        setFormError(t(TEXT_LOGIN_ERROR));
+        return;
+      }
+
+      onLoginSuccess?.(user);
+
+      setFormError("");
+      resetAndClose();
+    } catch (err) {
+      setFormError(err.message || t(TEXT_LOGIN_ERROR));
+    }
   };
 
-  const handleRegisterSubmit = () => {
-    if (!isRegisterFormComplete) {
-      setFormError(t(TEXT_REGISTER_ERROR));
+  const handleRegisterSubmit = async () => {
+    const name = registerForm.name.trim();
+    const email = registerForm.email.trim();
+    const password = registerForm.password.trim();
+    const confirmPassword = registerForm.confirmPassword.trim();
+
+    if (!name) {
+      setFormError("Vui lòng nhập họ và tên");
       return;
     }
 
-    if (registerForm.password !== registerForm.confirmPassword) {
+    if (!email) {
+      setFormError("Vui lòng nhập Email");
+      return;
+    }
+
+    if (!EMAIL_REGEX.test(email)) {
+      setFormError("Định dạng Email không hợp lệ (ví dụ: user@example.com)");
+      return;
+    }
+
+    if (!password) {
+      setFormError("Vui lòng nhập mật khẩu");
+      return;
+    }
+
+    if (password.length < 6) {
+      setFormError("Mật khẩu phải chứa ít nhất 6 ký tự");
+      return;
+    }
+
+    if (password !== confirmPassword) {
       setFormError(t(TEXT_PASSWORD_MISMATCH));
       return;
     }
 
     setFormError("");
-    resetAndClose();
+
+    try {
+      const user = await register({ name, email, password });
+
+      if (!user) {
+        setFormError(t(TEXT_REGISTER_ERROR));
+        return;
+      }
+
+      onLoginSuccess?.(user);
+
+      setFormError("");
+      resetAndClose();
+    } catch (err) {
+      setFormError(err.message || t(TEXT_REGISTER_ERROR));
+    }
   };
 
   const renderLeftPanel = () => (
@@ -234,13 +311,13 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
         </View>
         <InputField
           label=""
+          leftIcon="📧"
           value={loginForm.email}
           onChangeText={(value) => {
             setFormError("");
             setLoginForm((current) => ({ ...current, email: value }));
           }}
           placeholder="email@example.com"
-          rightIcon=""
         />
       </View>
 
@@ -255,14 +332,16 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
         </View>
         <InputField
           label=""
+          leftIcon="🔑"
           value={loginForm.password}
           onChangeText={(value) => {
             setFormError("");
             setLoginForm((current) => ({ ...current, password: value }));
           }}
           placeholder="••••••••"
-          secureTextEntry
-          rightIcon="◦"
+          secureTextEntry={!showPassword}
+          rightIcon={showPassword ? "👁️" : "🙈"}
+          onRightIconPress={() => setShowPassword((v) => !v)}
         />
       </View>
 
@@ -287,7 +366,10 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
       </Pressable>
 
       {formError ? (
-        <Text style={authModalStyles.formErrorText}>{formError}</Text>
+        <View style={authModalStyles.errorBox}>
+          <Text style={authModalStyles.errorBoxIcon}>⚠️</Text>
+          <Text style={authModalStyles.formErrorText}>{formError}</Text>
+        </View>
       ) : null}
 
       <Pressable
@@ -315,6 +397,7 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
     <View style={authModalStyles.form}>
       <InputField
         label={t(TEXT_NAME)}
+        leftIcon="👤"
         value={registerForm.name}
         onChangeText={(value) => {
           setFormError("");
@@ -325,6 +408,7 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
 
       <InputField
         label={t(TEXT_EMAIL)}
+        leftIcon="📧"
         value={registerForm.email}
         onChangeText={(value) => {
           setFormError("");
@@ -335,18 +419,21 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
 
       <InputField
         label={t(TEXT_PASSWORD)}
+        leftIcon="🔑"
         value={registerForm.password}
         onChangeText={(value) => {
           setFormError("");
           setRegisterForm((current) => ({ ...current, password: value }));
         }}
         placeholder={t(TEXT_PASSWORD)}
-        secureTextEntry
-        rightIcon="◦"
+        secureTextEntry={!showPassword}
+        rightIcon={showPassword ? "👁️" : "🙈"}
+        onRightIconPress={() => setShowPassword((v) => !v)}
       />
 
       <InputField
         label={t(TEXT_CONFIRM_PASSWORD)}
+        leftIcon="🔒"
         value={registerForm.confirmPassword}
         onChangeText={(value) => {
           setFormError("");
@@ -356,12 +443,16 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
           }));
         }}
         placeholder={t(TEXT_CONFIRM_PASSWORD)}
-        secureTextEntry
-        rightIcon="◦"
+        secureTextEntry={!showConfirmPassword}
+        rightIcon={showConfirmPassword ? "👁️" : "🙈"}
+        onRightIconPress={() => setShowConfirmPassword((v) => !v)}
       />
 
       {formError ? (
-        <Text style={authModalStyles.formErrorText}>{formError}</Text>
+        <View style={authModalStyles.errorBox}>
+          <Text style={authModalStyles.errorBoxIcon}>⚠️</Text>
+          <Text style={authModalStyles.formErrorText}>{formError}</Text>
+        </View>
       ) : null}
 
       <Pressable

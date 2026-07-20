@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-
-import { API } from "../../../../../constants/apiURL";
+import { useParams, useNavigate } from "react-router-dom";
+import {
+  getOrderById,
+  getOrderItemsByOrder,
+  getProducts,
+  getOrderStatus,
+  getShippingCompanies,
+} from "../../../../../services/api";
 
 import styles from "./OrderDetail.styles";
 
@@ -15,6 +19,7 @@ import PaymentSummaryCard from "./components/PaymentSummaryCard";
 
 export default function OrderDetailScreen() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [order, setOrder] = useState(null);
   const [items, setItems] = useState([]);
@@ -22,18 +27,23 @@ export default function OrderDetailScreen() {
   const [shippingCompanies, setShippingCompanies] = useState([]);
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    if (!user || (user.role !== "sales_staff" && user.role !== "system_admin")) {
+      navigate("/");
+      return;
+    }
     loadData();
-  }, [id]);
+  }, [id, navigate]);
 
   async function loadData() {
     try {
       const [orderRes, itemRes, productRes, statusRes, companyRes] =
         await Promise.all([
-          axios.get(`${API.BASE_API_URL}${API.GET_ORDER_BY_ID(id)}`),
-          axios.get(`${API.BASE_API_URL}${API.GET_ORDER_ITEMS_BY_ORDER(id)}`),
-          axios.get(`${API.BASE_API_URL}${API.GET_PRODUCT}`),
-          axios.get(`${API.BASE_API_URL}${API.GET_ORDER_STATUS}`),
-          axios.get(`${API.BASE_API_URL}${API.GET_SHIPPING_COMPANIES}`),
+          getOrderById(id),
+          getOrderItemsByOrder(id),
+          getProducts(),
+          getOrderStatus(),
+          getShippingCompanies(),
         ]);
 
       const mergeItems = itemRes.data.map((item) => {

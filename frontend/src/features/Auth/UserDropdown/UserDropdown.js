@@ -42,7 +42,7 @@ export default function UserDropdown({ user, onClose, onLogout }) {
         <Text style={styles.itemText}>📦 Đơn hàng</Text>
       </Pressable>
 
-      {user.role === "admin" && (
+      {user.role === "sales_staff" && (
         <Pressable
           style={styles.item}
           onPress={() => {
@@ -51,6 +51,30 @@ export default function UserDropdown({ user, onClose, onLogout }) {
           }}
         >
           <Text style={styles.itemText}>⚙️ Quản lý đơn hàng</Text>
+        </Pressable>
+      )}
+
+      {user.role === "product_manager" && (
+        <Pressable
+          style={styles.item}
+          onPress={() => {
+            navigate(ROUTES.PRODUCT_MANAGEMENT);
+            onClose();
+          }}
+        >
+          <Text style={styles.itemText}>⚙️ Quản lý cửa hàng</Text>
+        </Pressable>
+      )}
+
+      {user.role === "system_admin" && (
+        <Pressable
+          style={styles.item}
+          onPress={() => {
+            navigate(ROUTES.ADMIN_ACCOUNTS);
+            onClose();
+          }}
+        >
+          <Text style={styles.itemText}>⚙️ Hệ thống quản trị</Text>
         </Pressable>
       )}
 

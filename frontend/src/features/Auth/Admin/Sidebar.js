@@ -43,12 +43,16 @@ export default function Sidebar({ selected, onSelect }) {
     },
   ];
 
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const userRole = user ? user.role : "";
+
   const menus = [
     {
       id: "orders",
       label: t(TEXT_ORDERS),
       route: ROUTES.ORDER_MANAGEMENT,
       icon: IconShippingBox,
+      allowedRoles: ["sales_staff", "system_admin"],
     },
     {
       id: "products",
@@ -56,20 +60,23 @@ export default function Sidebar({ selected, onSelect }) {
       route: ROUTES.PRODUCT_MANAGEMENT,
       icon: IconGridOutline,
       children: productChildren,
+      allowedRoles: ["product_manager", "system_admin"],
     },
     {
       id: "inventory",
       label: t(TEXT_INVENTORY),
       route: ROUTES.INVENTORY_MANAGEMENT,
       icon: IconWarehouse,
+      allowedRoles: ["product_manager", "system_admin"],
     },
     {
       id: "vouchers",
       label: t(TEXT_VOUCHERS_MENU),
       route: ROUTES.VOUCHER_MANAGEMENT,
       icon: IconTagOutline,
+      allowedRoles: ["product_manager", "system_admin"],
     },
-  ];
+  ].filter((item) => item.allowedRoles.includes(userRole));
 
   const activeChildId = productChildren.find((c) =>
     location.pathname.startsWith(c.route)

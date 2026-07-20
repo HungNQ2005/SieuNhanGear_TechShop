@@ -24,6 +24,12 @@ const { createWarehouseRouter } = require("./routes/warehouse.routes");
 const { createStockRouter } = require("./routes/stock.routes");
 const { createStockHistoryRouter } = require("./routes/stockHistory.routes");
 const { createAccountRouter } = require("./routes/account.routes");
+const { createCommentRouter } = require("./routes/comment.routes");
+const { createOrderRouter } = require("./routes/order.routes");
+const { createPromotionRouter } = require("./routes/promotion.routes");
+const { createSpecificationRouter } = require("./routes/specification.routes");
+const { createBannerRouter } = require("./routes/banner.routes");
+const { createStatisticRouter } = require("./routes/statistic.routes");
 function createApp() {
   const app = express();
 
@@ -56,6 +62,12 @@ function createApp() {
   app.use(ROUTES.STOCK.BASE, createStockRouter());
   app.use(ROUTES.STOCK_HISTORY.BASE, createStockHistoryRouter());
   app.use(ROUTES.ACCOUNT.BASE, createAccountRouter());
+  app.use(ROUTES.COMMENT.BASE, createCommentRouter());
+  app.use(ROUTES.ORDER.BASE, createOrderRouter());
+  app.use(ROUTES.PROMOTION.BASE, createPromotionRouter());
+  app.use(ROUTES.SPECIFICATION.BASE, createSpecificationRouter());
+  app.use(ROUTES.BANNER.BASE, createBannerRouter());
+  app.use(ROUTES.STATISTIC.BASE, createStatisticRouter());
 
   app.use(notFoundMiddleware);
 

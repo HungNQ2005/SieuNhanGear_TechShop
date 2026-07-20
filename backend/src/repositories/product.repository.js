@@ -1,10 +1,13 @@
 const Product = require("../database/models/Product.model");
 
 const productRepository = {
-  async getAll({ categoryId } = {}) {
+  async getAll({ categoryId, q } = {}) {
     const query = {};
     if (categoryId !== undefined && categoryId !== null) {
       query.category_id = Number(categoryId);
+    }
+    if (q !== undefined && q !== null && String(q).trim()) {
+      query.name = { $regex: String(q).trim(), $options: "i" };
     }
     return Product.find(query).sort({ id: 1 });
   },

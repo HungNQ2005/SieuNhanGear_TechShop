@@ -7,6 +7,21 @@ const api = axios.create({
   timeout: 10000,
 });
 
+api.interceptors.request.use(
+  (config) => {
+    if (typeof localStorage !== "undefined") {
+      const token = localStorage.getItem("token");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 // Banners
 export const getBanners = () => api.get(API.GET_BANNER);
 export const getBannerById = (id) => api.get(API.GET_BANNER_BY_ID(id));

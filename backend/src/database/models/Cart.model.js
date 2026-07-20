@@ -1,21 +1,22 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-// STUB: Cart model
+// Khớp với demo_data.json (cart): { id, accountId, productId, quantity }
 const cartItemSchema = new mongoose.Schema(
   {
-    productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
-    qty: { type: Number, required: true, min: 1, default: 1 },
+    id: { type: Number, required: true, unique: true, index: true },
+    accountId: { type: Number, required: true, index: true },
+    productId: { type: Number, required: true, index: true },
+    quantity: { type: Number, required: true, min: 1, default: 1 },
   },
-  { _id: false },
+  { timestamps: true }
 );
 
-const cartSchema = new mongoose.Schema(
-  {
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', unique: true, index: true },
-    items: [cartItemSchema],
+cartItemSchema.set("toJSON", {
+  transform: (doc, ret) => {
+    delete ret._id;
+    delete ret.__v;
+    return ret;
   },
-  { timestamps: true },
-);
+});
 
-module.exports = mongoose.model('Cart', cartSchema);
-
+module.exports = mongoose.model("CartItem", cartItemSchema);

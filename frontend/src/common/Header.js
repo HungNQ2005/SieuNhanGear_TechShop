@@ -112,6 +112,7 @@ export default function Header() {
   };
   const handleLogout = async () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
 
     setUser(null);
     setShowUserDropdown(false);

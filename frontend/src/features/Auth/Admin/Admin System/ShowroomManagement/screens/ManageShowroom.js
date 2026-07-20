@@ -11,6 +11,7 @@ import {
 import { styles } from "./ManageShowroom.styles";
 import ShowroomFormModal from "../components/ShowroomFormModal";
 import { useLocalization } from "../../../../../../providers/LocalizationProvider";
+import { useNavigate } from "react-router-dom";
 
 import {
   getShowrooms,
@@ -67,6 +68,7 @@ const PAGE_SIZE = 6;
 
 export default function ManageShowroom() {
   const { t } = useLocalization();
+  const navigate = useNavigate();
 
   const [showrooms, setShowrooms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -122,8 +124,13 @@ export default function ManageShowroom() {
   };
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    if (!user || user.role !== "system_admin") {
+      navigate("/");
+      return;
+    }
     loadData();
-  }, []);
+  }, [navigate]);
 
   // ==========================
   // Search

@@ -1,5 +1,6 @@
 const express = require("express");
 const { productController } = require("../../../controllers/product.controller");
+const { authenticate, authorize } = require("../../../middlewares/auth.middleware");
 
 function createProductRouter() {
   const router = express.Router();
@@ -10,14 +11,14 @@ function createProductRouter() {
   // GET /api/products/:id
   router.get("/:id", productController.getById);
 
-  // POST /api/products
-  router.post("/", productController.create);
+  // POST /api/products (UC-19 Manage Products)
+  router.post("/", authenticate, authorize("product_manager"), productController.create);
 
   // PUT /api/products/:id
-  router.put("/:id", productController.update);
+  router.put("/:id", authenticate, authorize("product_manager"), productController.update);
 
   // DELETE /api/products/:id
-  router.delete("/:id", productController.delete);
+  router.delete("/:id", authenticate, authorize("product_manager"), productController.delete);
 
   return router;
 }

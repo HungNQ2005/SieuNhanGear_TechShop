@@ -3,8 +3,8 @@ const { productService } = require("../services/product.service");
 const productController = {
   async getAll(req, res, next) {
     try {
-      const { category_id: categoryId } = req.query;
-      const data = await productService.getAllProducts({ categoryId });
+      const { category_id: categoryId, q } = req.query;
+      const data = await productService.getAllProducts({ categoryId, q });
       res.json(data);
     } catch (e) {
       next(e);

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, ScrollView } from "react-native";
+import { useNavigate } from "react-router-dom";
 
 import Sidebar from "../Sidebar";
 import DashboardCard from "./components/DashboardCard";
@@ -17,6 +18,7 @@ import {
 import styles from "./OrderManagement.styles";
 
 export default function OrderManagementScreen() {
+  const navigate = useNavigate();
   const [statusList, setStatusList] = useState([]);
   const [selectedMenu, setSelectedMenu] = useState("Orders");
   const { t } = useLocalization();
@@ -24,8 +26,13 @@ export default function OrderManagementScreen() {
 
   const [selectedStatus, setSelectedStatus] = useState(0);
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    if (!user || (user.role !== "sales_staff" && user.role !== "system_admin")) {
+      navigate("/");
+      return;
+    }
     loadData();
-  }, []);
+  }, [navigate]);
   const loadOrders = async () => {
     try {
       const res = await getOrders();

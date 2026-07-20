@@ -1,21 +1,33 @@
 import { API } from "../constants/apiURL";
 export const login = async (email, password) => {
     const response = await fetch(
-        `${API.BASE_API_URL}${API.GET_ACCOUNTS}?email=${email}&password=${password}`
+        `${API.BASE_API_URL}api/auth/login`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+        }
     );
 
     if (!response.ok) {
-        throw new Error("Cannot connect to server");
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || "Email hoặc mật khẩu không chính xác");
     }
 
-    const users = await response.json();
+    const data = await response.json();
 
-    return users.length > 0 ? users[0] : null;
+    if (data && data.token && typeof localStorage !== "undefined") {
+        localStorage.setItem("token", data.token);
+    }
+
+    return data && data.account ? data.account : null;
 };
 
 export const register = async (user) => {
     const response = await fetch(
-        `${API.BASE_API_URL}${API.GET_ACCOUNTS}`,
+        `${API.BASE_API_URL}api/auth/register`,
         {
             method: "POST",
             headers: {
@@ -25,5 +37,16 @@ export const register = async (user) => {
         }
     );
 
-    return await response.json();
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || "Registration failed");
+    }
+
+    const data = await response.json();
+
+    if (data && data.token && typeof localStorage !== "undefined") {
+        localStorage.setItem("token", data.token);
+    }
+
+    return data && data.account ? data.account : null;
 };

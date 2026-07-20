@@ -10,6 +10,7 @@ import {
   ScrollView,
   Text,
 } from "react-native";
+import { useNavigate } from "react-router-dom";
 
 import Sidebar from "../Sidebar";
 import AdminTopBar from "../AdminTopBar";
@@ -43,6 +44,7 @@ function computeVoucherStatus(voucher) {
 
 export default function VoucherManagementScreen() {
   const { t } = useLocalization();
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
 
@@ -81,8 +83,13 @@ export default function VoucherManagementScreen() {
   }, []);
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    if (!user || (user.role !== "product_manager" && user.role !== "system_admin")) {
+      navigate("/");
+      return;
+    }
     loadData();
-  }, [loadData]);
+  }, [loadData, navigate]);
 
   const voucherStats = useMemo(() => {
     return {

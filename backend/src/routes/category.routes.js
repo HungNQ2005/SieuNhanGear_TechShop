@@ -1,5 +1,6 @@
 const express = require("express");
 const { categoryController } = require("../controllers/category.controller");
+const { authenticate, authorize } = require("../middlewares/auth.middleware");
 
 function createCategoryRouter() {
   const router = express.Router();
@@ -11,13 +12,13 @@ function createCategoryRouter() {
   router.get("/:id", categoryController.getById);
 
   // POST /api/categories
-  router.post("/", categoryController.create);
+  router.post("/", authenticate, authorize("product_manager"), categoryController.create);
 
   // PUT /api/categories/:id
-  router.put("/:id", categoryController.update);
+  router.put("/:id", authenticate, authorize("product_manager"), categoryController.update);
 
   // DELETE /api/categories/:id
-  router.delete("/:id", categoryController.delete);
+  router.delete("/:id", authenticate, authorize("product_manager"), categoryController.delete);
 
   return router;
 }

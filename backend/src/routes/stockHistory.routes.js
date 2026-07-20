@@ -1,5 +1,6 @@
 const express = require("express");
 const { stockHistoryController } = require("../controllers/stockHistory.controller");
+const { authenticate, authorize } = require("../middlewares/auth.middleware");
 
 function createStockHistoryRouter() {
   const router = express.Router();
@@ -11,7 +12,7 @@ function createStockHistoryRouter() {
   router.get("/:id", stockHistoryController.getById);
 
   // POST /api/stock-history
-  router.post("/", stockHistoryController.create);
+  router.post("/", authenticate, authorize("product_manager"), stockHistoryController.create);
 
   return router;
 }
