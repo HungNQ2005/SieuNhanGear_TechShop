@@ -57,4 +57,22 @@ function authorize(...roles) {
   };
 }
 
-module.exports = { authenticate, authorize };
+// optionalAuthenticate: kiểm tra token nếu có thì gắn req.user, nếu không có token thì vẫn tiếp tục
+function optionalAuthenticate(req, res, next) {
+  try {
+    const header = req.headers.authorization || "";
+    const [scheme, token] = header.split(" ");
+
+    if (scheme === "Bearer" && token) {
+      const payload = jwt.verify(token);
+      if (payload) {
+        req.user = { id: payload.id, email: payload.email, role: payload.role };
+      }
+    }
+    next();
+  } catch (e) {
+    next();
+  }
+}
+
+module.exports = { authenticate, optionalAuthenticate, authorize };

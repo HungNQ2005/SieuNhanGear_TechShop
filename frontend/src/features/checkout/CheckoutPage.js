@@ -186,7 +186,7 @@ export default function CheckoutPage() {
         setAppliedVoucher(voucher);
         setDiscountCode("");
       }
-    } catch (_) {}
+    } catch (_) { }
     setIsApplyingDiscount(false);
   };
 
@@ -243,7 +243,7 @@ export default function CheckoutPage() {
         ),
       );
       clearCart();
-    } catch (_) {}
+    } catch (_) { }
     setSubmitting(false);
   };
 
@@ -346,7 +346,7 @@ export default function CheckoutPage() {
                           style={[
                             styles.codeBadge,
                             appliedVoucher?.id === v.id &&
-                              styles.codeBadgeActive,
+                            styles.codeBadgeActive,
                             !v.isActive && styles.codeBadgeDisabled,
                           ]}
                         >

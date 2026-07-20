@@ -1,6 +1,5 @@
-// src/features/profileManagerment/screens/ProfileManagement.js
 import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import SideBar from '../components/SideBar';
 import ProfileInformation from '../components/ProfileInformation';
@@ -14,7 +13,7 @@ export default function ProfileManagement() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const savedUser = localStorage.getItem('user');
+        const savedUser = typeof localStorage !== 'undefined' ? localStorage.getItem('user') : null;
         if (savedUser) {
             setUser(JSON.parse(savedUser));
         } else {
@@ -24,10 +23,10 @@ export default function ProfileManagement() {
     }, [navigate]);
 
     const renderContent = () => {
-        if (!user) return null;
+        const userId = user?.id || user?._id;
         switch (activeTab) {
             case 'profile':
-                return <ProfileInformation accountId={user._id} />;
+                return <ProfileInformation accountId={userId} />;
             case 'orders':
                 return <OrderInformation />;
             case 'favorites':

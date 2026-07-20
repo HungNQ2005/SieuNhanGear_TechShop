@@ -749,5 +749,22 @@ export default {
       "Bạn có chắc chắn muốn xóa \"{{name}}\"? Hành động này không thể hoàn tác.",
     TEXT_CAT_DELETE_CANCEL: "Huỷ",
     TEXT_CAT_DELETE_CONFIRM: "Xóa",
+  },
+  profile: {
+    TEXT_PROFILE_INFO: "Thông tin cá nhân",
+    TEXT_PROFILE_ORDER_HISTORY: "Lịch sử đơn hàng",
+    TEXT_PROFILE_FAVORITES: "Sản phẩm yêu thích",
+    TEXT_PROFILE_LOGOUT: "Đăng xuất",
+    TEXT_PROFILE_EDIT: "✎ Chỉnh sửa",
+    TEXT_PROFILE_CHANGE_PASSWORD: "Đổi mật khẩu",
+    TEXT_PROFILE_CANCEL: "Hủy",
+    TEXT_PROFILE_SAVE: "Lưu",
+    TEXT_PROFILE_PHONE: "Số điện thoại:",
+    TEXT_PROFILE_DOB: "Ngày sinh:",
+    TEXT_PROFILE_ADDRESS: "Địa chỉ:",
+    TEXT_PROFILE_NOT_UPDATED: "Chưa cập nhật",
+    TEXT_PROFILE_CURRENT_PASSWORD: "Nhập mật khẩu hiện tại",
+    TEXT_PROFILE_NEW_PASSWORD: "Nhập mật khẩu mới",
+    TEXT_PROFILE_CONFIRM_PASSWORD: "Nhập lại mật khẩu mới",
   }
 };

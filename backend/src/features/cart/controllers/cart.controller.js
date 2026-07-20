@@ -3,7 +3,11 @@ const { cartService } = require("../services/cart.service");
 const cartController = {
   async getCart(req, res, next) {
     try {
-      const data = await cartService.getCart(req.user.id);
+      const accountId = req.user ? req.user.id : (req.query.accountId || req.params.accountId);
+      if (!accountId) {
+        return res.json({ items: [], total: 0 });
+      }
+      const data = await cartService.getCart(accountId);
       res.json(data);
     } catch (e) {
       next(e);

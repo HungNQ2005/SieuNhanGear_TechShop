@@ -754,5 +754,22 @@ export default {
       "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
     TEXT_CAT_DELETE_CANCEL: "Cancel",
     TEXT_CAT_DELETE_CONFIRM: "Delete",
+  },
+  profile: {
+    TEXT_PROFILE_INFO: "Profile Information",
+    TEXT_PROFILE_ORDER_HISTORY: "Order History",
+    TEXT_PROFILE_FAVORITES: "Favorite Products",
+    TEXT_PROFILE_LOGOUT: "Log out",
+    TEXT_PROFILE_EDIT: "✎ Edit",
+    TEXT_PROFILE_CHANGE_PASSWORD: "Change Password",
+    TEXT_PROFILE_CANCEL: "Cancel",
+    TEXT_PROFILE_SAVE: "Save",
+    TEXT_PROFILE_PHONE: "Phone Number:",
+    TEXT_PROFILE_DOB: "Date of Birth:",
+    TEXT_PROFILE_ADDRESS: "Address:",
+    TEXT_PROFILE_NOT_UPDATED: "Not updated",
+    TEXT_PROFILE_CURRENT_PASSWORD: "Enter current password",
+    TEXT_PROFILE_NEW_PASSWORD: "Enter new password",
+    TEXT_PROFILE_CONFIRM_PASSWORD: "Confirm new password",
   }
 };
