@@ -16,8 +16,12 @@ const { createManufacturerRouter } = require('./features/product/routes/manufact
 const { createAccountRouter } = require('./features/auth/routes/account.routes');
 const { createHomeRouter } = require('./features/home/routes/home.routes');
 const { createBannerRouter } = require('./features/home/routes/banner.routes');
+const { createProvinceRouter } = require('./routes/province.routes');
+const { createOrdersRouter } = require('./features/order/routes/orders.routes');
 const { notFoundMiddleware } = require('./middlewares/notFound.middleware');
 const { errorMiddleware } = require('./middlewares/error.middleware');
+//const { createVoucherRouter } = require("./routes/voucher.routes");
+const { createShowroomRouter } = require("./routes/showroom.routes");
 
 
 function createApp() {
@@ -47,6 +51,13 @@ function createApp() {
   app.use(ROUTES.HOME.BASE, createHomeRouter());
   app.use(ROUTES.BANNER.BASE, createBannerRouter());
   app.use(ROUTES.ACCOUNT.BASE, createAccountRouter());
+  app.use(ROUTES.SHOWROOM.BASE, createShowroomRouter());
+
+  // Orders
+  app.use('/api/orders', createOrdersRouter());
+
+  // Proxy provinces API to avoid CORS issues
+  app.use('/api', createProvinceRouter());
 
   app.use(notFoundMiddleware);
 

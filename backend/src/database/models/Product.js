@@ -16,7 +16,5 @@ const productSchema = new mongoose.Schema({
     img_URL: String
 });
 
-module.exports = mongoose.model(
-    "Product",
-    productSchema
-);
+// Tránh lỗi OverwriteModelError khi file được require nhiều lần
+module.exports = mongoose.models.Product || mongoose.model('Product', productSchema);
