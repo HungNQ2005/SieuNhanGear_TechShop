@@ -14,5 +14,6 @@ const productSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-module.exports = mongoose.model('Product', productSchema);
+// Tránh lỗi OverwriteModelError khi file được require nhiều lần
+module.exports = mongoose.models.Product || mongoose.model('Product', productSchema);
 

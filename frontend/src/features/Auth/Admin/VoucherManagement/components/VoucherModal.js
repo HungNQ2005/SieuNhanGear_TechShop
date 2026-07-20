@@ -125,6 +125,7 @@ export default function VoucherModal({
             value={code}
             onChangeText={setCode}
             placeholder="WELCOME10"
+            placeholderTextColor="#94A3B8"
             autoCapitalize="characters"
             style={{
               borderWidth: 1,
@@ -151,6 +152,7 @@ export default function VoucherModal({
             value={description}
             onChangeText={setDescription}
             placeholder="Giảm 10% cho mọi đơn hàng"
+            placeholderTextColor="#94A3B8"
             style={{
               borderWidth: 1,
               borderColor: "#E5E7EB",
@@ -177,6 +179,7 @@ export default function VoucherModal({
             onChangeText={setDiscountPercentage}
             keyboardType="numeric"
             placeholder="10"
+            placeholderTextColor="#94A3B8"
             style={{
               borderWidth: 1,
               borderColor: "#E5E7EB",
@@ -203,6 +206,7 @@ export default function VoucherModal({
             onChangeText={setMinOrderValue}
             keyboardType="numeric"
             placeholder="0"
+            placeholderTextColor="#94A3B8"
             style={{
               borderWidth: 1,
               borderColor: "#E5E7EB",
@@ -231,8 +235,23 @@ export default function VoucherModal({
                 borderColor: "#2563EB",
                 backgroundColor: isActive ? "#2563EB" : "#FFFFFF",
                 marginRight: 10,
+                justifyContent: "center",
+                alignItems: "center",
               }}
-            />
+            >
+              {isActive && (
+                <Text
+                  style={{
+                    color: "#FFFFFF",
+                    fontSize: 12,
+                    fontWeight: "bold",
+                  }}
+                >
+                  ✓
+                </Text>
+              )}
+            </View>
+
             <Text
               style={{
                 color: "#374151",
@@ -243,7 +262,6 @@ export default function VoucherModal({
               {t(TEXT_VOUCHER_MODAL_ACTIVE)}
             </Text>
           </TouchableOpacity>
-
           <View
             style={{
               flexDirection: "row",

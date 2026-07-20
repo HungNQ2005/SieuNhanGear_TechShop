@@ -7,6 +7,20 @@ const api = axios.create({
   timeout: 10000,
 });
 
+// Thêm interceptor để gắn token nếu có
+api.interceptors.request.use((config) => {
+  try {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  } catch (e) {
+    // ignore
+  }
+  return config;
+});
+
 // Banners
 export const getBanners = () => api.get(API.GET_BANNER);
 export const getBannerById = (id) => api.get(API.GET_BANNER_BY_ID(id));
@@ -115,16 +129,36 @@ export const getPaymentMethodById = (id) =>
 // Address
 const PROVINCE_API_BASE = "https://provinces.open-api.vn/api/v2";
 export const getProvinces = async () => {
-  const response = await fetch(`${PROVINCE_API_BASE}/p/`);
-  const data = await response.json();
-  return { data };
+  try {
+    // Thử lấy từ backend proxy trước để tránh CORS
+    try {
+      const prox = await api.get('/api/provinces');
+      return { data: prox.data };
+    } catch (_) {
+      const response = await axios.get(`${PROVINCE_API_BASE}/p/`, { timeout: 8000 });
+      return { data: response.data };
+    }
+  } catch (error) {
+    // Trả về mảng rỗng khi lỗi, caller chịu trách nhiệm hiển thị
+    console.error('getProvinces error:', error?.message || error);
+    return { data: [] };
+  }
 };
+
 export const getWardsByProvince = async (provinceCode) => {
-  const response = await fetch(
-    `${PROVINCE_API_BASE}/p/${provinceCode}?depth=2`,
-  );
-  const data = await response.json();
-  return { data: data.wards || [] };
+  try {
+    try {
+      const prox = await api.get(`/api/provinces/${provinceCode}/wards`);
+      return { data: prox.data };
+    } catch (_) {
+      const response = await axios.get(`${PROVINCE_API_BASE}/p/${provinceCode}?depth=2`, { timeout: 8000 });
+      const data = response.data;
+      return { data: data.wards || [] };
+    }
+  } catch (error) {
+    console.error('getWardsByProvince error:', error?.message || error);
+    return { data: [] };
+  }
 };
 // Shipping Address
 export const getShippingAddresses = () => api.get(API.GET_SHIPPING_ADDRESS);

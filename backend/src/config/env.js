@@ -1,7 +1,8 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 
 const parseOrigins = (raw) => {
-  if (!raw) return '*';
+  if (!raw || raw === '*') return '*';
   const list = raw.split(',').map((s) => s.trim()).filter(Boolean);
   return list.length ? list : '*';
 };
@@ -9,7 +10,7 @@ const parseOrigins = (raw) => {
 const env = {
   PORT: Number(process.env.PORT) || 3521,
   NODE_ENV: process.env.NODE_ENV || 'development',
-  MONGODB_URI: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/SieuNhanGearDB',
+  MONGODB_URI: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/SNGDB',
   CORS_ORIGINS: parseOrigins(process.env.CORS_ORIGINS),
   JWT_SECRET: process.env.JWT_SECRET || 'your_jwt_abc'
 };
