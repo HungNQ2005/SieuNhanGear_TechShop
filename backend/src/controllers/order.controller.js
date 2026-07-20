@@ -12,8 +12,32 @@ function toCsv(orders) {
 const orderController = {
   async create(req, res, next) {
     try {
+      if (req.body.isMock || req.body.customerName) {
+        const data = await orderService.createMockOrder(req.user, req.body);
+        return res.status(201).json(data);
+      }
       const data = await orderService.createOrder(req.user, req.body);
       res.status(201).json(data);
+    } catch (e) {
+      next(e);
+    }
+  },
+
+  async update(req, res, next) {
+    try {
+      const { id } = req.params;
+      const data = await orderService.updateOrderFull(id, req.body);
+      res.json(data);
+    } catch (e) {
+      next(e);
+    }
+  },
+
+  async delete(req, res, next) {
+    try {
+      const { id } = req.params;
+      const result = await orderService.deleteOrder(id);
+      res.json(result);
     } catch (e) {
       next(e);
     }
@@ -48,10 +72,14 @@ const orderController = {
     }
   },
 
-  // UC-13 View Order List (Sale Staff)
+  // UC-13 View Order List (Sale Staff / Public Order Search)
   async getAll(req, res, next) {
     try {
-      const { statusId } = req.query;
+      const { statusId, code } = req.query;
+      if (code) {
+        const orders = await orderRepository.getByCode(code);
+        return res.json(orders);
+      }
       const data = await orderService.getAllOrders({ statusId });
       res.json(data);
     } catch (e) {

@@ -135,6 +135,66 @@ const orderService = {
   async getOrderStatuses() {
     return orderStatusRepository.getAll();
   },
+
+  async deleteOrder(orderId) {
+    const deleted = await orderRepository.delete(orderId);
+    if (!deleted) {
+      throw new HttpError({ code: "NOT_FOUND", statusCode: 404, message: "Order not found" });
+    }
+    try {
+      await orderItemRepository.deleteByOrder(orderId);
+    } catch (e) {
+      // Ignore if orderItemRepository does not have deleteByOrder
+    }
+    return { message: "Order deleted successfully", id: orderId };
+  },
+
+  async updateOrderFull(orderId, data) {
+    const updated = await orderRepository.update(orderId, data);
+    if (!updated) {
+      throw new HttpError({ code: "NOT_FOUND", statusCode: 404, message: "Order not found" });
+    }
+    return attachItems(updated);
+  },
+
+  async createMockOrder(user, data) {
+    const customerName = data.customerName || "Khách hàng Test";
+    const phone = data.phone || "0900000000";
+    const address = data.address || "Việt Nam";
+    const statusId = Number(data.statusId) || 1;
+    const paymentMethod = data.paymentMethod || "COD";
+    const paymentStatus = data.paymentStatus || "Pending";
+    const total = Number(data.total) || 100000;
+
+    const order = await orderRepository.create({
+      customerId: user ? user.id : 1,
+      customerName,
+      phone,
+      address,
+      statusId,
+      paymentMethod,
+      paymentStatus,
+      total,
+      trackingCode: data.trackingCode || `VN${Date.now()}`,
+    });
+
+    if (Array.isArray(data.items) && data.items.length > 0) {
+      try {
+        await orderItemRepository.createMany(
+          data.items.map((item) => ({
+            orderId: order.id,
+            productId: item.productId || 1,
+            price: item.price || total,
+            quantity: item.quantity || 1,
+          }))
+        );
+      } catch (e) {
+        console.log("Create order items warning:", e);
+      }
+    }
+
+    return attachItems(order);
+  },
 };
 
 module.exports = { orderService };

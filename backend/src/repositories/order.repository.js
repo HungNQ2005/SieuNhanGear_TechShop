@@ -13,9 +13,23 @@ const orderRepository = {
     return Order.findOne({ id: Number(id) });
   },
 
+  async getByCode(code) {
+    if (!code) return [];
+    const trimmed = String(code).trim();
+    const numericId = Number(trimmed);
+    const conditions = [
+      { code: trimmed },
+      { code: { $regex: trimmed, $options: "i" } }
+    ];
+    if (!isNaN(numericId) && numericId > 0) {
+      conditions.push({ id: numericId });
+    }
+    return Order.find({ $or: conditions }).sort({ createdAt: -1 });
+  },
+
   async create(data) {
     const id = await nextId(Order);
-    const code = `ORD-${Date.now()}`;
+    const code = data.code || `ORD-${Date.now()}`;
     const order = new Order({ ...data, id, code });
     return order.save();
   },
@@ -26,6 +40,14 @@ const orderRepository = {
 
   async updatePayment(id, paymentStatus) {
     return Order.findOneAndUpdate({ id: Number(id) }, { paymentStatus }, { new: true, runValidators: true });
+  },
+
+  async update(id, data) {
+    return Order.findOneAndUpdate({ id: Number(id) }, data, { new: true, runValidators: true });
+  },
+
+  async delete(id) {
+    return Order.findOneAndDelete({ id: Number(id) });
   },
 
   async getBetweenDates(from, to) {

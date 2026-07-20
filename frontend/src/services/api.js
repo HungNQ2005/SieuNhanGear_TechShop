@@ -71,7 +71,10 @@ export const createOrder = (data) =>
   api.post(API.CREATE_ORDER, data);
 
 export const updateOrder = (id, data) =>
-  api.patch(API.UPDATE_ORDER(id), data);
+  api.put(API.UPDATE_ORDER(id), data);
+
+export const updateOrderStatus = (id, statusId) =>
+  api.put(`${API.GET_ORDERS}/${id}/status`, { statusId });
 
 export const deleteOrder = (id) =>
   api.delete(API.DELETE_ORDER(id));
@@ -148,37 +151,58 @@ export const getShippingAddressByAccount = (accountId) =>
 // Orders
 
 export const getOrderByCode = async (code) => {
-  const orderRes = await api.get(API.GET_ORDER_BY_CODE(code));
+  try {
+    const orderRes = await api.get(API.GET_ORDER_BY_CODE(code));
+    const orders = Array.isArray(orderRes.data)
+      ? orderRes.data
+      : (orderRes.data?.data ? orderRes.data.data : (orderRes.data ? [orderRes.data] : []));
 
-  if (!orderRes.data.length) return null;
+    if (!orders || !orders.length || !orders[0]) return null;
 
-  const order = orderRes.data[0];
+    const order = orders[0];
 
-  // Lấy order items
-  const orderItemsRes = await api.get(
-    API.GET_ORDER_ITEMS_BY_ORDER(order.id)
-  );
+    // Lấy order items
+    let orderItems = order.items || [];
+    try {
+      const orderItemsRes = await api.get(
+        API.GET_ORDER_ITEMS_BY_ORDER(order.id)
+      );
+      if (Array.isArray(orderItemsRes.data) && orderItemsRes.data.length > 0) {
+        orderItems = orderItemsRes.data;
+      }
+    } catch (e) {
+      console.log("No extra order items endpoint, using embedded items", e);
+    }
 
-  // Lấy products
-  const productsRes = await api.get(API.GET_PRODUCT);
+    // Lấy products
+    let products = [];
+    try {
+      const productsRes = await api.get(API.GET_PRODUCT);
+      products = Array.isArray(productsRes.data) ? productsRes.data : [];
+    } catch (e) {
+      console.log("Fetch products failed", e);
+    }
 
-  // Ghép thông tin sản phẩm
-  order.items = orderItemsRes.data.map((item) => {
-    const product = productsRes.data.find(
-      (p) => p.id === item.productId
-    );
+    order.items = orderItems.map((item) => {
+      const product = products.find(
+        (p) => String(p.id || p._id) === String(item.productId || item.product_id)
+      );
 
-    return {
-      ...item,
-      name: product?.name,
-      image: product?.img_URL,
-      brand: "",        // nếu chưa có manufacturer thì để tạm
-      specs: "",        // nếu chưa có specs thì để tạm
-      price: item.price ?? product?.price
-    };
-  });
+      return {
+        ...item,
+        name: item.name || product?.name || "Sản phẩm",
+        image: item.image || product?.img_URL || "",
+        brand: item.brand || "",
+        specs: item.specs || "",
+        price: item.price ?? product?.price ?? 0,
+      };
+    });
 
-  return order;
+    return order;
+  } catch (err) {
+    console.error("getOrderByCode failed:", err);
+    return null;
+  }
 };
 // ==========================
 // Inventory / Warehouses

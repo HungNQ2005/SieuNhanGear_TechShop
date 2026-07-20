@@ -66,7 +66,7 @@ export const API = {
     `api/orderTimeline?orderId=${orderId}`,
 
   // Status
-  GET_ORDER_STATUS: "api/orderStatus",
+  GET_ORDER_STATUS: "api/orders/statuses",
 
   // Shipping
   GET_SHIPPING_COMPANIES: "api/shippingCompanies",
@@ -93,9 +93,9 @@ export const API = {
   GET_SHIPPING_ADDRESS_BY_ACCOUNT: (accountId) =>
     `api/shippingAddresses?accountId=${accountId}`,
   //Order
-  GET_ORDER: "orders",
-  GET_ORDER_BY_ID: (id) => `orders/${id}`,
-  GET_ORDER_BY_CODE: (code) => `orders?code=${code}`,
+  GET_ORDER: "api/orders",
+  GET_ORDER_BY_ID: (id) => `api/orders/${id}`,
+  GET_ORDER_BY_CODE: (code) => `api/orders?code=${code}`,
 
   // ==========================
   // Inventory / Warehouses

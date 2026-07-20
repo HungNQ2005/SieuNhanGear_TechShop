@@ -32,6 +32,7 @@ const { createSpecificationRouter } = require("./routes/specification.routes");
 const { createBannerRouter } = require("./routes/banner.routes");
 const { createManufacturerRouter } = require("./features/product/routes/manufacturer.routes");
 const { createNewsRouter } = require("./routes/news.routes");
+const { createOrderItemRouter } = require("./routes/orderItem.routes");
 const { createStatisticRouter } = require("./routes/statistic.routes");
 
 function createApp() {
@@ -49,8 +50,9 @@ function createApp() {
   // Serve static files from the "src/asset/images" directory
   app.use('/src/asset/images', express.static(path.join(__dirname, 'asset/images')));
 
-  app.get("/", (req, res) => {
-    res.json({ name: "sieunhangearstore-backend", status: "ok" });
+  app.get("/api/orderStatus", (req, res) => {
+    const { orderStatusRepository } = require("./repositories/orderStatus.repository");
+    orderStatusRepository.getAll().then((data) => res.json(data)).catch(() => res.json([]));
   });
 
   app.use(ROUTES.HEALTH.BASE, createHealthRouter());
@@ -74,6 +76,7 @@ function createApp() {
   app.use(ROUTES.ACCOUNT.BASE, createAccountRouter());
   app.use(ROUTES.COMMENT.BASE, createCommentRouter());
   app.use(ROUTES.ORDER.BASE, createOrderRouter());
+  app.use("/api/orderItems", createOrderItemRouter());
   app.use(ROUTES.PROMOTION.BASE, createPromotionRouter());
   app.use(ROUTES.SPECIFICATION.BASE, createSpecificationRouter());
   app.use(ROUTES.BANNER.BASE, createBannerRouter());
