@@ -30,6 +30,7 @@ import ManageAccount from "./src/features/Auth/Admin/Admin System/AccounManageme
 import ProductsScreen from "./src/features/Auth/Admin/ProductManagement/Products/ProductsScreen";
 import CategoriesScreen from "./src/features/Auth/Admin/ProductManagement/Categories/CategoriesScreen";
 import VoucherManagementScreen from "./src/features/Auth/Admin/VoucherManagement/VoucherManagementScreen"; 
+import ProfileScreen from "./src/features/profileManagerment/screens/ProfileManagerment";
 export default function App() {
   const scrollViewRef = useRef(null);
 
@@ -101,6 +102,11 @@ export default function App() {
                     path={ROUTES.ADMIN_VOUCHER}
                     element={<VoucherManagementScreen />}
                   />
+                  <Route
+                    path={ROUTES.PROFILE}
+                    element={<ProfileScreen />}
+                  />
+
                 </Routes>
                 <Footer />
               </ScrollView>

@@ -20,4 +20,10 @@ export const ROUTES = {
   ADMIN_ACCOUNTS: "/admin/account",
   ADMIN_PRODUCT: "/admin/products",
   ADMIN_VOUCHER: "/admin/vouchers",
+    //Profile
+  PROFILE: "/profile",
+  PROFILE_INFOMATION: "/profile/information",
+  PROFILE_FAVORITE_PROFUCT: "/profile/favorite",
+  PROFILE_ORDER_HISTORY: "/profile/order",
+  PROFILE_LOGOUT: "/profile/logout",
 };
