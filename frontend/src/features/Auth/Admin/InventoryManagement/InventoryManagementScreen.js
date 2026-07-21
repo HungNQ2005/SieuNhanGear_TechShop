@@ -11,6 +11,7 @@ import Pagination from "./components/Pagination";
 import LowStockAlertsView from "./components/LowStockAlertsView";
 import StockHistoryView from "./components/StockHistoryView";
 import RestockModal from "./components/RestockModal";
+import ProductDetailModal from "./components/ProductDetailModal";
 
 import { useLocalization } from "../../../../providers/LocalizationProvider";
 import {
@@ -51,6 +52,7 @@ export default function InventoryManagementScreen() {
   const [page, setPage] = useState(1);
 
   const [restockTarget, setRestockTarget] = useState(null);
+  const [detailProduct, setDetailProduct] = useState(null);
   const [saving, setSaving] = useState(false);
 
   const loadData = useCallback(async () => {
@@ -230,7 +232,11 @@ export default function InventoryManagementScreen() {
                   to={Math.min(page * PAGE_SIZE, filteredStock.length)}
                   total={filteredStock.length}
                 />
-                <StockTable rows={pagedStock} onRestock={setRestockTarget} />
+                <StockTable
+                  rows={pagedStock}
+                  onRestock={setRestockTarget}
+                  onViewDetail={setDetailProduct}
+                />
                 <Pagination
                   page={page}
                   totalPages={totalPages}
@@ -243,6 +249,7 @@ export default function InventoryManagementScreen() {
               <LowStockAlertsView
                 items={lowStockItems}
                 onRestock={setRestockTarget}
+                onViewDetail={setDetailProduct}
               />
             )}
 
@@ -267,6 +274,12 @@ export default function InventoryManagementScreen() {
         saving={saving}
         onClose={() => setRestockTarget(null)}
         onConfirm={handleRestockConfirm}
+      />
+
+      <ProductDetailModal
+        product={detailProduct}
+        visible={Boolean(detailProduct)}
+        onClose={() => setDetailProduct(null)}
       />
     </View>
   );

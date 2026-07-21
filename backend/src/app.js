@@ -23,7 +23,7 @@ const { createAccountRouter } = require("./routes/account.routes");
 const { createCommentRouter } = require("./routes/comment.routes");
 const { createOrderRouter } = require("./routes/order.routes");
 const { createPromotionRouter } = require("./routes/promotion.routes");
-const { createSpecificationRouter } = require("./routes/specification.routes");
+const { createSpecificationRouter, createAttributeGroupRouter, createAttributeRouter } = require("./routes/specification.routes");
 const { createBannerRouter } = require("./routes/banner.routes");
 const { createManufacturerRouter } = require("./features/product/routes/manufacturer.routes");
 const { createNewsRouter } = require("./routes/news.routes");
@@ -105,6 +105,8 @@ function createApp() {
   app.use("/api/orderItems", createOrderItemRouter());
   app.use(ROUTES.PROMOTION.BASE, createPromotionRouter());
   app.use(ROUTES.SPECIFICATION.BASE, createSpecificationRouter());
+  app.use("/api/attributeGroups", createAttributeGroupRouter());
+  app.use("/api/attributes", createAttributeRouter());
   app.use(ROUTES.BANNER.BASE, createBannerRouter());
   app.use(ROUTES.STATISTIC.BASE, createStatisticRouter());
 

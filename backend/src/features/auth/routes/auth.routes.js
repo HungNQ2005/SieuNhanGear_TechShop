@@ -22,6 +22,9 @@ function createAuthRouter() {
   // PUT /api/auth/me (UC-03 Manage Profile) - cập nhật thông tin của chính mình
   router.put('/me', authenticate, authController.updateMe);
 
+  // POST /api/auth/forgot-password - dat lai mat khau theo email
+  router.post('/forgot-password', authController.forgotPassword);
+
   return router;
 }
 

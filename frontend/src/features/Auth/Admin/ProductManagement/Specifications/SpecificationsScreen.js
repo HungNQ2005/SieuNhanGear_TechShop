@@ -7,12 +7,18 @@ import AdminTopBar from "../../AdminTopBar";
 import AttributeGroupCard from "./components/AttributeGroupCard";
 import GlobalAttributeExplorer from "./components/GlobalAttributeExplorer";
 import AddAttributeGroupModal from "./components/AddAttributeGroupModal";
+import AddAttributeModal from "./components/AddAttributeModal";
 
 import { useLocalization } from "../../../../../providers/LocalizationProvider";
 import {
   getAttributeGroups,
   getAttributes,
   createAttributeGroup,
+  updateAttributeGroup,
+  deleteAttributeGroup,
+  createAttribute,
+  updateAttribute,
+  deleteAttribute,
 } from "../../../../../services/api";
 import {
   TEXT_SPEC_PAGE_TITLE,
@@ -26,9 +32,6 @@ import styles from "./Specifications.styles";
 
 const PAGE_SIZE = 4;
 
-// Fallback demo data — used only if the backend (json-server) has no seeded
-// `attributeGroups` / `attributes` resources yet, so the page still renders
-// a working preview out of the box.
 const FALLBACK_GROUPS = [
   {
     id: 1,
@@ -80,7 +83,12 @@ export default function SpecificationsScreen() {
   const [groupFilter, setGroupFilter] = useState("all");
   const [page, setPage] = useState(1);
 
-  const [modalVisible, setModalVisible] = useState(false);
+  const [groupModalVisible, setGroupModalVisible] = useState(false);
+  const [editingGroup, setEditingGroup] = useState(null);
+
+  const [attrModalVisible, setAttrModalVisible] = useState(false);
+  const [editingAttr, setEditingAttr] = useState(null);
+
   const [saving, setSaving] = useState(false);
 
   const loadData = useCallback(async () => {
@@ -99,7 +107,7 @@ export default function SpecificationsScreen() {
       setGroups(loadedGroups);
       setAttributes(loadedAttributes);
     } catch (err) {
-      console.log("Failed to load specification templates, using demo data", err);
+      console.log("Failed to load specification templates, using fallback", err);
       setGroups(FALLBACK_GROUPS);
       setAttributes(FALLBACK_ATTRIBUTES);
     } finally {
@@ -116,7 +124,6 @@ export default function SpecificationsScreen() {
     loadData();
   }, [loadData, navigate]);
 
-  // ─── Join attributes with their group + preview chips per group ──────────
   const groupMap = useMemo(() => new Map(groups.map((g) => [g.id, g])), [groups]);
 
   const joinedAttributes = useMemo(
@@ -133,18 +140,17 @@ export default function SpecificationsScreen() {
       groups.map((g) => ({
         ...g,
         attributes: attributes
-          .filter((a) => a.groupId === g.id)
+          .filter((a) => Number(a.groupId) === Number(g.id))
           .map((a) => a.name),
       })),
     [groups, attributes]
   );
 
-  // ─── Filters + pagination for the Global Attribute Explorer ──────────────
   const filteredAttributes = useMemo(() => {
     const q = search.trim().toLowerCase();
     return joinedAttributes.filter((a) => {
       if (q && !a.name.toLowerCase().includes(q)) return false;
-      if (groupFilter !== "all" && a.groupId !== groupFilter) return false;
+      if (groupFilter !== "all" && String(a.groupId) !== String(groupFilter)) return false;
       return true;
     });
   }, [joinedAttributes, search, groupFilter]);
@@ -159,6 +165,7 @@ export default function SpecificationsScreen() {
     page * PAGE_SIZE
   );
 
+  // CRUD cho Nhom thuoc tinh
   const handleCreateGroup = async (payload) => {
     setSaving(true);
     try {
@@ -167,17 +174,85 @@ export default function SpecificationsScreen() {
         ? res.data
         : { id: Date.now(), ...payload, productsCount: 0 };
       setGroups((prev) => [...prev, newGroup]);
-      setModalVisible(false);
+      setGroupModalVisible(false);
+      setEditingGroup(null);
     } catch (err) {
       console.log("Failed to create attribute group", err);
-      // Still reflect the new group locally so the demo stays usable offline.
-      setGroups((prev) => [
-        ...prev,
-        { id: Date.now(), ...payload, productsCount: 0 },
-      ]);
-      setModalVisible(false);
+      setGroups((prev) => [...prev, { id: Date.now(), ...payload, productsCount: 0 }]);
+      setGroupModalVisible(false);
+      setEditingGroup(null);
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleUpdateGroup = async (id, payload) => {
+    setSaving(true);
+    try {
+      const res = await updateAttributeGroup(id, payload);
+      const updated = res.data?.id ? res.data : { id, ...payload };
+      setGroups((prev) => prev.map((g) => (g.id === id ? { ...g, ...updated } : g)));
+      setGroupModalVisible(false);
+      setEditingGroup(null);
+    } catch (err) {
+      console.log("Failed to update attribute group", err);
+      setGroups((prev) => prev.map((g) => (g.id === id ? { ...g, ...payload } : g)));
+      setGroupModalVisible(false);
+      setEditingGroup(null);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeleteGroup = async (group) => {
+    try {
+      await deleteAttributeGroup(group.id);
+    } catch (err) {
+      console.log("Failed to delete attribute group on server", err);
+    } finally {
+      setGroups((prev) => prev.filter((g) => g.id !== group.id));
+      setAttributes((prev) => prev.filter((a) => Number(a.groupId) !== Number(group.id)));
+    }
+  };
+
+  // CRUD cho Thuoc tinh
+  const handleSaveAttribute = async (payload) => {
+    setSaving(true);
+    try {
+      if (editingAttr) {
+        const res = await updateAttribute(editingAttr.id, payload);
+        const updated = res.data?.id ? res.data : { ...editingAttr, ...payload };
+        setAttributes((prev) => prev.map((a) => (a.id === editingAttr.id ? { ...a, ...updated } : a)));
+      } else {
+        const res = await createAttribute(payload);
+        const created = res.data?.id ? res.data : { id: Date.now(), usageCount: 0, ...payload };
+        setAttributes((prev) => [...prev, created]);
+      }
+      setAttrModalVisible(false);
+      setEditingAttr(null);
+    } catch (err) {
+      console.log("Failed to save attribute", err);
+      if (editingAttr) {
+        setAttributes((prev) => prev.map((a) => (a.id === editingAttr.id ? { ...a, ...payload } : a)));
+      } else {
+        setAttributes((prev) => [...prev, { id: Date.now(), usageCount: 0, ...payload }]);
+      }
+      setAttrModalVisible(false);
+      setEditingAttr(null);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeleteAttribute = async (attr) => {
+    try {
+      await deleteAttribute(attr.id);
+    } catch (err) {
+      console.log("Failed to delete attribute on server", err);
+    } finally {
+      setAttributes((prev) => prev.filter((a) => a.id !== attr.id));
+      setAttrModalVisible(false);
+      setEditingAttr(null);
     }
   };
 
@@ -199,13 +274,29 @@ export default function SpecificationsScreen() {
               <Text style={styles.pageSubtitle}>{t(TEXT_SPEC_PAGE_SUBTITLE)}</Text>
             </View>
 
-            <TouchableOpacity
-              style={styles.addButton}
-              onPress={() => setModalVisible(true)}
-            >
-              <IconPlusCircle />
-              <Text style={styles.addButtonText}>{t(TEXT_SPEC_ADD_GROUP_BUTTON)}</Text>
-            </TouchableOpacity>
+            <View style={{ flexDirection: "row", gap: 10 }}>
+              <TouchableOpacity
+                style={[styles.addButton, { backgroundColor: "#0F172A" }]}
+                onPress={() => {
+                  setEditingAttr(null);
+                  setAttrModalVisible(true);
+                }}
+              >
+                <IconPlusCircle />
+                <Text style={styles.addButtonText}>Thêm thuộc tính</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => {
+                  setEditingGroup(null);
+                  setGroupModalVisible(true);
+                }}
+              >
+                <IconPlusCircle />
+                <Text style={styles.addButtonText}>{t(TEXT_SPEC_ADD_GROUP_BUTTON)}</Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
           {loading ? (
@@ -216,7 +307,15 @@ export default function SpecificationsScreen() {
             <>
               <View style={styles.cardsRow}>
                 {groupsWithPreview.map((group) => (
-                  <AttributeGroupCard key={group.id} group={group} />
+                  <AttributeGroupCard
+                    key={group.id}
+                    group={group}
+                    onEditTemplate={(g) => {
+                      setEditingGroup(g);
+                      setGroupModalVisible(true);
+                    }}
+                    onDelete={handleDeleteGroup}
+                  />
                 ))}
               </View>
 
@@ -231,6 +330,10 @@ export default function SpecificationsScreen() {
                 onPageChange={setPage}
                 from={(page - 1) * PAGE_SIZE + 1}
                 to={Math.min(page * PAGE_SIZE, filteredAttributes.length)}
+                onEditAttribute={(attr) => {
+                  setEditingAttr(attr);
+                  setAttrModalVisible(true);
+                }}
               />
             </>
           )}
@@ -240,10 +343,28 @@ export default function SpecificationsScreen() {
       </View>
 
       <AddAttributeGroupModal
-        visible={modalVisible}
+        visible={groupModalVisible}
+        editingGroup={editingGroup}
         saving={saving}
-        onClose={() => setModalVisible(false)}
+        onClose={() => {
+          setGroupModalVisible(false);
+          setEditingGroup(null);
+        }}
         onCreate={handleCreateGroup}
+        onUpdate={handleUpdateGroup}
+      />
+
+      <AddAttributeModal
+        visible={attrModalVisible}
+        editingAttribute={editingAttr}
+        groups={groups}
+        saving={saving}
+        onClose={() => {
+          setAttrModalVisible(false);
+          setEditingAttr(null);
+        }}
+        onSubmit={handleSaveAttribute}
+        onDelete={handleDeleteAttribute}
       />
     </View>
   );

@@ -43,3 +43,20 @@ export const register = async (user) => {
 
     return (data && (data.account || data.data)) ? (data.account || data.data) : null;
 };
+
+export const forgotPassword = async (email, newPassword) => {
+    const url = API.AUTH_FORGOT_PASSWORD ? `${API.BASE_API_URL}${API.AUTH_FORGOT_PASSWORD}` : `${API.BASE_API_URL}api/auth/forgot-password`;
+    const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, newPassword }),
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+        throw new Error(data.message || "Đặt lại mật khẩu thất bại");
+    }
+
+    return data;
+};

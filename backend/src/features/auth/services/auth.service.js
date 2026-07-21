@@ -124,6 +124,26 @@ const authService = {
     }
     return toSafeAccount(account);
   },
+
+  // UC Quên mật khẩu: Cập nhật mật khẩu mới theo email người dùng
+  async forgotPassword({ email, newPassword }) {
+    if (!email || !EMAIL_REGEX.test(String(email).trim())) {
+      throw new HttpError({ code: "BAD_REQUEST", statusCode: 400, message: "Email không hợp lệ" });
+    }
+    if (!newPassword || String(newPassword).length < MIN_PASSWORD_LENGTH) {
+      throw new HttpError({ code: "BAD_REQUEST", statusCode: 400, message: `Mật khẩu phải có ít nhất ${MIN_PASSWORD_LENGTH} ký tự` });
+    }
+
+    const normalizedEmail = String(email).trim().toLowerCase();
+    const account = await accountRepository.getByEmail(normalizedEmail);
+    if (!account) {
+      throw new HttpError({ code: "NOT_FOUND", statusCode: 404, message: "Tài khoản với email này không tồn tại" });
+    }
+
+    const passwordHash = hashPassword(String(newPassword));
+    const updatedAccount = await accountRepository.update(account.id, { passwordHash });
+    return toSafeAccount(updatedAccount);
+  },
 };
 
 module.exports = { authService };

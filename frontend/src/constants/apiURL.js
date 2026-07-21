@@ -37,6 +37,7 @@ export const API = {
   AUTH_LOGIN: "api/auth/login",
   AUTH_LOGOUT: "api/auth/logout",
   AUTH_REGISTER: "api/auth/register",
+  AUTH_FORGOT_PASSWORD: "api/auth/forgot-password",
 
   GET_COMMENTS: "api/comments",
   GET_COMMENT_BY_ID: (id) => `api/comments/${id}`,

@@ -11,7 +11,7 @@ import {
   ScrollView,
 } from "react-native";
 import { authModalStyles } from "./AuthModal.styles";
-import { login, register } from "../../services/AuthService";
+import { login, register, forgotPassword } from "../../services/AuthService";
 import { useLocalization } from "../../providers/LocalizationProvider";
 import TextIntl from "../../common/TextIntl";
 import {
@@ -42,6 +42,7 @@ import {
 
 const LOGIN = "login";
 const REGISTER = "register";
+const FORGOT = "forgot";
 function InputField({
   label,
   value,
@@ -100,14 +101,20 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
     password: "",
     confirmPassword: "",
   });
+  const [forgotForm, setForgotForm] = useState({
+    email: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [forgotSuccess, setForgotSuccess] = useState("");
 
   const title = useMemo(
-    () => (activeTab === LOGIN ? t(TEXT_LOGIN) : t(TEXT_REGISTER)),
+    () => (activeTab === LOGIN ? t(TEXT_LOGIN) : activeTab === REGISTER ? t(TEXT_REGISTER) : "Đặt lại mật khẩu"),
     [activeTab, t],
   );
   const subtitle = useMemo(
     () =>
-      activeTab === LOGIN ? t(TEXT_LOGIN_SUBTITLE) : t(TEXT_REGISTER_SUBTITLE),
+      activeTab === LOGIN ? t(TEXT_LOGIN_SUBTITLE) : activeTab === REGISTER ? t(TEXT_REGISTER_SUBTITLE) : "Nhập email và mật khẩu mới để khôi phục tài khoản",
     [activeTab, t],
   );
   const cardLayoutStyle = isCompact
@@ -324,7 +331,7 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
       <View style={authModalStyles.fieldGroup}>
         <View style={authModalStyles.rowBetween}>
           <TextIntl tx={TEXT_PASSWORD} style={authModalStyles.fieldLabel} />
-          <Pressable>
+          <Pressable onPress={() => handleTabChange(FORGOT)}>
             <Text style={authModalStyles.forgotLink}>
               {t(TEXT_FORGOT_PASSWORD)}
             </Text>
@@ -478,6 +485,117 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
     </View>
   );
 
+  const handleForgotSubmit = async () => {
+    const email = forgotForm.email.trim();
+    const newPassword = forgotForm.newPassword.trim();
+    const confirmPassword = forgotForm.confirmPassword.trim();
+
+    if (!email) {
+      setFormError("Vui lòng nhập Email");
+      return;
+    }
+    if (!EMAIL_REGEX.test(email)) {
+      setFormError("Định dạng Email không hợp lệ");
+      return;
+    }
+    if (!newPassword || newPassword.length < 6) {
+      setFormError("Mật khẩu mới phải từ 6 ký tự trở lên");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setFormError("Mật khẩu nhập lại không khớp");
+      return;
+    }
+
+    setFormError("");
+    setForgotSuccess("");
+
+    try {
+      await forgotPassword(email, newPassword);
+      setForgotSuccess("Đặt lại mật khẩu thành công! Bạn có thể đăng nhập ngay.");
+      setTimeout(() => {
+        handleTabChange(LOGIN);
+      }, 2000);
+    } catch (err) {
+      setFormError(err.message || "Không thể đặt lại mật khẩu");
+    }
+  };
+
+  const renderForgotForm = () => (
+    <View style={authModalStyles.form}>
+      <InputField
+        label={t(TEXT_EMAIL)}
+        leftIcon="📧"
+        value={forgotForm.email}
+        onChangeText={(value) => {
+          setFormError("");
+          setForgotSuccess("");
+          setForgotForm((current) => ({ ...current, email: value }));
+        }}
+        placeholder={t(TEXT_EMAIL)}
+      />
+
+      <InputField
+        label="Mật khẩu mới"
+        leftIcon="🔑"
+        value={forgotForm.newPassword}
+        onChangeText={(value) => {
+          setFormError("");
+          setForgotSuccess("");
+          setForgotForm((current) => ({ ...current, newPassword: value }));
+        }}
+        placeholder="Nhập mật khẩu mới"
+        secureTextEntry={!showPassword}
+        rightIcon={showPassword ? "👁️" : "🙈"}
+        onRightIconPress={() => setShowPassword((v) => !v)}
+      />
+
+      <InputField
+        label="Xác nhận mật khẩu mới"
+        leftIcon="🔒"
+        value={forgotForm.confirmPassword}
+        onChangeText={(value) => {
+          setFormError("");
+          setForgotSuccess("");
+          setForgotForm((current) => ({ ...current, confirmPassword: value }));
+        }}
+        placeholder="Xác nhận mật khẩu mới"
+        secureTextEntry={!showConfirmPassword}
+        rightIcon={showConfirmPassword ? "👁️" : "🙈"}
+        onRightIconPress={() => setShowConfirmPassword((v) => !v)}
+      />
+
+      {formError ? (
+        <View style={authModalStyles.errorBox}>
+          <Text style={authModalStyles.errorBoxIcon}>⚠️</Text>
+          <Text style={authModalStyles.formErrorText}>{formError}</Text>
+        </View>
+      ) : null}
+
+      {forgotSuccess ? (
+        <View style={[authModalStyles.errorBox, { backgroundColor: "#ECFDF5", borderColor: "#A7F3D0" }]}>
+          <Text style={authModalStyles.errorBoxIcon}>✓</Text>
+          <Text style={[authModalStyles.formErrorText, { color: "#059669" }]}>{forgotSuccess}</Text>
+        </View>
+      ) : null}
+
+      <Pressable
+        style={authModalStyles.submitButton}
+        onPress={handleForgotSubmit}
+      >
+        <Text style={authModalStyles.submitButtonText}>Đặt lại mật khẩu</Text>
+        <Text style={authModalStyles.submitButtonArrow}>→</Text>
+      </Pressable>
+
+      <View style={authModalStyles.footerLinkRow}>
+        <Text style={authModalStyles.footerHint}>Quay lại?</Text>
+        <Pressable onPress={() => handleTabChange(LOGIN)}>
+          <Text style={authModalStyles.footerLink}>{t(TEXT_LOGIN)}</Text>
+        </Pressable>
+      </View>
+    </View>
+  );
+
   return (
     <Modal
       visible={visible}
@@ -534,6 +652,16 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
                   {t(TEXT_REGISTER)}
                 </Text>
               </Pressable>
+              {activeTab === FORGOT && (
+                <Pressable
+                  style={[authModalStyles.tabButton, authModalStyles.tabButtonActive]}
+                  onPress={() => handleTabChange(FORGOT)}
+                >
+                  <Text style={[authModalStyles.tabText, authModalStyles.tabTextActive]}>
+                    Quên MK
+                  </Text>
+                </Pressable>
+              )}
             </View>
 
             <ScrollView
@@ -543,7 +671,11 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
               <Text style={authModalStyles.heading}>{title}</Text>
               <Text style={authModalStyles.subtitle}>{subtitle}</Text>
 
-              {activeTab === LOGIN ? renderLoginForm() : renderRegisterForm()}
+              {activeTab === LOGIN
+                ? renderLoginForm()
+                : activeTab === REGISTER
+                ? renderRegisterForm()
+                : renderForgotForm()}
             </ScrollView>
           </View>
         </View>

@@ -111,29 +111,31 @@ export default function OrderManagementScreen() {
   };
 
   const handleSaveOrder = async () => {
-    if (!customerName.trim()) {
-      alert("Vui lòng nhập tên khách hàng!");
-      return;
-    }
-
     setSaving(true);
     try {
-      const payload = {
-        isMock: true,
-        code: code.trim() || undefined,
-        customerName: customerName.trim(),
-        phone: phone.trim(),
-        address: address.trim(),
-        total: Number(total) || 0,
-        statusId: Number(statusId),
-        paymentMethod,
-        paymentStatus,
-      };
-
       if (editingOrder) {
-        await updateOrder(editingOrder.id, payload);
-        alert("Cập nhật đơn hàng thành công!");
+        await updateOrder(editingOrder.id, {
+          ...editingOrder,
+          statusId: Number(statusId),
+        });
+        alert("Cập nhật trạng thái đơn hàng thành công!");
       } else {
+        if (!customerName.trim()) {
+          alert("Vui lòng nhập tên khách hàng!");
+          setSaving(false);
+          return;
+        }
+        const payload = {
+          isMock: true,
+          code: code.trim() || undefined,
+          customerName: customerName.trim(),
+          phone: phone.trim(),
+          address: address.trim(),
+          total: Number(total) || 0,
+          statusId: Number(statusId),
+          paymentMethod,
+          paymentStatus,
+        };
         await createOrder(payload);
         alert("Tạo đơn hàng mới thành công!");
       }
@@ -232,12 +234,13 @@ export default function OrderManagementScreen() {
 
             {/* Field: Order Code */}
             <View style={styles.fieldGroup}>
-              <Text style={styles.fieldLabel}>Mã đơn hàng (Tùy chọn):</Text>
+              <Text style={styles.fieldLabel}>Mã đơn hàng:</Text>
               <TextInput
-                style={styles.input}
-                placeholder="Ví dụ: ORD-20260701 (Để trống để tự động tạo)"
+                style={[styles.input, Boolean(editingOrder) && { backgroundColor: "#F1F5F9", color: "#64748B" }]}
+                placeholder="Ví dụ: ORD-20260701"
                 value={code}
                 onChangeText={setCode}
+                editable={!editingOrder}
               />
             </View>
 
@@ -245,10 +248,11 @@ export default function OrderManagementScreen() {
             <View style={styles.fieldGroup}>
               <Text style={styles.fieldLabel}>Tên khách hàng:</Text>
               <TextInput
-                style={styles.input}
+                style={[styles.input, Boolean(editingOrder) && { backgroundColor: "#F1F5F9", color: "#64748B" }]}
                 placeholder="Nguyễn Văn A"
                 value={customerName}
                 onChangeText={setCustomerName}
+                editable={!editingOrder}
               />
             </View>
 
@@ -256,10 +260,11 @@ export default function OrderManagementScreen() {
             <View style={styles.fieldGroup}>
               <Text style={styles.fieldLabel}>Số điện thoại:</Text>
               <TextInput
-                style={styles.input}
+                style={[styles.input, Boolean(editingOrder) && { backgroundColor: "#F1F5F9", color: "#64748B" }]}
                 placeholder="0901234567"
                 value={phone}
                 onChangeText={setPhone}
+                editable={!editingOrder}
               />
             </View>
 
@@ -267,10 +272,11 @@ export default function OrderManagementScreen() {
             <View style={styles.fieldGroup}>
               <Text style={styles.fieldLabel}>Địa chỉ giao hàng:</Text>
               <TextInput
-                style={styles.input}
+                style={[styles.input, Boolean(editingOrder) && { backgroundColor: "#F1F5F9", color: "#64748B" }]}
                 placeholder="123 Trần Duy Hưng, Hà Nội"
                 value={address}
                 onChangeText={setAddress}
+                editable={!editingOrder}
               />
             </View>
 
@@ -278,17 +284,20 @@ export default function OrderManagementScreen() {
             <View style={styles.fieldGroup}>
               <Text style={styles.fieldLabel}>Tổng giá trị (VNĐ):</Text>
               <TextInput
-                style={styles.input}
+                style={[styles.input, Boolean(editingOrder) && { backgroundColor: "#F1F5F9", color: "#64748B" }]}
                 placeholder="15000000"
                 keyboardType="numeric"
                 value={total}
                 onChangeText={setTotal}
+                editable={!editingOrder}
               />
             </View>
 
-            {/* Field: Order Status */}
+            {/* Field: Order Status (Được phép chỉnh sửa) */}
             <View style={styles.fieldGroup}>
-              <Text style={styles.fieldLabel}>Trạng thái đơn hàng:</Text>
+              <Text style={[styles.fieldLabel, { color: "#2563EB", fontWeight: "700" }]}>
+                Trạng thái đơn hàng (Có thể chỉnh sửa):
+              </Text>
               <View style={styles.optionsRow}>
                 {[
                   { id: 1, label: "Đang xử lý (Processing)" },
@@ -324,11 +333,13 @@ export default function OrderManagementScreen() {
                 {["Pending", "Paid", "Failed"].map((ps) => (
                   <TouchableOpacity
                     key={ps}
+                    disabled={Boolean(editingOrder)}
                     style={[
                       styles.optionChip,
                       paymentStatus === ps && styles.optionChipSelected,
+                      Boolean(editingOrder) && { opacity: 0.6 },
                     ]}
-                    onPress={() => setPaymentStatus(ps)}
+                    onPress={() => !editingOrder && setPaymentStatus(ps)}
                   >
                     <Text
                       style={[

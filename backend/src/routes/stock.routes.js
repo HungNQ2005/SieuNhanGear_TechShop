@@ -14,11 +14,12 @@ function createStockRouter() {
   // POST /api/stock
   router.post("/", authenticate, authorize("product_manager", "system_admin"), stockController.create);
 
-  // PUT /api/stock/:id  (dùng khi Restock)
-  router.put("/:id", authenticate, authorize("product_manager", "system_admin"), stockController.update);
+  // PUT & PATCH /api/stock/:id (dung khi Restock hoac cap nhat ton kho)
+  router.put("/:id", stockController.update);
+  router.patch("/:id", stockController.update);
 
   // DELETE /api/stock/:id
-  router.delete("/:id", authenticate, authorize("product_manager", "system_admin"), stockController.delete);
+  router.delete("/:id", stockController.delete);
 
   return router;
 }

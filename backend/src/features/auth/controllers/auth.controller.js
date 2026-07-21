@@ -36,6 +36,16 @@ const authController = {
       next(e);
     }
   },
+
+  // XL quen mat khau
+  async forgotPassword(req, res, next) {
+    try {
+      const result = await authService.forgotPassword(req.body);
+      res.json({ success: true, message: "Dat lai mat khau thanh cong", account: result });
+    } catch (e) {
+      next(e);
+    }
+  },
 };
 
 module.exports = { authController };
