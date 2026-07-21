@@ -59,6 +59,27 @@ function createApp() {
     orderStatusRepository.getAll().then((data) => res.json(data)).catch(() => res.json([]));
   });
 
+  app.get("/api/paymentMethods", (req, res) => {
+    try {
+      const demoData = require("./data/demo_data.json");
+      return res.json(demoData.paymentMethods || [
+        { id: 1, code: "COD", name: "Thanh toán khi nhận hàng (COD)", description: "Thanh toán tiền mặt khi nhận hàng" },
+        { id: 2, code: "VNPAY", name: "Thanh toán qua VNPAY", description: "Thanh toán qua Ví điện tử / QR Code VNPAY" },
+        { id: 3, code: "BANK", name: "Chuyển khoản ngân hàng", description: "Chuyển khoản qua tài khoản ngân hàng cửa hàng" }
+      ]);
+    } catch (_) {
+      return res.json([
+        { id: 1, code: "COD", name: "Thanh toán khi nhận hàng (COD)", description: "Thanh toán tiền mặt khi nhận hàng" },
+        { id: 2, code: "VNPAY", name: "Thanh toán qua VNPAY", description: "Thanh toán qua Ví điện tử / QR Code VNPAY" },
+        { id: 3, code: "BANK", name: "Chuyển khoản ngân hàng", description: "Chuyển khoản qua tài khoản ngân hàng cửa hàng" }
+      ]);
+    }
+  });
+
+  app.get("/api/shippingAddresses", (req, res) => {
+    res.json([]);
+  });
+
   app.use(ROUTES.HEALTH.BASE, createHealthRouter());
   app.use(ROUTES.CATALOG.BASE, createCatalogRouter());
 

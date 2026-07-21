@@ -158,24 +158,37 @@ const orderService = {
   },
 
   async createMockOrder(user, data) {
-    const customerName = data.customerName || "Khách hàng Test";
-    const phone = data.phone || "0900000000";
+    const customerName = data.receiverName || data.customerName || (user ? user.name || user.email : "Khách hàng");
+    const phone = data.phone || (user ? user.phone : "") || "0900000000";
     const address = data.address || "Việt Nam";
+    const email = data.email || (user ? user.email : "");
     const statusId = Number(data.statusId) || 1;
     const paymentMethod = data.paymentMethod || "COD";
     const paymentStatus = data.paymentStatus || "Pending";
-    const total = Number(data.total) || 100000;
+    const total = Number(data.totalPrice ?? data.total) || 0;
 
     const order = await orderRepository.create({
-      customerId: user ? user.id : 1,
+      customerId: user ? (user.id || user._id || 1) : 1,
       customerName,
+      email,
       phone,
       address,
+      province: data.province || "",
+      provinceCode: data.provinceCode || "",
+      ward: data.ward || "",
+      wardCode: data.wardCode || "",
       statusId,
+      status: data.status || "Pending",
       paymentMethod,
       paymentStatus,
+      subtotal: Number(data.subtotal) || total,
+      shippingFee: Number(data.shippingFee) || 0,
       total,
-      trackingCode: data.trackingCode || `VN${Date.now()}`,
+      totalPrice: total,
+      voucherCode: data.discountCode || data.voucherCode || "",
+      discountCode: data.discountCode || "",
+      discountAmount: Number(data.discountAmount) || 0,
+      trackingCode: data.trackingCode || `SN${Date.now()}`,
     });
 
     if (Array.isArray(data.items) && data.items.length > 0) {
@@ -183,14 +196,20 @@ const orderService = {
         await orderItemRepository.createMany(
           data.items.map((item) => ({
             orderId: order.id,
-            productId: item.productId || 1,
-            price: item.price || total,
+            productId: item.productId || item.id || 1,
+            price: item.price || 0,
             quantity: item.quantity || 1,
           }))
         );
       } catch (e) {
         console.log("Create order items warning:", e);
       }
+    }
+
+    if (user && (user.id || user._id)) {
+      try {
+        await cartRepository.clearByAccount(user.id || user._id);
+      } catch (_) {}
     }
 
     return attachItems(order);

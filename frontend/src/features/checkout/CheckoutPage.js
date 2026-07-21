@@ -50,13 +50,19 @@ import {
 } from "../../constants/i18nKeys";
 import { IconDiscount } from "../../constants/icons";
 
+const DEFAULT_PAYMENT_METHODS = [
+  { id: 1, code: "COD", name: "Thanh toán khi nhận hàng (COD)", description: "Thanh toán tiền mặt cho nhân viên giao hàng khi nhận hàng" },
+  { id: 2, code: "VNPAY", name: "Thanh toán qua VNPAY", description: "Thanh toán qua Ví điện tử hoặc QR Code VNPAY" },
+  { id: 3, code: "BANK", name: "Chuyển khoản ngân hàng", description: "Chuyển khoản qua tài khoản ngân hàng cửa hàng" },
+];
+
 export default function CheckoutPage() {
   const { t } = useLocalization();
   const [accountId, setAccountId] = useState(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [pendingCheckout, setPendingCheckout] = useState(false);
   const { items, loadCart, clearCart } = useCart();
-  const [paymentMethods, setPaymentMethods] = useState([]);
+  const [paymentMethods, setPaymentMethods] = useState(DEFAULT_PAYMENT_METHODS);
   const [vouchers, setVouchers] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [discountCode, setDiscountCode] = useState("");
@@ -72,7 +78,7 @@ export default function CheckoutPage() {
     wardCode: "",
     address: "",
   });
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("COD");
   const [provinces, setProvinces] = useState([]);
   const [wards, setWards] = useState([]);
   const [pickerVisible, setPickerVisible] = useState(false);
@@ -84,13 +90,20 @@ export default function CheckoutPage() {
   useEffect(() => {
     const initData = async () => {
       try {
-        // Nếu user đã đăng nhập, lấy thông tin từ localStorage
+        // Nếu user đã đăng nhập, lấy thông tin từ localStorage và điền mặc định
         const savedUser = localStorage.getItem('user');
         const user = savedUser ? JSON.parse(savedUser) : null;
         if (user) {
           const accountIdVal = user._id || user.id;
           setAccountId(accountIdVal);
           await loadCart(accountIdVal);
+
+          setFormData((prev) => ({
+            ...prev,
+            name: prev.name || user.name || "",
+            email: prev.email || user.email || "",
+            phone: prev.phone || user.phone || "",
+          }));
         }
 
         // Sử dụng allSettled để một API lỗi không làm hỏng toàn bộ init
@@ -106,27 +119,29 @@ export default function CheckoutPage() {
         const provinceData = settled[2].status === 'fulfilled' ? settled[2].value : null;
         const shippingRes = settled[3].status === 'fulfilled' ? settled[3].value : null;
 
-        setPaymentMethods(paymentRes?.data || []);
+        const methods = (paymentRes?.data && paymentRes.data.length > 0) ? paymentRes.data : DEFAULT_PAYMENT_METHODS;
+        setPaymentMethods(methods);
         setVouchers(voucherRes?.data || []);
         setProvinces(provinceData?.data || []);
 
-        if (paymentRes?.data?.length) {
-          setSelectedPaymentMethod(paymentRes.data[0].code);
+        if (methods.length > 0 && !selectedPaymentMethod) {
+          setSelectedPaymentMethod(methods[0].code);
         }
 
         const shipping = shippingRes?.data?.[0];
 
         if (shipping) {
-          setFormData({
-            name: shipping.receiverName,
-            email: shipping.email,
-            phone: shipping.phone,
-            province: shipping.province,
-            provinceCode: shipping.provinceCode,
-            ward: shipping.ward,
-            wardCode: shipping.wardCode,
-            address: shipping.address,
-          });
+          setFormData((prev) => ({
+            ...prev,
+            name: shipping.receiverName || prev.name,
+            email: shipping.email || prev.email,
+            phone: shipping.phone || prev.phone,
+            province: shipping.province || prev.province,
+            provinceCode: shipping.provinceCode || prev.provinceCode,
+            ward: shipping.ward || prev.ward,
+            wardCode: shipping.wardCode || prev.wardCode,
+            address: shipping.address || prev.address,
+          }));
 
           if (shipping.provinceCode) {
             const wardRes = await getWardsByProvince(shipping.provinceCode);
@@ -135,8 +150,6 @@ export default function CheckoutPage() {
         }
       } catch (err) {
         console.log(err);
-        setNotifMessage('Không tải được danh sách tỉnh/thành. Vui lòng thử lại sau.');
-        setNotifVisible(true);
       }
     };
 

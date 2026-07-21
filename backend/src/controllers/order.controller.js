@@ -12,7 +12,12 @@ function toCsv(orders) {
 const orderController = {
   async create(req, res, next) {
     try {
-      if (req.body.isMock || req.body.customerName) {
+      if (
+        req.body.isMock ||
+        req.body.customerName ||
+        req.body.receiverName ||
+        (Array.isArray(req.body.items) && req.body.items.length > 0)
+      ) {
         const data = await orderService.createMockOrder(req.user, req.body);
         return res.status(201).json(data);
       }
