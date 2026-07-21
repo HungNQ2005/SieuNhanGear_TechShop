@@ -11,7 +11,7 @@ import {
   ScrollView,
 } from "react-native";
 import { authModalStyles } from "./AuthModal.styles";
-import { login, register } from "../../services/AuthService";
+import { login, register, forgotPassword } from "../../services/AuthService";
 import { useLocalization } from "../../providers/LocalizationProvider";
 import TextIntl from "../../common/TextIntl";
 import {
@@ -42,19 +42,26 @@ import {
 
 const LOGIN = "login";
 const REGISTER = "register";
+const FORGOT = "forgot";
 function InputField({
   label,
   value,
   onChangeText,
   placeholder,
   secureTextEntry,
+  leftIcon,
   rightIcon,
+  onRightIconPress,
 }) {
   return (
     <View style={authModalStyles.fieldGroup}>
-      <Text style={authModalStyles.fieldLabel}>{label}</Text>
+      {label ? <Text style={authModalStyles.fieldLabel}>{label}</Text> : null}
       <View style={authModalStyles.inputShell}>
-        <View style={authModalStyles.inputIcon}></View>
+        {leftIcon ? (
+          <View style={authModalStyles.inputIcon}>
+            <Text style={authModalStyles.inputIconText}>{leftIcon}</Text>
+          </View>
+        ) : null}
         <TextInput
           value={value}
           onChangeText={onChangeText}
@@ -65,9 +72,13 @@ function InputField({
           autoCapitalize="none"
         />
         {rightIcon ? (
-          <View style={authModalStyles.inputTrailing}>
+          <Pressable
+            style={authModalStyles.inputTrailing}
+            onPress={onRightIconPress}
+            disabled={!onRightIconPress}
+          >
             <Text style={authModalStyles.trailingText}>{rightIcon}</Text>
-          </View>
+          </Pressable>
         ) : null}
       </View>
     </View>
@@ -81,6 +92,8 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
   const [activeTab, setActiveTab] = useState(LOGIN);
   const [rememberMe, setRememberMe] = useState(true);
   const [formError, setFormError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loginForm, setLoginForm] = useState({ email: "", password: "" });
   const [registerForm, setRegisterForm] = useState({
     name: "",
@@ -88,14 +101,20 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
     password: "",
     confirmPassword: "",
   });
+  const [forgotForm, setForgotForm] = useState({
+    email: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [forgotSuccess, setForgotSuccess] = useState("");
 
   const title = useMemo(
-    () => (activeTab === LOGIN ? t(TEXT_LOGIN) : t(TEXT_REGISTER)),
+    () => (activeTab === LOGIN ? t(TEXT_LOGIN) : activeTab === REGISTER ? t(TEXT_REGISTER) : "Đặt lại mật khẩu"),
     [activeTab, t],
   );
   const subtitle = useMemo(
     () =>
-      activeTab === LOGIN ? t(TEXT_LOGIN_SUBTITLE) : t(TEXT_REGISTER_SUBTITLE),
+      activeTab === LOGIN ? t(TEXT_LOGIN_SUBTITLE) : activeTab === REGISTER ? t(TEXT_REGISTER_SUBTITLE) : "Nhập email và mật khẩu mới để khôi phục tài khoản",
     [activeTab, t],
   );
   const cardLayoutStyle = isCompact
@@ -125,51 +144,103 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
     setFormError("");
     setActiveTab(tab);
   };
-  const handleLoginSubmit = async () => {
-    const user = await login(
-      loginForm.email.trim(),
-      loginForm.password.trim()
-    );
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!user) {
-      setFormError(t(TEXT_LOGIN_ERROR));
+  const handleLoginSubmit = async () => {
+    const email = loginForm.email.trim();
+    const password = loginForm.password.trim();
+
+    if (!email) {
+      setFormError("Vui lòng nhập Email");
       return;
     }
 
-    onLoginSuccess?.(user);
+    if (!EMAIL_REGEX.test(email)) {
+      setFormError("Định dạng Email không hợp lệ (ví dụ: user@example.com)");
+      return;
+    }
 
-    console.log("Đăng nhập thành công");
-    console.log(user);
+    if (!password) {
+      setFormError("Vui lòng nhập mật khẩu");
+      return;
+    }
+
+    if (password.length < 6) {
+      setFormError("Mật khẩu phải chứa ít nhất 6 ký tự");
+      return;
+    }
 
     setFormError("");
-    resetAndClose();
+
+    try {
+      const user = await login(email, password);
+
+      if (!user) {
+        setFormError(t(TEXT_LOGIN_ERROR));
+        return;
+      }
+
+      onLoginSuccess?.(user);
+
+      setFormError("");
+      resetAndClose();
+    } catch (err) {
+      setFormError(err.message || t(TEXT_LOGIN_ERROR));
+    }
   };
 
   const handleRegisterSubmit = async () => {
-    if (!isRegisterFormComplete) {
-      setFormError(t(TEXT_REGISTER_ERROR));
+    const name = registerForm.name.trim();
+    const email = registerForm.email.trim();
+    const password = registerForm.password.trim();
+    const confirmPassword = registerForm.confirmPassword.trim();
+
+    if (!name) {
+      setFormError("Vui lòng nhập họ và tên");
       return;
     }
 
-    if (registerForm.password !== registerForm.confirmPassword) {
+    if (!email) {
+      setFormError("Vui lòng nhập Email");
+      return;
+    }
+
+    if (!EMAIL_REGEX.test(email)) {
+      setFormError("Định dạng Email không hợp lệ (ví dụ: user@example.com)");
+      return;
+    }
+
+    if (!password) {
+      setFormError("Vui lòng nhập mật khẩu");
+      return;
+    }
+
+    if (password.length < 6) {
+      setFormError("Mật khẩu phải chứa ít nhất 6 ký tự");
+      return;
+    }
+
+    if (password !== confirmPassword) {
       setFormError(t(TEXT_PASSWORD_MISMATCH));
       return;
     }
 
-    try {
-      const newUser = await register({
-        name: registerForm.name,
-        email: registerForm.email,
-        password: registerForm.password,
-        // Thêm các thông tin như phone, gender,... nếu cần.
-      });
+    setFormError("");
 
-      setActiveTab(LOGIN);
+    try {
+      const user = await register({ name, email, password });
+
+      if (!user) {
+        setFormError(t(TEXT_REGISTER_ERROR));
+        return;
+      }
+
+      onLoginSuccess?.(user);
+
       setFormError("");
-      // Có thể tự động điền email cho tiện
-      setLoginForm(prev => ({ ...prev, email: registerForm.email }));
-    } catch (error) {
-      setFormError(error.message || t(TEXT_REGISTER_ERROR));
+      resetAndClose();
+    } catch (err) {
+      setFormError(err.message || t(TEXT_REGISTER_ERROR));
     }
   };
 
@@ -247,20 +318,20 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
         </View>
         <InputField
           label=""
+          leftIcon="📧"
           value={loginForm.email}
           onChangeText={(value) => {
             setFormError("");
             setLoginForm((current) => ({ ...current, email: value }));
           }}
           placeholder="email@example.com"
-          rightIcon=""
         />
       </View>
 
       <View style={authModalStyles.fieldGroup}>
         <View style={authModalStyles.rowBetween}>
           <TextIntl tx={TEXT_PASSWORD} style={authModalStyles.fieldLabel} />
-          <Pressable>
+          <Pressable onPress={() => handleTabChange(FORGOT)}>
             <Text style={authModalStyles.forgotLink}>
               {t(TEXT_FORGOT_PASSWORD)}
             </Text>
@@ -268,14 +339,16 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
         </View>
         <InputField
           label=""
+          leftIcon="🔑"
           value={loginForm.password}
           onChangeText={(value) => {
             setFormError("");
             setLoginForm((current) => ({ ...current, password: value }));
           }}
           placeholder="••••••••"
-          secureTextEntry
-          rightIcon="◦"
+          secureTextEntry={!showPassword}
+          rightIcon={showPassword ? "👁️" : "🙈"}
+          onRightIconPress={() => setShowPassword((v) => !v)}
         />
       </View>
 
@@ -300,7 +373,10 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
       </Pressable>
 
       {formError ? (
-        <Text style={authModalStyles.formErrorText}>{formError}</Text>
+        <View style={authModalStyles.errorBox}>
+          <Text style={authModalStyles.errorBoxIcon}>⚠️</Text>
+          <Text style={authModalStyles.formErrorText}>{formError}</Text>
+        </View>
       ) : null}
 
       <Pressable
@@ -328,6 +404,7 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
     <View style={authModalStyles.form}>
       <InputField
         label={t(TEXT_NAME)}
+        leftIcon="👤"
         value={registerForm.name}
         onChangeText={(value) => {
           setFormError("");
@@ -338,6 +415,7 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
 
       <InputField
         label={t(TEXT_EMAIL)}
+        leftIcon="📧"
         value={registerForm.email}
         onChangeText={(value) => {
           setFormError("");
@@ -348,18 +426,21 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
 
       <InputField
         label={t(TEXT_PASSWORD)}
+        leftIcon="🔑"
         value={registerForm.password}
         onChangeText={(value) => {
           setFormError("");
           setRegisterForm((current) => ({ ...current, password: value }));
         }}
         placeholder={t(TEXT_PASSWORD)}
-        secureTextEntry
-        rightIcon="◦"
+        secureTextEntry={!showPassword}
+        rightIcon={showPassword ? "👁️" : "🙈"}
+        onRightIconPress={() => setShowPassword((v) => !v)}
       />
 
       <InputField
         label={t(TEXT_CONFIRM_PASSWORD)}
+        leftIcon="🔒"
         value={registerForm.confirmPassword}
         onChangeText={(value) => {
           setFormError("");
@@ -369,12 +450,16 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
           }));
         }}
         placeholder={t(TEXT_CONFIRM_PASSWORD)}
-        secureTextEntry
-        rightIcon="◦"
+        secureTextEntry={!showConfirmPassword}
+        rightIcon={showConfirmPassword ? "👁️" : "🙈"}
+        onRightIconPress={() => setShowConfirmPassword((v) => !v)}
       />
 
       {formError ? (
-        <Text style={authModalStyles.formErrorText}>{formError}</Text>
+        <View style={authModalStyles.errorBox}>
+          <Text style={authModalStyles.errorBoxIcon}>⚠️</Text>
+          <Text style={authModalStyles.formErrorText}>{formError}</Text>
+        </View>
       ) : null}
 
       <Pressable
@@ -393,6 +478,117 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
         <Text style={authModalStyles.footerHint}>
           {t(TEXT_ALREADY_HAVE_ACCOUNT)}
         </Text>
+        <Pressable onPress={() => handleTabChange(LOGIN)}>
+          <Text style={authModalStyles.footerLink}>{t(TEXT_LOGIN)}</Text>
+        </Pressable>
+      </View>
+    </View>
+  );
+
+  const handleForgotSubmit = async () => {
+    const email = forgotForm.email.trim();
+    const newPassword = forgotForm.newPassword.trim();
+    const confirmPassword = forgotForm.confirmPassword.trim();
+
+    if (!email) {
+      setFormError("Vui lòng nhập Email");
+      return;
+    }
+    if (!EMAIL_REGEX.test(email)) {
+      setFormError("Định dạng Email không hợp lệ");
+      return;
+    }
+    if (!newPassword || newPassword.length < 6) {
+      setFormError("Mật khẩu mới phải từ 6 ký tự trở lên");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setFormError("Mật khẩu nhập lại không khớp");
+      return;
+    }
+
+    setFormError("");
+    setForgotSuccess("");
+
+    try {
+      await forgotPassword(email, newPassword);
+      setForgotSuccess("Đặt lại mật khẩu thành công! Bạn có thể đăng nhập ngay.");
+      setTimeout(() => {
+        handleTabChange(LOGIN);
+      }, 2000);
+    } catch (err) {
+      setFormError(err.message || "Không thể đặt lại mật khẩu");
+    }
+  };
+
+  const renderForgotForm = () => (
+    <View style={authModalStyles.form}>
+      <InputField
+        label={t(TEXT_EMAIL)}
+        leftIcon="📧"
+        value={forgotForm.email}
+        onChangeText={(value) => {
+          setFormError("");
+          setForgotSuccess("");
+          setForgotForm((current) => ({ ...current, email: value }));
+        }}
+        placeholder={t(TEXT_EMAIL)}
+      />
+
+      <InputField
+        label="Mật khẩu mới"
+        leftIcon="🔑"
+        value={forgotForm.newPassword}
+        onChangeText={(value) => {
+          setFormError("");
+          setForgotSuccess("");
+          setForgotForm((current) => ({ ...current, newPassword: value }));
+        }}
+        placeholder="Nhập mật khẩu mới"
+        secureTextEntry={!showPassword}
+        rightIcon={showPassword ? "👁️" : "🙈"}
+        onRightIconPress={() => setShowPassword((v) => !v)}
+      />
+
+      <InputField
+        label="Xác nhận mật khẩu mới"
+        leftIcon="🔒"
+        value={forgotForm.confirmPassword}
+        onChangeText={(value) => {
+          setFormError("");
+          setForgotSuccess("");
+          setForgotForm((current) => ({ ...current, confirmPassword: value }));
+        }}
+        placeholder="Xác nhận mật khẩu mới"
+        secureTextEntry={!showConfirmPassword}
+        rightIcon={showConfirmPassword ? "👁️" : "🙈"}
+        onRightIconPress={() => setShowConfirmPassword((v) => !v)}
+      />
+
+      {formError ? (
+        <View style={authModalStyles.errorBox}>
+          <Text style={authModalStyles.errorBoxIcon}>⚠️</Text>
+          <Text style={authModalStyles.formErrorText}>{formError}</Text>
+        </View>
+      ) : null}
+
+      {forgotSuccess ? (
+        <View style={[authModalStyles.errorBox, { backgroundColor: "#ECFDF5", borderColor: "#A7F3D0" }]}>
+          <Text style={authModalStyles.errorBoxIcon}>✓</Text>
+          <Text style={[authModalStyles.formErrorText, { color: "#059669" }]}>{forgotSuccess}</Text>
+        </View>
+      ) : null}
+
+      <Pressable
+        style={authModalStyles.submitButton}
+        onPress={handleForgotSubmit}
+      >
+        <Text style={authModalStyles.submitButtonText}>Đặt lại mật khẩu</Text>
+        <Text style={authModalStyles.submitButtonArrow}>→</Text>
+      </Pressable>
+
+      <View style={authModalStyles.footerLinkRow}>
+        <Text style={authModalStyles.footerHint}>Quay lại?</Text>
         <Pressable onPress={() => handleTabChange(LOGIN)}>
           <Text style={authModalStyles.footerLink}>{t(TEXT_LOGIN)}</Text>
         </Pressable>
@@ -456,6 +652,16 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
                   {t(TEXT_REGISTER)}
                 </Text>
               </Pressable>
+              {activeTab === FORGOT && (
+                <Pressable
+                  style={[authModalStyles.tabButton, authModalStyles.tabButtonActive]}
+                  onPress={() => handleTabChange(FORGOT)}
+                >
+                  <Text style={[authModalStyles.tabText, authModalStyles.tabTextActive]}>
+                    Quên MK
+                  </Text>
+                </Pressable>
+              )}
             </View>
 
             <ScrollView
@@ -465,7 +671,11 @@ export default function AuthModal({ visible, onClose, onLoginSuccess }) {
               <Text style={authModalStyles.heading}>{title}</Text>
               <Text style={authModalStyles.subtitle}>{subtitle}</Text>
 
-              {activeTab === LOGIN ? renderLoginForm() : renderRegisterForm()}
+              {activeTab === LOGIN
+                ? renderLoginForm()
+                : activeTab === REGISTER
+                ? renderRegisterForm()
+                : renderForgotForm()}
             </ScrollView>
           </View>
         </View>

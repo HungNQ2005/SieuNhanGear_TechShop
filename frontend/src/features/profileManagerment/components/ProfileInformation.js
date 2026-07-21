@@ -5,14 +5,28 @@ import {
     TextInput,
     ActivityIndicator,
     TouchableOpacity,
-    Alert,
     Modal,
 } from 'react-native';
 import api from '../../../services/api';
 import { API } from '../../../constants/apiURL';
 import { styles } from '../styles/ProfileInformation.styles';
+import { useLocalization } from '../../../providers/LocalizationProvider';
+import {
+    TEXT_PROFILE_INFO,
+    TEXT_PROFILE_EDIT,
+    TEXT_PROFILE_CHANGE_PASSWORD,
+    TEXT_PROFILE_CANCEL,
+    TEXT_PROFILE_SAVE,
+    TEXT_PROFILE_PHONE,
+    TEXT_PROFILE_DOB,
+    TEXT_PROFILE_ADDRESS,
+    TEXT_PROFILE_NOT_UPDATED,
+    TEXT_EMAIL,
+    TEXT_NAME
+} from '../../../constants/i18nKeys';
 
 export default function ProfileInformation({ accountId }) {
+    const { t } = useLocalization();
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [account, setAccount] = useState(null);
@@ -21,7 +35,7 @@ export default function ProfileInformation({ accountId }) {
 
     // State cho đổi mật khẩu
     const [showChangePassword, setShowChangePassword] = useState(false);
-    const [passwordForm, setPasswordForm] = useState({ newPassword: '', confirmPassword: '' });
+    const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
     const [passwordError, setPasswordError] = useState('');
     const [changingPassword, setChangingPassword] = useState(false);
 
@@ -31,33 +45,54 @@ export default function ProfileInformation({ accountId }) {
         phone: '',
         dateOfBirth: '',
         address: '',
+        avatarURL: '',
     });
 
-    // Hàm validate mật khẩu
     const validatePassword = (pwd) => {
-        if (pwd.length < 8) return 'Mật khẩu tối thiểu 8 ký tự';
-        if (!/[A-Z]/.test(pwd)) return 'Mật khẩu phải có ít nhất 1 chữ in hoa';
-        if (!/[0-9]/.test(pwd)) return 'Mật khẩu phải có ít nhất 1 chữ số';
-        if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd)) {
-            return 'Mật khẩu phải có ít nhất 1 ký tự đặc biệt';
-        }
+        if (pwd.length < 6) return 'Mật khẩu tối thiểu 6 ký tự';
         return '';
     };
 
-    // Lấy dữ liệu ban đầu
     const fetchAccount = async () => {
-        if (!accountId) return;
         setLoading(true);
+        setError(null);
         try {
-            const response = await api.get(API.GET_ACCOUNT_BY_ID(accountId));
-            const data = response.data.data;
-            setAccount(data);
-            setEditForm({
-                name: data.name || '',
-                phone: data.phone || '',
-                dateOfBirth: data.dateOfBirth ? data.dateOfBirth.split('T')[0] : '',
-                address: data.address || '',
-            });
+            let data = null;
+            if (accountId) {
+                try {
+                    const response = await api.get(API.GET_ACCOUNT_BY_ID(accountId));
+                    data = response.data?.data || response.data;
+                } catch (e) {
+                    console.log("Get account by ID failed, falling back to /me", e);
+                }
+            }
+
+            if (!data) {
+                try {
+                    const meRes = await api.get("/api/auth/me");
+                    data = meRes.data?.account || meRes.data?.data || meRes.data;
+                } catch (e) {
+                    console.log("Get /me failed, falling back to localStorage", e);
+                }
+            }
+
+            if (!data && typeof localStorage !== 'undefined') {
+                const savedUser = localStorage.getItem("user");
+                data = savedUser ? JSON.parse(savedUser) : null;
+            }
+
+            if (data) {
+                setAccount(data);
+                setEditForm({
+                    name: data.name || '',
+                    phone: data.phone || '',
+                    dateOfBirth: data.dateOfBirth ? String(data.dateOfBirth).split('T')[0] : '',
+                    address: data.address || '',
+                    avatarURL: data.avatarURL || '',
+                });
+            } else {
+                setError('Không thể tải thông tin cá nhân');
+            }
         } catch (err) {
             setError('Failed to load profile');
             console.error(err);
@@ -70,38 +105,57 @@ export default function ProfileInformation({ accountId }) {
         fetchAccount();
     }, [accountId]);
 
-    // Xử lý lưu thay đổi thông tin
     const handleSave = async () => {
         setSaving(true);
         try {
+            let dobIso = undefined;
+            if (editForm.dateOfBirth && editForm.dateOfBirth.trim()) {
+                const parsedDate = new Date(editForm.dateOfBirth.trim());
+                if (!isNaN(parsedDate.getTime())) {
+                    dobIso = parsedDate.toISOString();
+                }
+            }
+
             const payload = {
                 name: editForm.name.trim(),
                 phone: editForm.phone.trim() || undefined,
-                dateOfBirth: editForm.dateOfBirth ? new Date(editForm.dateOfBirth).toISOString() : undefined,
+                dateOfBirth: dobIso,
                 address: editForm.address.trim() || undefined,
+                avatarURL: editForm.avatarURL.trim() || undefined,
             };
 
-            const response = await api.put(API.UPDATE_ACCOUNT(accountId), payload);
-            const updated = response.data.data;
-
-            setAccount(updated);
+            const response = await api.put(`/api/auth/me`, payload);
+            const updated = response.data?.account || response.data?.data || response.data;
+            if (updated && typeof updated === 'object') {
+                setAccount(updated);
+                if (typeof localStorage !== 'undefined') {
+                    localStorage.setItem("user", JSON.stringify(updated));
+                    if (typeof window !== 'undefined') {
+                        window.dispatchEvent(new Event("userUpdated"));
+                    }
+                }
+            }
             setEditForm({
                 name: updated.name || '',
                 phone: updated.phone || '',
-                dateOfBirth: updated.dateOfBirth ? updated.dateOfBirth.split('T')[0] : '',
+                dateOfBirth: updated.dateOfBirth ? String(updated.dateOfBirth).split('T')[0] : '',
                 address: updated.address || '',
+                avatarURL: updated.avatarURL || '',
             });
             setIsEditing(false);
-            Alert.alert('Thành công', 'Cập nhật thông tin thành công');
+            if (typeof window !== 'undefined') {
+                window.alert('Cập nhật thông tin thành công!');
+            }
         } catch (err) {
             console.error(err);
-            Alert.alert('Lỗi', err.response?.data?.message || 'Không thể cập nhật thông tin');
+            if (typeof window !== 'undefined') {
+                window.alert(err.response?.data?.message || 'Không thể cập nhật thông tin');
+            }
         } finally {
             setSaving(false);
         }
     };
 
-    // Xử lý đổi mật khẩu
     const handleChangePassword = async () => {
         const { currentPassword, newPassword, confirmPassword } = passwordForm;
         if (!currentPassword || !newPassword || !confirmPassword) {
@@ -119,16 +173,18 @@ export default function ProfileInformation({ accountId }) {
         }
         setChangingPassword(true);
         try {
-            await api.put(API.UPDATE_ACCOUNT(accountId), {
+            await api.put(`/api/auth/me`, {
                 currentPassword,
                 password: newPassword,
             });
-            Alert.alert('Thành công', 'Mật khẩu đã được cập nhật');
+            if (typeof window !== 'undefined') {
+                window.alert('Mật khẩu đã được cập nhật thành công');
+            }
             setShowChangePassword(false);
             setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
             setPasswordError('');
         } catch (err) {
-            Alert.alert('Lỗi', err.response?.data?.message || 'Không thể cập nhật mật khẩu');
+            setPasswordError(err.response?.data?.message || 'Không thể cập nhật mật khẩu');
         } finally {
             setChangingPassword(false);
         }
@@ -136,10 +192,11 @@ export default function ProfileInformation({ accountId }) {
 
     const handleCancel = () => {
         setEditForm({
-            name: account.name || '',
-            phone: account.phone || '',
-            dateOfBirth: account.dateOfBirth ? account.dateOfBirth.split('T')[0] : '',
-            address: account.address || '',
+            name: account?.name || '',
+            phone: account?.phone || '',
+            dateOfBirth: account?.dateOfBirth ? String(account.dateOfBirth).split('T')[0] : '',
+            address: account?.address || '',
+            avatarURL: account?.avatarURL || '',
         });
         setIsEditing(false);
     };
@@ -147,7 +204,7 @@ export default function ProfileInformation({ accountId }) {
     const formatDate = (dateStr) => {
         if (!dateStr) return '';
         const date = new Date(dateStr);
-        return date.toLocaleDateString('vi-VN');
+        return isNaN(date.getTime()) ? '' : date.toLocaleDateString('vi-VN');
     };
 
     if (loading) {
@@ -161,7 +218,7 @@ export default function ProfileInformation({ accountId }) {
     if (error || !account) {
         return (
             <View style={styles.center}>
-                <Text style={styles.errorText}>{error || 'No data'}</Text>
+                <Text style={styles.errorText}>{error || 'Chưa có thông tin'}</Text>
                 <TouchableOpacity onPress={fetchAccount} style={styles.retryButton}>
                     <Text style={styles.retryText}>Thử lại</Text>
                 </TouchableOpacity>
@@ -172,47 +229,47 @@ export default function ProfileInformation({ accountId }) {
     return (
         <View style={styles.container}>
             <View style={styles.headerRow}>
-                <Text style={styles.title}>Profile Information</Text>
+                <Text style={styles.title}>{t(TEXT_PROFILE_INFO)}</Text>
             </View>
 
             {/* Email – Read-only */}
             <View style={styles.infoRow}>
-                <Text style={styles.label}>Email:</Text>
+                <Text style={styles.label}>{t(TEXT_EMAIL)}:</Text>
                 <Text style={styles.value}>{account.email}</Text>
             </View>
 
-            {/* Các trường có thể sửa */}
+            {/* Name */}
             <View style={styles.infoRow}>
-                <Text style={styles.label}>Name:</Text>
+                <Text style={styles.label}>{t(TEXT_NAME)}:</Text>
                 {isEditing ? (
                     <TextInput
                         style={styles.input}
                         value={editForm.name}
                         onChangeText={(text) => setEditForm({ ...editForm, name: text })}
-                        placeholder="Nhập tên"
                     />
                 ) : (
                     <Text style={styles.value}>{account.name}</Text>
                 )}
             </View>
 
+            {/* Phone */}
             <View style={styles.infoRow}>
-                <Text style={styles.label}>Phone:</Text>
+                <Text style={styles.label}>{t(TEXT_PROFILE_PHONE)}</Text>
                 {isEditing ? (
                     <TextInput
                         style={styles.input}
                         value={editForm.phone}
                         onChangeText={(text) => setEditForm({ ...editForm, phone: text })}
-                        placeholder="Nhập số điện thoại"
                         keyboardType="phone-pad"
                     />
                 ) : (
-                    <Text style={styles.value}>{account.phone || 'Chưa cập nhật'}</Text>
+                    <Text style={styles.value}>{account.phone || t(TEXT_PROFILE_NOT_UPDATED)}</Text>
                 )}
             </View>
 
+            {/* Date of Birth */}
             <View style={styles.infoRow}>
-                <Text style={styles.label}>Date of Birth:</Text>
+                <Text style={styles.label}>{t(TEXT_PROFILE_DOB)}</Text>
                 {isEditing ? (
                     <TextInput
                         style={styles.input}
@@ -221,25 +278,25 @@ export default function ProfileInformation({ accountId }) {
                         placeholder="YYYY-MM-DD"
                     />
                 ) : (
-                    <Text style={styles.value}>{formatDate(account.dateOfBirth) || 'Chưa cập nhật'}</Text>
+                    <Text style={styles.value}>{formatDate(account.dateOfBirth) || t(TEXT_PROFILE_NOT_UPDATED)}</Text>
                 )}
             </View>
 
+            {/* Address */}
             <View style={styles.infoRow}>
-                <Text style={styles.label}>Address:</Text>
+                <Text style={styles.label}>{t(TEXT_PROFILE_ADDRESS)}</Text>
                 {isEditing ? (
                     <TextInput
                         style={styles.input}
                         value={editForm.address}
                         onChangeText={(text) => setEditForm({ ...editForm, address: text })}
-                        placeholder="Nhập địa chỉ"
                     />
                 ) : (
-                    <Text style={styles.value}>{account.address || 'Chưa cập nhật'}</Text>
+                    <Text style={styles.value}>{account.address || t(TEXT_PROFILE_NOT_UPDATED)}</Text>
                 )}
             </View>
 
-            {/* Nút hành động khi edit */}
+            {/* Action buttons during edit */}
             {isEditing && (
                 <View style={styles.actionRow}>
                     <TouchableOpacity
@@ -247,7 +304,7 @@ export default function ProfileInformation({ accountId }) {
                         onPress={handleCancel}
                         disabled={saving}
                     >
-                        <Text style={styles.actionButtonText}>Hủy</Text>
+                        <Text style={styles.actionButtonText}>{t(TEXT_PROFILE_CANCEL)}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[styles.actionButton, styles.saveButton]}
@@ -257,7 +314,7 @@ export default function ProfileInformation({ accountId }) {
                         {saving ? (
                             <ActivityIndicator size="small" color="#fff" />
                         ) : (
-                            <Text style={styles.actionButtonText}>Lưu</Text>
+                            <Text style={styles.actionButtonText}>{t(TEXT_PROFILE_SAVE)}</Text>
                         )}
                     </TouchableOpacity>
                 </View>
@@ -265,21 +322,20 @@ export default function ProfileInformation({ accountId }) {
 
             {!isEditing && (
                 <TouchableOpacity onPress={() => setIsEditing(true)} style={styles.editButton}>
-                    <Text style={styles.editButtonText}>✎ Sửa</Text>
+                    <Text style={styles.editButtonText}>{t(TEXT_PROFILE_EDIT)}</Text>
                 </TouchableOpacity>
             )}
 
-            {/* Nút đổi mật khẩu */}
             {!isEditing && (
                 <TouchableOpacity
                     style={styles.changePasswordButton}
                     onPress={() => setShowChangePassword(true)}
                 >
-                    <Text style={styles.changePasswordText}>Đổi mật khẩu</Text>
+                    <Text style={styles.changePasswordText}>{t(TEXT_PROFILE_CHANGE_PASSWORD)}</Text>
                 </TouchableOpacity>
             )}
 
-            {/* Modal đổi mật khẩu */}
+            {/* Change Password Modal */}
             <Modal
                 visible={showChangePassword}
                 transparent
@@ -292,10 +348,8 @@ export default function ProfileInformation({ accountId }) {
             >
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>Đổi mật khẩu</Text>
-                        <Text style={styles.modalSubtitle}>Cập nhật mật khẩu để bảo vệ tài khoản của bạn</Text>
+                        <Text style={styles.modalTitle}>{t(TEXT_PROFILE_CHANGE_PASSWORD)}</Text>
 
-                        {/* Mật khẩu hiện tại */}
                         <TextInput
                             style={styles.input}
                             placeholder="Nhập mật khẩu hiện tại"
@@ -307,7 +361,6 @@ export default function ProfileInformation({ accountId }) {
                             }}
                         />
 
-                        {/* Mật khẩu mới */}
                         <TextInput
                             style={styles.input}
                             placeholder="Nhập mật khẩu mới"
@@ -319,7 +372,6 @@ export default function ProfileInformation({ accountId }) {
                             }}
                         />
 
-                        {/* Xác nhận mật khẩu mới */}
                         <TextInput
                             style={styles.input}
                             placeholder="Nhập lại mật khẩu mới"
@@ -330,66 +382,6 @@ export default function ProfileInformation({ accountId }) {
                                 setPasswordError('');
                             }}
                         />
-
-                        {/* Hiển thị yêu cầu mật khẩu */}
-                        <View style={styles.passwordRequirements}>
-                            <Text style={styles.requirementsTitle}>Yêu cầu mật khẩu</Text>
-                            <View style={styles.passwordRequirements}>
-                                <Text style={styles.requirementsTitle}>Yêu cầu mật khẩu</Text>
-
-                                <View style={styles.requirementItem}>
-                                    <View
-                                        style={[
-                                            styles.requirementDot,
-                                            passwordForm.newPassword.length >= 8 &&
-                                            styles.requirementDotActive,
-                                        ]}
-                                    />
-                                    <Text style={styles.requirementText}>
-                                        Tối thiểu 8 ký tự
-                                    </Text>
-                                </View>
-
-                                <View style={styles.requirementItem}>
-                                    <View
-                                        style={[
-                                            styles.requirementDot,
-                                            /[A-Z]/.test(passwordForm.newPassword) &&
-                                            styles.requirementDotActive,
-                                        ]}
-                                    />
-                                    <Text style={styles.requirementText}>
-                                        Ít nhất 1 chữ in hoa
-                                    </Text>
-                                </View>
-
-                                <View style={styles.requirementItem}>
-                                    <View
-                                        style={[
-                                            styles.requirementDot,
-                                            /[0-9]/.test(passwordForm.newPassword) &&
-                                            styles.requirementDotActive,
-                                        ]}
-                                    />
-                                    <Text style={styles.requirementText}>
-                                        Ít nhất 1 chữ số
-                                    </Text>
-                                </View>
-
-                                <View style={styles.requirementItem}>
-                                    <View
-                                        style={[
-                                            styles.requirementDot,
-                                            /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(passwordForm.newPassword) &&
-                                            styles.requirementDotActive,
-                                        ]}
-                                    />
-                                    <Text style={styles.requirementText}>
-                                        Ít nhất 1 ký tự đặc biệt
-                                    </Text>
-                                </View>
-                            </View>
-                        </View>
 
                         {passwordError ? (
                             <Text style={styles.errorText}>{passwordError}</Text>
@@ -404,7 +396,7 @@ export default function ProfileInformation({ accountId }) {
                                     setPasswordError('');
                                 }}
                             >
-                                <Text style={styles.actionButtonText}>Hủy</Text>
+                                <Text style={styles.actionButtonText}>{t(TEXT_PROFILE_CANCEL)}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={[styles.actionButton, styles.saveButton]}
@@ -414,7 +406,7 @@ export default function ProfileInformation({ accountId }) {
                                 {changingPassword ? (
                                     <ActivityIndicator size="small" color="#fff" />
                                 ) : (
-                                    <Text style={styles.actionButtonText}>Cập nhật mật khẩu</Text>
+                                    <Text style={styles.actionButtonText}>{t(TEXT_PROFILE_CHANGE_PASSWORD)}</Text>
                                 )}
                             </TouchableOpacity>
                         </View>

@@ -1,2 +1,402 @@
-{}
-
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Laptop ASUS ROG Strix G16",
+      "rating": 4.8,
+      "price": 35990000,
+      "category_id": 1,
+      "manufacturer_id": 1,
+      "img_URL": "images/product/1.png"
+    },
+    {
+      "id": 2,
+      "name": "Laptop Dell XPS 13 Plus",
+      "rating": 4.7,
+      "price": 42990000,
+      "category_id": 1,
+      "manufacturer_id": 2,
+      "img_URL": "images/product/2.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Laptop MacBook Pro 14 M3",
+      "rating": 4.9,
+      "price": 49990000,
+      "category_id": 1,
+      "manufacturer_id": 3,
+      "img_URL": "images/product/3.png"
+    },
+    {
+      "id": 4,
+      "name": "CPU Intel Core i9-14900K",
+      "rating": 4.7,
+      "price": 14990000,
+      "category_id": 2,
+      "manufacturer_id": 4,
+      "img_URL": "images/product/CPU Intel Core i9-14900K.webp"
+    },
+    {
+      "id": 5,
+      "name": "RAM Kingston Fury 32GB DDR5",
+      "rating": 4.7,
+      "price": 3890000,
+      "category_id": 3,
+      "manufacturer_id": 5,
+      "img_URL": "images/product/RAM Kingston Fury 32GB DDR5.webp"
+    },
+    {
+      "id": 6,
+      "name": "SSD Samsung 990 Pro 1TB",
+      "rating": 4.8,
+      "price": 3490000,
+      "category_id": 4,
+      "manufacturer_id": 6,
+      "img_URL": "images/product/SSD Samsung 990 Pro 1TB.webp"
+    },
+    {
+      "id": 7,
+      "name": "Card đồ họa NVIDIA RTX 4070 Ti",
+      "rating": 4.8,
+      "price": 18990000,
+      "category_id": 2,
+      "manufacturer_id": 7,
+      "img_URL": "images/product/Card đồ họa NVIDIA RTX 4070 Ti.webp"
+    },
+    {
+      "id": 8,
+      "name": "Mainboard MSI B760 Tomahawk",
+      "rating": 4.6,
+      "price": 4590000,
+      "category_id": 5,
+      "manufacturer_id": 8,
+      "img_URL": "images/product/Mainboard MSI B760 Tomahawk.jpg"
+    },
+    {
+      "id": 9,
+      "name": "Nguồn Corsair RM750e 750W 80 Plus Gold",
+      "rating": 4.8,
+      "price": 2890000,
+      "category_id": 6,
+      "manufacturer_id": 9,
+      "img_URL": "images/product/Nguồn Corsair RM750e 750W 80 Plus Gold.webp"
+    },
+    {
+      "id": 10,
+      "name": "Tản nhiệt DeepCool AK620",
+      "rating": 4.7,
+      "price": 1690000,
+      "category_id": 7,
+      "manufacturer_id": 10,
+      "img_URL": "images/product/Tản nhiệt DeepCool AK620.webp"
+    },
+    {
+      "id": 11,
+      "name": "Chuột Logitech G Pro X Superlight",
+      "rating": 4.9,
+      "price": 2990000,
+      "category_id": 8,
+      "manufacturer_id": 11,
+      "img_URL": "images/product/Chuột Logitech G Pro X Superlight.jpg"
+    },
+    {
+      "id": 12,
+      "name": "Bàn phím Keychron K8 Pro",
+      "rating": 4.8,
+      "price": 2590000,
+      "category_id": 9,
+      "manufacturer_id": 12,
+      "img_URL": "images/product/Bàn phím Keychron K8 Pro.webp"
+    },
+    {
+      "id": 13,
+      "name": "PC Gaming RTX 4070 Ti",
+      "rating": 4.9,
+      "price": 39990000,
+      "category_id": 10,
+      "manufacturer_id": 13,
+      "img_URL": "images/product/PC Gaming RTX 4070 Ti.png"
+    },
+    {
+      "id": 14,
+      "name": "Màn hình LG UltraGear 27GP850",
+      "rating": 4.8,
+      "price": 7990000,
+      "category_id": 11,
+      "manufacturer_id": 14,
+      "img_URL": "images/product/Màn hình LG UltraGear 27GP850.webp"
+    },
+    {
+      "id": 15,
+      "name": "Tai nghe HyperX Cloud III",
+      "rating": 4.8,
+      "price": 2590000,
+      "category_id": 12,
+      "manufacturer_id": 15,
+      "img_URL": "images/product/Tai nghe HyperX Cloud III.jpg"
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "Laptop",
+      "icon": "keyboard",
+      "subCategoriesCount": 0,
+      "status": "active"
+    },
+    {
+      "id": 2,
+      "name": "Electronics / Peripherals",
+      "icon": "mouse",
+      "subCategoriesCount": 0,
+      "status": "active"
+    },
+    {
+      "id": 3,
+      "name": "Audio / Wireless",
+      "icon": "monitor",
+      "subCategoriesCount": 0,
+      "status": "active"
+    },
+    {
+      "id": 4,
+      "name": "Displays / Gaming",
+      "icon": "headphone",
+      "subCategoriesCount": 0,
+      "status": "active"
+    },
+    {
+      "id": 5,
+      "name": "Hardware / Case",
+      "icon": "computer",
+      "subCategoriesCount": 0,
+      "status": "active"
+    },
+    {
+      "id": 6,
+      "name": "Networking",
+      "icon": "keyboard",
+      "subCategoriesCount": 0,
+      "status": "active"
+    },
+    {
+      "id": 7,
+      "name": "Storage",
+      "icon": "mouse",
+      "subCategoriesCount": 0,
+      "status": "active"
+    }
+  ],
+  "manufacturers": [
+    { "id": 1, "name": "ASUS" },
+    { "id": 2, "name": "Dell" },
+    { "id": 3, "name": "Apple" },
+    { "id": 4, "name": "SN-Gear" }
+  ],
+  "news": [
+    {
+      "id": "1",
+      "tag": "GPU",
+      "date": "29/05/2026",
+      "title": "RTX 5090 có gì mới?",
+      "image": "images/news/news_1.avif"
+    },
+    {
+      "id": "2",
+      "tag": "LAPTOP",
+      "date": "28/05/2026",
+      "title": "Top laptop gaming đáng mua 2026",
+      "image": "images/news/news_2.avif"
+    },
+    {
+      "id": "3",
+      "tag": "GPU",
+      "date": "BUILD PC",
+      "title": "Build PC gaming 30 triệu",
+      "image": "images/news/news_3.avif"
+    }
+  ],
+  "banners": [
+    { "id": 1, "img_URL": "images/banner/banner_1.jpg" }
+  ],
+  "showroom": [
+    {
+      "id": 1,
+      "name": "SieuNhanGear - Hà Nội",
+      "address": "123 Trần Thái Tông, Cầu Giấy, Hà Nội",
+      "phone": "024 1234 5678",
+      "website": "https://example.com/hn",
+      "latitude": 21.033243,
+      "longitude": 105.800651
+    },
+    {
+      "id": 2,
+      "name": "SieuNhanGear - TP. Hồ Chí Minh",
+      "address": "45 Nguyễn Thị Minh Khai, Quận 1, TP. HCM",
+      "phone": "028 9876 5432",
+      "website": "https://example.com/hcm",
+      "latitude": 10.776889,
+      "longitude": 106.700806
+    },
+    {
+      "id": 3,
+      "name": "SieuNhanGear - Đà Nẵng",
+      "address": "78 Lê Duẩn, Hải Châu, Đà Nẵng",
+      "phone": "0236 555 1234",
+      "website": "https://example.com/dn",
+      "latitude": 16.054407,
+      "longitude": 108.202165
+    }
+  ],
+  "cart": [
+    { "id": 1, "accountId": 1, "productId": 1, "quantity": 1 },
+    { "id": 2, "accountId": 1, "productId": 3, "quantity": 2 }
+  ],
+  "accounts": [
+    { "id": 1, "name": "Admin", "email": "admin@gmail.com", "password": "123456", "phone": "", "role": "system_admin" },
+    { "id": 2, "name": "User", "email": "user@gmail.com", "password": "123456", "role": "user" },
+    { "id": 3, "name": "System Admin", "email": "systemadmin@gmail.com", "password": "123456", "role": "system_admin" },
+    { "id": 4, "name": "Product Manager", "email": "productmanager@gmail.com", "password": "123456", "role": "product_manager" },
+    { "id": 5, "name": "Sales Staff", "email": "salesstaff@gmail.com", "password": "123456", "role": "sales_staff" }
+  ],
+  "orderStatus": [
+    { "id": 1, "name": "Processing", "color": "#2563EB" },
+    { "id": 2, "name": "Shipping", "color": "#F59E0B" },
+    { "id": 3, "name": "Delivered", "color": "#10B981" },
+    { "id": 4, "name": "Cancelled", "color": "#EF4444" }
+  ],
+  "orderItems": [
+    { "id": 1, "orderId": 1, "productId": 1, "price": 35990000, "quantity": 1 },
+    { "id": 2, "orderId": 1, "productId": 3, "price": 49990000, "quantity": 2 }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "code": "ORD-20260701",
+      "customerId": 2,
+      "customerName": "Nguyễn Văn A",
+      "phone": "0909123456",
+      "address": "123 Trần Duy Hưng, Hà Nội",
+      "statusId": 1,
+      "paymentMethod": "COD",
+      "paymentStatus": "Pending",
+      "shippingCompanyId": 1,
+      "trackingCode": "VN123456789",
+      "total": 35990000,
+      "createdAt": "2026-07-08T08:30:00"
+    },
+    {
+      "id": 2,
+      "code": "ORD-20260702",
+      "customerId": 2,
+      "customerName": "Trần Thị B",
+      "phone": "0988123456",
+      "address": "Quận 1, TP HCM",
+      "statusId": 2,
+      "paymentMethod": "Momo",
+      "paymentStatus": "Paid",
+      "shippingCompanyId": 2,
+      "trackingCode": "GHN987654321",
+      "total": 49990000,
+      "createdAt": "2026-07-08T10:00:00"
+    },
+    {
+      "id": 3,
+      "code": "ORD-20260703",
+      "customerId": 2,
+      "customerName": "Lê Văn C",
+      "phone": "0911222333",
+      "address": "Đà Nẵng",
+      "statusId": 3,
+      "paymentMethod": "Banking",
+      "paymentStatus": "Paid",
+      "shippingCompanyId": 3,
+      "trackingCode": "GHTK333444",
+      "total": 85980000,
+      "createdAt": "2026-07-07T14:00:00"
+    },
+    {
+      "id": 4,
+      "code": "ORD-20260704",
+      "customerName": "Phạm Minh D",
+      "phone": "0933444555",
+      "address": "Hải Phòng",
+      "statusId": 4,
+      "paymentMethod": "COD",
+      "paymentStatus": "Cancelled",
+      "shippingCompanyId": 1,
+      "trackingCode": "",
+      "total": 42990000,
+      "createdAt": "2026-07-06T09:15:00"
+    },
+    {
+      "id": 5,
+      "accountId": 1,
+      "orderDate": "2026-07-18T11:22:54.212Z",
+      "receiverName": "Nguyen Van A",
+      "email": "user@gmail.com",
+      "phone": "0901234567",
+      "province": "Thành phố Hồ Chí Minh",
+      "provinceCode": "79",
+      "ward": "Phường Bến Nghé",
+      "wardCode": "26734",
+      "address": "123 Nguyễn Huệ, Quận 1, Phường Bến Nghé, Thành phố Hồ Chí Minh",
+      "paymentMethod": "cod",
+      "shippingFee": 0,
+      "discountCode": "",
+      "discountAmount": 0,
+      "subtotal": 135970000,
+      "totalPrice": 135970000,
+      "status": "Pending"
+    }
+  ],
+  "shippingCompanies": [
+    { "id": 1, "name": "Viettel Post", "phone": "19008095" },
+    { "id": 2, "name": "GHN", "phone": "1900636677" },
+    { "id": 3, "name": "GHTK", "phone": "19006092" }
+  ],
+  "paymentMethods": [
+    { "id": 1, "code": "cod", "name": "Thanh toán khi nhận hàng", "description": "Thanh toán bằng tiền mặt khi nhận hàng" },
+    { "id": 2, "code": "bank_transfer", "name": "Chuyển khoản ngân hàng", "description": "Thanh toán bằng chuyển khoản" }
+  ],
+  "vouchers": [
+    { "id": 2, "code": "NEWYEAR15", "description": "Giảm 15% cho mọi đơn hàng", "discountPercentage": 15, "minOrderValue": 0, "isActive": true },
+    { "id": 3, "code": "FLASH30", "description": "Giảm 30% cho đơn từ 1.000.000đ", "discountPercentage": 30, "minOrderValue": 1000000, "isActive": true }
+  ],
+  "shippingAddresses": [
+    {
+      "id": 1,
+      "accountId": 1,
+      "receiverName": "Nguyen Van A",
+      "email": "user@gmail.com",
+      "phone": "0901234567",
+      "province": "Thành phố Hồ Chí Minh",
+      "provinceCode": "79",
+      "ward": "Phường Bến Nghé",
+      "wardCode": "26734",
+      "address": "123 Nguyễn Huệ, Quận 1",
+      "isDefault": true
+    },
+    {
+      "id": 2,
+      "accountId": 2,
+      "receiverName": "Tran Thi B",
+      "email": "tranthib@gmail.com",
+      "phone": "0912345678",
+      "province": "Hà Nội",
+      "provinceCode": "01",
+      "ward": "Phường Dịch Vọng",
+      "wardCode": "00076",
+      "address": "12 Trần Thái Tông",
+      "isDefault": true
+    }
+  ],
+  "warehouses": [
+    { "id": 1, "name": "Hanoi - Zone A", "code": "HN-A", "region": "Hanoi" },
+    { "id": 2, "name": "Saigon - Zone C", "code": "SG-C", "region": "Ho Chi Minh" },
+    { "id": 3, "name": "Danang - Zone B", "code": "DN-B", "region": "Danang" },
+    { "id": 4, "name": "Hanoi - Zone D", "code": "HN-D", "region": "Hanoi" }
+  ],
+  "stock": [],
+  "stockHistory": []
+}

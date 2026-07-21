@@ -1,19 +1,29 @@
 const express = require('express');
-const { ROUTES } = require('../../../constants/routes.constants');
-const { register, login, logout } = require('../../../controllers/authController');
+const { authController } = require('../controllers/auth.controller');
+const { authenticate } = require('../../../middlewares/auth.middleware');
 
-// STUB: auth routes (chưa có DB/JWT)
 function createAuthRouter() {
   const router = express.Router();
 
-  // POST /api/auth/login
-  router.post(ROUTES.AUTH.LOGIN, login);
+  // POST /api/auth/register (UC-01) - luôn tạo tài khoản Customer (role "user")
+  router.post('/register', authController.register);
+
+  // POST /api/auth/login (UC-02) - dùng chung cho mọi role, trả về JWT kèm role
+  router.post('/login', authController.login);
 
   // POST /api/auth/logout
-  router.post(ROUTES.AUTH.LOGOUT, logout);
+  router.post('/logout', (req, res) => {
+    res.json({ success: true, message: "Logged out successfully" });
+  });
 
-  // POST /api/auth/register
-  router.post(ROUTES.AUTH.REGISTER, register);
+  // GET /api/auth/me - lấy thông tin tài khoản đang đăng nhập (cần Bearer token)
+  router.get('/me', authenticate, authController.me);
+
+  // PUT /api/auth/me (UC-03 Manage Profile) - cập nhật thông tin của chính mình
+  router.put('/me', authenticate, authController.updateMe);
+
+  // POST /api/auth/forgot-password - dat lai mat khau theo email
+  router.post('/forgot-password', authController.forgotPassword);
 
   return router;
 }

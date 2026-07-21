@@ -37,6 +37,7 @@ export const API = {
   AUTH_LOGIN: "api/auth/login",
   AUTH_LOGOUT: "api/auth/logout",
   AUTH_REGISTER: "api/auth/register",
+  AUTH_FORGOT_PASSWORD: "api/auth/forgot-password",
 
   GET_COMMENTS: "api/comments",
   GET_COMMENT_BY_ID: (id) => `api/comments/${id}`,
@@ -66,7 +67,7 @@ export const API = {
     `api/orderTimeline?orderId=${orderId}`,
 
   // Status
-  GET_ORDER_STATUS: "api/orderStatus",
+  GET_ORDER_STATUS: "api/orders/statuses",
 
   // Shipping
   GET_SHIPPING_COMPANIES: "api/shippingCompanies",
@@ -93,9 +94,9 @@ export const API = {
   GET_SHIPPING_ADDRESS_BY_ACCOUNT: (accountId) =>
     `api/shippingAddresses?accountId=${accountId}`,
   //Order
-  GET_ORDER: "orders",
-  GET_ORDER_BY_ID: (id) => `orders/${id}`,
-  GET_ORDER_BY_CODE: (code) => `orders?code=${code}`,
+  GET_ORDER: "api/orders",
+  GET_ORDER_BY_ID: (id) => `api/orders/${id}`,
+  GET_ORDER_BY_CODE: (code) => `api/orders?code=${code}`,
 
   // ==========================
   // Inventory / Warehouses
@@ -110,10 +111,10 @@ export const API = {
     `api/stock?warehouseId=${warehouseId}`,
   UPDATE_STOCK: (id) => `api/stock/${id}`,
 
-  GET_STOCK_HISTORY: "api/stockHistory",
+  GET_STOCK_HISTORY: "api/stock-history",
   GET_STOCK_HISTORY_BY_PRODUCT: (productId) =>
-    `api/stockHistory?productId=${productId}`,
-  CREATE_STOCK_HISTORY: "api/stockHistory",
+    `api/stock-history?productId=${productId}`,
+  CREATE_STOCK_HISTORY: "api/stock-history",
 
   // ==========================
   // Specification Templates (Attribute Groups & Attributes)

@@ -5,21 +5,25 @@ import { API } from "../../../constants/apiURL";
 import { ROUTES } from "../../../constants/routes";
 import styles from "./UserDropdown.styles";
 
+import { getAvatarUri } from "../../../utils/avatar";
+
 export default function UserDropdown({ user, onClose, onLogout }) {
   const navigate = useNavigate();
+  const avatarUri = getAvatarUri(user?.avatarURL);
+  const role = String(user?.role || "").toLowerCase().trim();
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        {user.avatarURL ? (
+        {avatarUri ? (
           <Image
-            source={{ uri: `${API.BASE_API_URL}${user.avatarURL}` }}
+            source={{ uri: avatarUri }}
             style={styles.avatarImage}
           />
         ) : (
           <View style={styles.avatar}>
             <Text style={styles.avatarText}>
-              {user.name.charAt(0).toUpperCase()}
+              {user?.name ? user.name.charAt(0).toUpperCase() : "U"}
             </Text>
           </View>
         )}
@@ -50,7 +54,7 @@ export default function UserDropdown({ user, onClose, onLogout }) {
         <Text style={styles.itemText}>📦 Đơn hàng</Text>
       </Pressable>
 
-      {user.role === "admin" && (
+      {role === "sales_staff" && (
         <Pressable
           style={styles.item}
           onPress={() => {
@@ -59,6 +63,30 @@ export default function UserDropdown({ user, onClose, onLogout }) {
           }}
         >
           <Text style={styles.itemText}>⚙️ Quản lý đơn hàng</Text>
+        </Pressable>
+      )}
+
+      {role === "product_manager" && (
+        <Pressable
+          style={styles.item}
+          onPress={() => {
+            navigate(ROUTES.PRODUCT_MANAGEMENT);
+            onClose();
+          }}
+        >
+          <Text style={styles.itemText}>⚙️ Quản lý cửa hàng</Text>
+        </Pressable>
+      )}
+
+      {(role === "system_admin" || role === "admin") && (
+        <Pressable
+          style={styles.item}
+          onPress={() => {
+            navigate(ROUTES.ADMIN_ACCOUNTS);
+            onClose();
+          }}
+        >
+          <Text style={styles.itemText}>⚙️ Hệ thống quản trị</Text>
         </Pressable>
       )}
 

@@ -90,7 +90,11 @@ export default function OrderProductTable({ items }) {
           >
             <Image
               source={{
-                uri: `${API.BASE_API_URL}/${item.img_URL}`,
+                uri: !item.img_URL
+                  ? ""
+                  : item.img_URL.startsWith("http://") || item.img_URL.startsWith("https://") || item.img_URL.startsWith("data:")
+                  ? item.img_URL
+                  : `${API.BASE_API_URL}${item.img_URL.startsWith("/") ? "" : "/"}${item.img_URL}`,
               }}
               style={{
                 width: 60,
@@ -98,6 +102,7 @@ export default function OrderProductTable({ items }) {
                 borderRadius: 8,
                 marginRight: 12,
                 resizeMode: "contain",
+                backgroundColor: "#F1F5F9",
               }}
             />
 

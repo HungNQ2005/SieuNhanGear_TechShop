@@ -92,14 +92,17 @@ export default function LowStockAlertsView({ items, onRestock }) {
               borderColor: "#F1F3F6",
             }}
           >
-            <View style={{ flex: 3 }}>
-              <Text style={{ fontSize: 14, fontWeight: "700", color: "#111827" }}>
+            <TouchableOpacity
+              style={{ flex: 3 }}
+              onPress={() => onViewDetail && onViewDetail(row.product || row)}
+            >
+              <Text style={{ fontSize: 14, fontWeight: "700", color: "#111827", textDecorationLine: "underline" }}>
                 {row.product?.name || "-"}
               </Text>
               <Text style={{ fontSize: 12, color: "#9CA3AF", marginTop: 2 }}>
                 {row.category?.name || "-"}
               </Text>
-            </View>
+            </TouchableOpacity>
 
             <View style={{ flex: 2 }}>
               <StockLevelBadge quantity={row.quantity} status={row.status} />

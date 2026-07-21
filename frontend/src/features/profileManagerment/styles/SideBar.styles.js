@@ -1,4 +1,3 @@
-// src/features/profileManagerment/styles/SideBar.styles.js
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
@@ -21,10 +20,25 @@ export const styles = StyleSheet.create({
         paddingBottom: 16,
     },
     avatar: {
-        width: 80,
-        height: 80,
-        borderRadius: 40,
-        marginBottom: 8,
+        width: 84,
+        height: 84,
+        borderRadius: 42,
+        backgroundColor: '#E2E8F0',
+        marginBottom: 12,
+    },
+    avatarFallback: {
+        width: 84,
+        height: 84,
+        borderRadius: 42,
+        backgroundColor: '#2563EB',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 12,
+    },
+    avatarFallbackText: {
+        fontSize: 32,
+        fontWeight: 'bold',
+        color: '#FFFFFF',
     },
     userName: {
         fontSize: 18,

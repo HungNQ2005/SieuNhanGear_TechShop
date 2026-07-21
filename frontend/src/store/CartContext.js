@@ -6,9 +6,11 @@ import React, {
   useEffect,
 } from "react";
 import { getProducts } from "../services/api";
-import { createCart, getCartByAccount, updateCart } from "../services/CartService";
+import { createCart, getCartByAccount } from "../services/CartService";
+
 const CartContext = createContext({
   items: [],
+  loadCart: () => {},
   addToCart: () => {},
   increaseQuantity: () => {},
   decreaseQuantity: () => {},
@@ -19,8 +21,28 @@ const CartContext = createContext({
 });
 
 export function CartProvider({ children }) {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(() => {
+    if (typeof localStorage !== "undefined") {
+      try {
+        const saved = localStorage.getItem("cart");
+        return saved ? JSON.parse(saved) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+    return [];
+  });
   const [accountId, setAccountId] = useState(null);
+
+  useEffect(() => {
+    if (typeof localStorage !== "undefined") {
+      try {
+        localStorage.setItem("cart", JSON.stringify(items));
+      } catch (e) {
+        console.error("Failed to save cart to localStorage", e);
+      }
+    }
+  }, [items]);
 
   useEffect(() => {
     try {
@@ -47,7 +69,7 @@ export function CartProvider({ children }) {
 
     try {
       const payloadItems = (nextItems || []).map((item) => ({
-        productId: item.productId ?? item.id,
+        productId: item.productId ?? item.id ?? item._id,
         quantity: Number(item.quantity ?? 1),
         price: Number(item.price ?? 0),
       }));
@@ -61,7 +83,6 @@ export function CartProvider({ children }) {
   const loadCart = async (resolvedAccountId) => {
     const activeAccountId = resolvedAccountId || accountId;
     if (!activeAccountId) {
-      setItems([]);
       return;
     }
 
@@ -70,46 +91,47 @@ export function CartProvider({ children }) {
       const cartItems = normalizeCartPayload(cartPayload);
 
       const productRes = await getProducts();
-      const products = Array.isArray(productRes?.data) ? productRes.data : [];
+      const products = Array.isArray(productRes?.data)
+        ? productRes.data
+        : (Array.isArray(productRes) ? productRes : []);
 
-      const normalizedItems = cartItems
-        .map((cartItem) => {
-          const productId = cartItem.productId ?? cartItem.product?.id;
-          const product = products.find((p) => p.id === productId);
+      if (cartItems.length > 0) {
+        const normalizedItems = cartItems
+          .map((cartItem) => {
+            const productId = cartItem.productId ?? cartItem.product?.id ?? cartItem.product?._id;
+            const product = cartItem.product || products.find((p) => String(p.id || p._id) === String(productId)) || {};
 
-          if (!product) return null;
+            return {
+              ...product,
+              quantity: Number(cartItem.quantity ?? cartItem.qty ?? 1),
+              accountId: activeAccountId ?? cartPayload?.userId ?? null,
+              cartId: cartItem.id ?? cartItem._id ?? null,
+              productId: productId || product.id,
+            };
+          })
+          .filter(Boolean);
 
-          return {
-            ...product,
-            quantity: Number(cartItem.quantity ?? cartItem.qty ?? 1),
-            accountId: activeAccountId ?? cartPayload?.userId ?? null,
-            cartId: cartItem.id ?? cartItem._id ?? null,
-            productId,
-          };
-        })
-        .filter(Boolean);
-
-      setItems((current) => {
-        if (!normalizedItems.length) {
-          return current.length ? current : [];
+        if (normalizedItems.length) {
+          setItems(normalizedItems);
         }
-        return normalizedItems;
-      });
+      }
     } catch (err) {
       console.error("Load cart failed:", err);
-      setItems((current) => current);
     }
   };
 
-  const addToCart = (product) => {
+  const addToCart = (product, qty = 1) => {
+    if (!product) return;
     setItems((current) => {
-      const existing = current.find((item) => item.id === product.id);
+      const productId = product.id || product._id;
+      const existing = current.find((item) => String(item.id || item._id) === String(productId));
+
       const next = existing
         ? current.map((item) =>
-            item.id === product.id
+            String(item.id || item._id) === String(productId)
               ? {
                   ...item,
-                  quantity: item.quantity + 1,
+                  quantity: item.quantity + (qty || 1),
                 }
               : item,
           )
@@ -117,7 +139,7 @@ export function CartProvider({ children }) {
             ...current,
             {
               ...product,
-              quantity: 1,
+              quantity: qty || 1,
             },
           ];
 
@@ -129,7 +151,9 @@ export function CartProvider({ children }) {
   const increaseQuantity = (id) => {
     setItems((current) => {
       const next = current.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
+        String(item.id || item._id) === String(id)
+          ? { ...item, quantity: item.quantity + 1 }
+          : item,
       );
       syncCartToServer(next, accountId);
       return next;
@@ -140,7 +164,9 @@ export function CartProvider({ children }) {
     setItems((current) => {
       const next = current
         .map((item) =>
-          item.id === id ? { ...item, quantity: item.quantity - 1 } : item,
+          String(item.id || item._id) === String(id)
+            ? { ...item, quantity: item.quantity - 1 }
+            : item,
         )
         .filter((item) => item.quantity > 0);
       syncCartToServer(next, accountId);
@@ -150,7 +176,7 @@ export function CartProvider({ children }) {
 
   const removeItem = (id) => {
     setItems((current) => {
-      const next = current.filter((item) => item.id !== id);
+      const next = current.filter((item) => String(item.id || item._id) !== String(id));
       syncCartToServer(next, accountId);
       return next;
     });
@@ -171,15 +197,16 @@ export function CartProvider({ children }) {
       removeItem,
       clearCart,
 
-      totalItems: items.reduce((sum, item) => sum + item.quantity, 0),
+      totalItems: items.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0),
 
       totalPrice: items.reduce(
-        (sum, item) => sum + item.price * item.quantity,
+        (sum, item) => sum + (Number(item.price) || 0) * (Number(item.quantity) || 0),
         0,
       ),
     }),
     [items],
   );
+
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 

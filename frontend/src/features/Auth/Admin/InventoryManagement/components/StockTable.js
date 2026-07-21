@@ -11,7 +11,7 @@ import {
 } from "../../../../../constants/i18nKeys";
 import StockRow from "./StockRow";
 
-export default function StockTable({ rows, onRestock }) {
+export default function StockTable({ rows, onRestock, onViewDetail }) {
   const { t } = useLocalization();
 
   return (
@@ -48,7 +48,7 @@ export default function StockTable({ rows, onRestock }) {
         </Text>
         <Text
           style={{
-            flex: 1,
+            flex: 1.5,
             fontWeight: "700",
             fontSize: 12,
             color: "#6B7280",
@@ -67,7 +67,7 @@ export default function StockTable({ rows, onRestock }) {
         </View>
       ) : (
         rows.map((row) => (
-          <StockRow key={row.id} row={row} onRestock={onRestock} />
+          <StockRow key={row.id} row={row} onRestock={onRestock} onViewDetail={onViewDetail} />
         ))
       )}
     </View>

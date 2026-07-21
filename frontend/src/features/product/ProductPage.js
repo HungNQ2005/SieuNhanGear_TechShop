@@ -81,6 +81,7 @@ export default function ProductPage() {
     const [error, setError] = useState(null);
     const [addedToCart, setAddedToCart] = useState(false);
     const [comments, setComments] = useState([]);
+    const [quantity, setQuantity] = useState(1);
 
     useEffect(() => {
         if (!id) return;
@@ -113,7 +114,7 @@ export default function ProductPage() {
                         String(p.category_id) === String(prod.category_id) ||
                         String(p.manufacturer_id) === String(prod.manufacturer_id)
                     )
-                ).slice(0, 6); //Load tối đa 6 sản phẩm, lag problem <(")
+                ).slice(0, 6);
                 setRelatedProducts(related);
             })
             .catch(() => setError('error'))
@@ -125,8 +126,8 @@ export default function ProductPage() {
 
         Promise.all([api.get(API.GET_COMMENTS), api.get(API.GET_ACCOUNTS)])
             .then(([commentsRes, accountsRes]) => {
-                const allComments = commentsRes.data;
-                const allAccounts = accountsRes.data;
+                const allComments = Array.isArray(commentsRes.data) ? commentsRes.data : [];
+                const allAccounts = Array.isArray(accountsRes.data) ? accountsRes.data : [];
                 const productComments = allComments.filter(c => c.product_id === product.id);
                 const commentsWithNames = productComments.map(comment => {
                     const account = allAccounts.find(acc => acc.id === comment.account_id);
@@ -144,13 +145,31 @@ export default function ProductPage() {
 
     const handleAddToCart = () => {
         if (!product) return;
-        addToCart(product);
+        addToCart(product, quantity);
         setAddedToCart(true);
         setTimeout(() => setAddedToCart(false), 2000);
     };
 
+    const handleBuyNow = () => {
+        if (!product) return;
+        addToCart(product, quantity);
+        navigate(ROUTES.CHECKOUT);
+    };
+
     const formatPrice = (price) =>
         price?.toLocaleString('vi-VN') + 'đ';
+
+    const getProductImageUri = (url) => {
+        if (!url) return null;
+        if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+            return url;
+        }
+        const baseUrl = API.BASE_API_URL.endsWith('/')
+            ? API.BASE_API_URL.slice(0, -1)
+            : API.BASE_API_URL;
+        const path = url.startsWith('/') ? url : `/${url}`;
+        return `${baseUrl}${path}`;
+    };
 
     if (loading) {
         return (
@@ -181,6 +200,8 @@ export default function ProductPage() {
         ? manufacturer?.description_vi
         : manufacturer?.description_en;
 
+    const productImageUri = getProductImageUri(product.img_URL);
+
     return (
         <ScrollView style={styles.page} contentContainerStyle={styles.pageContent}>
 
@@ -202,9 +223,9 @@ export default function ProductPage() {
                 <View style={styles.productSection}>
                     {/* Product Image */}
                     <View style={styles.imageWrapper}>
-                        {product.img_URL ? (
+                        {productImageUri ? (
                             <Image
-                                source={{ uri: `${API.BASE_API_URL}${product.img_URL}` }}
+                                source={{ uri: productImageUri }}
                                 style={styles.productImage}
                                 resizeMode="contain"
                             />
@@ -217,7 +238,7 @@ export default function ProductPage() {
                 </View>
 
                 {/* Product Info */}
-                <View>
+                <View style={{ flex: 1 }}>
                     <View style={styles.infoWrapper}>
                         {/* Manufacturer + Category tags */}
                         <View style={styles.tagRow}>
@@ -267,6 +288,26 @@ export default function ProductPage() {
                             </View>
                         )}
 
+                        {/* Quantity Selector */}
+                        <View style={styles.quantityRow}>
+                            <Text style={styles.quantityLabel}>Số lượng:</Text>
+                            <View style={styles.quantityControls}>
+                                <TouchableOpacity
+                                    style={styles.quantityBtn}
+                                    onPress={() => setQuantity(prev => Math.max(1, prev - 1))}
+                                >
+                                    <Text style={styles.quantityBtnText}>-</Text>
+                                </TouchableOpacity>
+                                <Text style={styles.quantityValue}>{quantity}</Text>
+                                <TouchableOpacity
+                                    style={styles.quantityBtn}
+                                    onPress={() => setQuantity(prev => prev + 1)}
+                                >
+                                    <Text style={styles.quantityBtnText}>+</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+
                         {/* Action buttons */}
                         <View style={styles.actionRow}>
                             <TouchableOpacity
@@ -276,16 +317,13 @@ export default function ProductPage() {
                             >
                                 <IconCart />
                                 <Text style={styles.addToCartText}>
-                                    <TextIntl tx={TEXT_PRODUCT_PAGE_ADD_TO_CART} />
+                                    {addedToCart ? 'Đã thêm vào giỏ!' : <TextIntl tx={TEXT_PRODUCT_PAGE_ADD_TO_CART} />}
                                 </Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
                                 style={styles.buyNowBtn}
-                                onPress={() => {
-                                    addToCart(product);
-                                    navigate(ROUTES.HOME); // Sau này chỉnh lại đến trang mua hàng chứ giờ nó dẫn về homepage
-                                }}
+                                onPress={handleBuyNow}
                                 activeOpacity={0.85}
                             >
                                 <TextIntl tx={TEXT_PRODUCT_PAGE_BUY_NOW} style={styles.buyNowText} />

@@ -11,6 +11,7 @@ import {
 import { styles } from "./ManageShowroom.styles";
 import ShowroomFormModal from "../components/ShowroomFormModal";
 import { useLocalization } from "../../../../../../providers/LocalizationProvider";
+import { useNavigate } from "react-router-dom";
 
 import {
   getShowrooms,
@@ -30,7 +31,7 @@ import {
   IconMapPinSmall,
   IconStoreEmpty,
 } from "../../../../../../constants/icons";
-import Sidebar from "../../Slidebar";
+import Sidebar from "../../../Sidebar";
 import {
   TEXT_SHOWROOM_MANAGEMENT_TITLE,
   TEXT_SHOWROOM_MANAGEMENT_SUBTITLE,
@@ -67,6 +68,7 @@ const PAGE_SIZE = 6;
 
 export default function ManageShowroom() {
   const { t } = useLocalization();
+  const navigate = useNavigate();
 
   const [showrooms, setShowrooms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -122,8 +124,13 @@ export default function ManageShowroom() {
   };
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    if (!user || (user.role !== "system_admin" && user.role !== "admin")) {
+      navigate("/");
+      return;
+    }
     loadData();
-  }, []);
+  }, [navigate]);
 
   // ==========================
   // Search
@@ -250,11 +257,9 @@ export default function ManageShowroom() {
     }
   };
   return (
-    <View style={{ flex: 1, flexDirection: "row" }}>
-      <View style={{ flex: 2 }}>
-        <Sidebar />
-      </View>
-      <View style={{ flex: 8 }}>
+    <View style={{ flex: 1, flexDirection: "row", backgroundColor: "#F8FAFC" }}>
+      <Sidebar selected="showroom" />
+      <View style={{ flex: 1, padding: 24 }}>
         {/* Header */}
         <View style={styles.headerRow}>
           <View>
@@ -289,16 +294,14 @@ export default function ManageShowroom() {
 
             <TextInput
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChangeText={setSearch}
               placeholder={t(TEXT_SHOWROOM_MANAGEMENT_SEARCH)}
               placeholderTextColor="#CBD5E1"
               style={{
                 flex: 1,
-                border: "none",
-                outline: "none",
-                background: "transparent",
                 height: "100%",
                 fontSize: 14,
+                color: "#0F172A",
               }}
             />
           </View>

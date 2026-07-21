@@ -14,17 +14,20 @@ import {
   TEXT_CART_SUBTOTAL,
   TEXT_CART_SUMMARY_TITLE,
 } from "../../../constants/i18nKeys";
+
 export default function CartSummary() {
   const { totalPrice } = useCart();
   const { t } = useLocalization();
   const navigate = useNavigate();
+  const safeTotal = (Number(totalPrice) || 0).toLocaleString("vi-VN") + "đ";
+
   return (
     <View style={styles.card}>
       <Text style={styles.title}>{t(TEXT_CART_SUMMARY_TITLE)}</Text>
 
       <View style={styles.row}>
         <Text>{t(TEXT_CART_SUBTOTAL)}</Text>
-        <Text>{totalPrice.toLocaleString()}đ</Text>
+        <Text>{safeTotal}</Text>
       </View>
 
       <View style={styles.row}>
@@ -37,7 +40,7 @@ export default function CartSummary() {
       <View style={styles.row}>
         <Text style={styles.total}>{t(TEXT_CART_GRAND_TOTAL)}</Text>
 
-        <Text style={styles.total}>{totalPrice.toLocaleString()}đ</Text>
+        <Text style={styles.total}>{safeTotal}</Text>
       </View>
 
       <Pressable

@@ -237,6 +237,47 @@ export const styles = StyleSheet.create({
     lineHeight: 24,
   },
 
+  // Quantity
+  quantityRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+    marginVertical: 12,
+  },
+  quantityLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#475569',
+  },
+  quantityControls: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#CBD5E1',
+    borderRadius: 8,
+    backgroundColor: '#F8FAFC',
+    overflow: 'hidden',
+  },
+  quantityBtn: {
+    width: 38,
+    height: 38,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F1F5F9',
+  },
+  quantityBtnText: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#1E293B',
+  },
+  quantityValue: {
+    width: 44,
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#0F172A',
+  },
+
   // Actions
   actionRow: {
     flexDirection: 'row',

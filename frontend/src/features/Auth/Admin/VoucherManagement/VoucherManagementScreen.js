@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-
 import { View, ScrollView, Text } from "react-native";
+import { useNavigate } from "react-router-dom";
 
 import Sidebar from "../Sidebar";
 import AdminTopBar from "../AdminTopBar";
@@ -28,6 +28,7 @@ const PAGE_SIZE = 10;
 
 export default function VoucherManagementScreen() {
   const { t } = useLocalization();
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
 
@@ -70,16 +71,19 @@ export default function VoucherManagementScreen() {
   }, []);
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    if (!user || (user.role !== "product_manager" && user.role !== "system_admin" && user.role !== "admin")) {
+      navigate("/");
+      return;
+    }
     loadData();
-  }, [loadData]);
+  }, [loadData, navigate]);
 
   const voucherStats = useMemo(() => {
     return {
       total: vouchers.length,
       active: vouchers.filter((v) => v.status === "active").length,
       inactive: vouchers.filter((v) => v.status === "inactive").length,
-      // The API doesn't expose redemption/usage data yet, so this is
-      // left at 0 until a usage-tracking field is added to the voucher model.
       used: 0,
     };
   }, [vouchers]);

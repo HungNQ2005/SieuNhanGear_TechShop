@@ -1151,3 +1151,21 @@ export const TEXT_CAT_DELETE_MESSAGE =
 export const TEXT_CAT_DELETE_CANCEL = "categoriesPage.TEXT_CAT_DELETE_CANCEL";
 export const TEXT_CAT_DELETE_CONFIRM =
   "categoriesPage.TEXT_CAT_DELETE_CONFIRM";
+
+// ─── Profile ───────────────────────────────────────────────────────────────────
+export const TEXT_PROFILE_INFO = "profile.TEXT_PROFILE_INFO";
+export const TEXT_PROFILE_ORDER_HISTORY = "profile.TEXT_PROFILE_ORDER_HISTORY";
+export const TEXT_PROFILE_FAVORITES = "profile.TEXT_PROFILE_FAVORITES";
+export const TEXT_PROFILE_LOGOUT = "profile.TEXT_PROFILE_LOGOUT";
+export const TEXT_PROFILE_EDIT = "profile.TEXT_PROFILE_EDIT";
+export const TEXT_PROFILE_CHANGE_PASSWORD = "profile.TEXT_PROFILE_CHANGE_PASSWORD";
+export const TEXT_PROFILE_CANCEL = "profile.TEXT_PROFILE_CANCEL";
+export const TEXT_PROFILE_SAVE = "profile.TEXT_PROFILE_SAVE";
+export const TEXT_PROFILE_PHONE = "profile.TEXT_PROFILE_PHONE";
+export const TEXT_PROFILE_DOB = "profile.TEXT_PROFILE_DOB";
+export const TEXT_PROFILE_ADDRESS = "profile.TEXT_PROFILE_ADDRESS";
+export const TEXT_PROFILE_NOT_UPDATED = "profile.TEXT_PROFILE_NOT_UPDATED";
+export const TEXT_PROFILE_CURRENT_PASSWORD = "profile.TEXT_PROFILE_CURRENT_PASSWORD";
+export const TEXT_PROFILE_NEW_PASSWORD = "profile.TEXT_PROFILE_NEW_PASSWORD";
+export const TEXT_PROFILE_CONFIRM_PASSWORD = "profile.TEXT_PROFILE_CONFIRM_PASSWORD";
+

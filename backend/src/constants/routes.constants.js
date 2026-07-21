@@ -1,6 +1,3 @@
-const express = require("express");
-const router = express.Router();
-
 const ROUTES = {
   HEALTH: {
     BASE: "/health",
@@ -38,6 +35,12 @@ const ROUTES = {
     GET_MANUFACTURER_BY_ID: "/:id",
   },
 
+  NEWS: {
+    BASE: "/api/news",
+    NULL: "/",
+    GET_NEWS_BY_ID: "/:id",
+  },
+
   CATEGORY: {
     BASE: "/api/categories",
     NULL: "/",
@@ -54,17 +57,50 @@ const ROUTES = {
     BASE: "/api/home",
   },
 
-  ACCOUNT: {
-    BASE: "/api/accounts",
-    NULL: "/",
-    GET_ACCOUNT_BY_ID: "/:id",
-  },
   SHOWROOM: {
     BASE: "/api/showroom",
   },
 
   VOUCHER: {
     BASE: "/api/vouchers",
+  },
+
+  WAREHOUSE: {
+    BASE: "/api/warehouses",
+  },
+
+  STOCK: {
+    BASE: "/api/stock",
+  },
+
+  STOCK_HISTORY: {
+    BASE: "/api/stock-history",
+  },
+
+  ACCOUNT: {
+    BASE: "/api/accounts",
+    NULL: "/",
+    GET_ACCOUNT_BY_ID: "/:id",
+  },
+
+  COMMENT: {
+    BASE: "/api/comments",
+  },
+
+  ORDER: {
+    BASE: "/api/orders",
+  },
+
+  PROMOTION: {
+    BASE: "/api/promotions",
+  },
+
+  SPECIFICATION: {
+    BASE: "/api/specifications",
+  },
+
+  STATISTIC: {
+    BASE: "/api/statistics",
   },
 };
 

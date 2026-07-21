@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { View, ScrollView, Text } from "react-native";
+import { useNavigate } from "react-router-dom";
 
 import Sidebar from "../Sidebar";
 import InventoryHeader from "./components/InventoryHeader";
@@ -10,6 +11,7 @@ import Pagination from "./components/Pagination";
 import LowStockAlertsView from "./components/LowStockAlertsView";
 import StockHistoryView from "./components/StockHistoryView";
 import RestockModal from "./components/RestockModal";
+import ProductDetailModal from "./components/ProductDetailModal";
 
 import { useLocalization } from "../../../../providers/LocalizationProvider";
 import {
@@ -34,6 +36,7 @@ function computeStatus(quantity, criticalThreshold, lowStockThreshold) {
 
 export default function InventoryManagementScreen() {
   const { t } = useLocalization();
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
@@ -49,6 +52,7 @@ export default function InventoryManagementScreen() {
   const [page, setPage] = useState(1);
 
   const [restockTarget, setRestockTarget] = useState(null);
+  const [detailProduct, setDetailProduct] = useState(null);
   const [saving, setSaving] = useState(false);
 
   const loadData = useCallback(async () => {
@@ -75,8 +79,13 @@ export default function InventoryManagementScreen() {
   }, []);
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    if (!user || (user.role !== "product_manager" && user.role !== "system_admin" && user.role !== "admin")) {
+      navigate("/");
+      return;
+    }
     loadData();
-  }, [loadData]);
+  }, [loadData, navigate]);
 
   // ─── Joined stock rows (product + category + warehouse + computed status) ──
   const joinedStock = useMemo(() => {
@@ -223,7 +232,11 @@ export default function InventoryManagementScreen() {
                   to={Math.min(page * PAGE_SIZE, filteredStock.length)}
                   total={filteredStock.length}
                 />
-                <StockTable rows={pagedStock} onRestock={setRestockTarget} />
+                <StockTable
+                  rows={pagedStock}
+                  onRestock={setRestockTarget}
+                  onViewDetail={setDetailProduct}
+                />
                 <Pagination
                   page={page}
                   totalPages={totalPages}
@@ -236,6 +249,7 @@ export default function InventoryManagementScreen() {
               <LowStockAlertsView
                 items={lowStockItems}
                 onRestock={setRestockTarget}
+                onViewDetail={setDetailProduct}
               />
             )}
 
@@ -260,6 +274,12 @@ export default function InventoryManagementScreen() {
         saving={saving}
         onClose={() => setRestockTarget(null)}
         onConfirm={handleRestockConfirm}
+      />
+
+      <ProductDetailModal
+        product={detailProduct}
+        visible={Boolean(detailProduct)}
+        onClose={() => setDetailProduct(null)}
       />
     </View>
   );

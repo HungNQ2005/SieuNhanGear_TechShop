@@ -15,7 +15,7 @@ function formatDate(iso) {
   )} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-export default function StockRow({ row, onRestock }) {
+export default function StockRow({ row, onRestock, onViewDetail }) {
   const { t } = useLocalization();
 
   return (
@@ -29,7 +29,10 @@ export default function StockRow({ row, onRestock }) {
         borderColor: "#F1F3F6",
       }}
     >
-      <View style={{ flex: 3, flexDirection: "row", alignItems: "center", gap: 12 }}>
+      <TouchableOpacity
+        style={{ flex: 3, flexDirection: "row", alignItems: "center", gap: 12 }}
+        onPress={() => onViewDetail && onViewDetail(row.product || row)}
+      >
         <View
           style={{
             width: 40,
@@ -51,7 +54,7 @@ export default function StockRow({ row, onRestock }) {
         </View>
         <View style={{ flex: 1 }}>
           <Text
-            style={{ fontSize: 14, fontWeight: "700", color: "#111827" }}
+            style={{ fontSize: 14, fontWeight: "700", color: "#111827", textDecorationLine: "underline" }}
             numberOfLines={2}
           >
             {row.product?.name || "-"}
@@ -60,7 +63,7 @@ export default function StockRow({ row, onRestock }) {
             {row.category?.name || "-"}
           </Text>
         </View>
-      </View>
+      </TouchableOpacity>
 
       <View style={{ flex: 2 }}>
         <StockLevelBadge quantity={row.quantity} status={row.status} />
@@ -82,7 +85,12 @@ export default function StockRow({ row, onRestock }) {
         </Text>
       </View>
 
-      <View style={{ flex: 1, alignItems: "flex-end" }}>
+      <View style={{ flex: 1.5, flexDirection: "row", justifyContent: "flex-end", gap: 12 }}>
+        <TouchableOpacity onPress={() => onViewDetail && onViewDetail(row.product || row)}>
+          <Text style={{ color: "#4B5563", fontWeight: "600", fontSize: 12.5 }}>
+            Chi tiết
+          </Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => onRestock(row)}>
           <Text style={{ color: "#2563EB", fontWeight: "700", fontSize: 13 }}>
             {t(TEXT_RESTOCK)}

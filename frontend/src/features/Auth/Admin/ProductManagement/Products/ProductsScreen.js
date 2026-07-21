@@ -4,6 +4,7 @@
 // 5 dòng/trang. Route: ROUTES.PRODUCT_MANAGEMENT ("/admin/products").
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { View, ScrollView, Text, TouchableOpacity } from "react-native";
+import { useNavigate } from "react-router-dom";
 
 import Sidebar from "../../Sidebar";
 import AdminTopBar from "../../AdminTopBar";
@@ -39,64 +40,10 @@ const PAGE_SIZE = 5;
 // Fallback demo data — used only if the backend (json-server) has no
 // `categories` / `products` resources yet, so the page still renders a
 // working preview identical to the design mock-up.
-const FALLBACK_CATEGORIES = [
-  { id: 1, name: "Peripherals" },
-  { id: 2, name: "Keyboards" },
-  { id: 3, name: "Displays" },
-  { id: 4, name: "Audio" },
-  { id: 5, name: "Computers" },
-];
-
-const FALLBACK_PRODUCTS = [
-  {
-    id: 1,
-    name: "Vector Precision Mouse X1",
-    subtitle: "v2.4 - Wireless Edition",
-    category_id: 1,
-    price: 690000,
-    status: "active",
-    img_URL: "",
-  },
-  {
-    id: 2,
-    name: "Mechanical Alpha-75",
-    subtitle: "Hot-swappable Switches",
-    category_id: 2,
-    price: 1290000,
-    status: "active",
-    img_URL: "",
-  },
-  {
-    id: 3,
-    name: "Spectre 4K Ultra 144Hz",
-    subtitle: "32-inch IPS Panel",
-    category_id: 3,
-    price: 12990000,
-    status: "drafting",
-    img_URL: "",
-  },
-  {
-    id: 4,
-    name: "Acoustic Shield Pro",
-    subtitle: "ANC Over-ear Audio",
-    category_id: 4,
-    price: 2490000,
-    status: "out_of_stock",
-    img_URL: "",
-  },
-  {
-    id: 5,
-    name: 'Titan Flow 16"',
-    subtitle: "64GB RAM, M3 equivalent",
-    category_id: 5,
-    price: 49990000,
-    status: "active",
-    img_URL: "",
-  },
-];
 
 export default function ProductsScreen() {
   const { t } = useLocalization();
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
@@ -151,8 +98,13 @@ export default function ProductsScreen() {
   }, []);
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    if (!user || (user.role !== "product_manager" && user.role !== "system_admin" && user.role !== "admin")) {
+      navigate("/");
+      return;
+    }
     loadData();
-  }, [loadData]);
+  }, [loadData, navigate]);
 
   const categoryNameById = useMemo(() => {
     const map = {};

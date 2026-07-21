@@ -72,9 +72,6 @@ export default function App() {
                     path={ROUTES.ORDER}
                     element={<OrderTrackingScreen />}
                   />
-                  
-                  <Route path={ROUTES.PROFILE}
-                  element = {<ProfileManagerment />}/>
 
                   <Route
                     path={ROUTES.ADMIN_ORDER_DETAIL}
@@ -107,6 +104,22 @@ export default function App() {
                   <Route
                     path={ROUTES.ADMIN_VOUCHER}
                     element={<VoucherManagementScreen />}
+                  />
+                  <Route
+                    path={ROUTES.PROFILE}
+                    element={<ProfileManagerment />}
+                  />
+                  <Route
+                    path={ROUTES.PROFILE_INFOMATION}
+                    element={<ProfileManagerment />}
+                  />
+                  <Route
+                    path={ROUTES.PROFILE_FAVORITE_PROFUCT}
+                    element={<ProfileManagerment />}
+                  />
+                  <Route
+                    path={ROUTES.PROFILE_ORDER_HISTORY}
+                    element={<ProfileManagerment />}
                   />
                 </Routes>
                 <Footer />

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import TextIntl from '../common/TextIntl';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
 import { API } from '../constants/apiURL';
+import { isFavorite, toggleFavorite } from '../utils/favorites';
 import {
   TEXT_HOME_ADD_TO_CART
 } from '../constants/i18nKeys';
@@ -15,16 +16,29 @@ export default function ProductCard({ product, manufacturers = [], categories = 
   if (!product) return null;
 
   const navigate = useNavigate();
+  const productId = product.id || product._id;
+  const [fav, setFav] = useState(() => isFavorite(productId));
+
+  useEffect(() => {
+    const handleFavUpdate = () => {
+      setFav(isFavorite(productId));
+    };
+    if (typeof window !== 'undefined') {
+      window.addEventListener('favoritesUpdated', handleFavUpdate);
+      return () => window.removeEventListener('favoritesUpdated', handleFavUpdate);
+    }
+  }, [productId]);
 
   const manufacturer = manufacturers?.find(m => m && String(m.id) === String(product?.manufacturer_id)) || null;
   const category = categories?.find(c => c && String(c.id) === String(product?.category_id)) || null;
 
   const formatPrice = (price) =>
-    price?.toLocaleString('vi-VN') + 'đ';
+    (Number(price) || 0).toLocaleString('vi-VN') + 'đ';
 
   const renderStars = (rating) => {
-    const full = Math.floor(rating);
-    const hasHalf = rating % 1 >= 0.5;
+    const r = Number(rating) || 5;
+    const full = Math.floor(r);
+    const hasHalf = r % 1 >= 0.5;
     return Array.from({ length: 5 }, (_, i) => {
       if (i < full) return '★';
       if (i === full && hasHalf) return '⯨';
@@ -33,8 +47,28 @@ export default function ProductCard({ product, manufacturers = [], categories = 
   };
 
   const handleCardPress = () => {
-    navigate(ROUTES.PRODUCT_PAGE.replace(':id', product.id));
+    navigate(ROUTES.PRODUCT_PAGE.replace(':id', productId));
   };
+
+  const handleToggleFav = (e) => {
+    e?.stopPropagation?.();
+    const isNowFav = toggleFavorite(product);
+    setFav(isNowFav);
+  };
+
+  const getProductImageUri = (url) => {
+    if (!url) return null;
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+      return url;
+    }
+    const baseUrl = API.BASE_API_URL.endsWith('/')
+      ? API.BASE_API_URL.slice(0, -1)
+      : API.BASE_API_URL;
+    const path = url.startsWith('/') ? url : `/${url}`;
+    return `${baseUrl}${path}`;
+  };
+
+  const imageUri = getProductImageUri(product.img_URL);
 
   return (
     <TouchableOpacity
@@ -44,9 +78,9 @@ export default function ProductCard({ product, manufacturers = [], categories = 
     >
       {/* Product image */}
       <View style={styles.imageContainer}>
-        {product.img_URL ? (
+        {imageUri ? (
           <Image
-            source={{ uri: `${API.BASE_API_URL}${product.img_URL}` }}
+            source={{ uri: imageUri }}
             style={styles.image}
             resizeMode="cover"
           />
@@ -56,11 +90,13 @@ export default function ProductCard({ product, manufacturers = [], categories = 
           </View>
         )}
         <TouchableOpacity
-          style={styles.wishlistBtn}
+          style={[styles.wishlistBtn, fav && styles.wishlistBtnActive]}
           activeOpacity={0.7}
-          onPress={(e) => e.stopPropagation()}  // ngăn bubble lên card
+          onPress={handleToggleFav}
         >
-          <Text style={styles.wishlistIcon}>♡</Text>
+          <Text style={[styles.wishlistIcon, fav && styles.wishlistIconActive]}>
+            {fav ? '♥' : '♡'}
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -98,7 +134,7 @@ export default function ProductCard({ product, manufacturers = [], categories = 
               </Text>
             ))}
           </View>
-          <Text style={styles.ratingValue}>{product.rating}</Text>
+          <Text style={styles.ratingValue}>{product.rating || 5}</Text>
           <Text style={styles.ratingCount}>(678)</Text>
         </View>
 
@@ -167,9 +203,15 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 2,
   },
+  wishlistBtnActive: {
+    backgroundColor: '#fee2e2',
+  },
   wishlistIcon: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#555',
+  },
+  wishlistIconActive: {
+    color: '#ef4444',
   },
   content: {
     padding: 12,

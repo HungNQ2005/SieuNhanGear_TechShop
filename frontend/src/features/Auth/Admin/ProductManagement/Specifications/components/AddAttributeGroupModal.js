@@ -23,17 +23,33 @@ const ICON_OPTIONS = [
   { value: "headphone", Icon: IconHeadphoneDevice },
 ];
 
-export default function AddAttributeGroupModal({ visible, saving, onClose, onCreate }) {
+export default function AddAttributeGroupModal({ visible, editingGroup, saving, onClose, onCreate, onUpdate }) {
   const { t } = useLocalization();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [icon, setIcon] = useState("mouse");
 
+  React.useEffect(() => {
+    if (editingGroup) {
+      setName(editingGroup.name || "");
+      setDescription(editingGroup.description || "");
+      setIcon(editingGroup.icon || "mouse");
+    } else {
+      setName("");
+      setDescription("");
+      setIcon("mouse");
+    }
+  }, [editingGroup, visible]);
+
   if (!visible) return null;
 
-  const handleCreate = () => {
+  const handleSubmit = () => {
     if (!name.trim()) return;
-    onCreate({ name: name.trim(), description: description.trim(), icon });
+    if (editingGroup) {
+      onUpdate && onUpdate(editingGroup.id, { name: name.trim(), description: description.trim(), icon });
+    } else {
+      onCreate({ name: name.trim(), description: description.trim(), icon });
+    }
     setName("");
     setDescription("");
     setIcon("mouse");
@@ -60,7 +76,7 @@ export default function AddAttributeGroupModal({ visible, saving, onClose, onCre
           }}
         >
           <Text style={{ fontSize: 17, fontWeight: "800", color: "#111827" }}>
-            {t(TEXT_SPEC_MODAL_TITLE)}
+            {editingGroup ? "Chỉnh sửa nhóm thuộc tính" : t(TEXT_SPEC_MODAL_TITLE)}
           </Text>
 
           <Text
@@ -172,7 +188,7 @@ export default function AddAttributeGroupModal({ visible, saving, onClose, onCre
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={handleCreate}
+              onPress={handleSubmit}
               disabled={saving || !name.trim()}
               style={{
                 paddingVertical: 10,
@@ -183,7 +199,7 @@ export default function AddAttributeGroupModal({ visible, saving, onClose, onCre
               }}
             >
               <Text style={{ fontSize: 13.5, fontWeight: "700", color: "#fff" }}>
-                {t(TEXT_SPEC_MODAL_CREATE)}
+                {editingGroup ? "Lưu thay đổi" : t(TEXT_SPEC_MODAL_CREATE)}
               </Text>
             </TouchableOpacity>
           </View>

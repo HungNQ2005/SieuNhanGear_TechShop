@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { View, ScrollView, Text, TouchableOpacity } from "react-native";
+import { useNavigate } from "react-router-dom";
 
 import Sidebar from "../../Sidebar";
 import AdminTopBar from "../../AdminTopBar";
@@ -44,6 +45,7 @@ const FALLBACK_CATEGORIES = [
 
 export default function CategoriesScreen() {
   const { t } = useLocalization();
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
@@ -99,8 +101,13 @@ export default function CategoriesScreen() {
   }, []);
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    if (!user || (user.role !== "product_manager" && user.role !== "system_admin" && user.role !== "admin")) {
+      navigate("/");
+      return;
+    }
     loadData();
-  }, [loadData]);
+  }, [loadData, navigate]);
 
   const joinedCategories = useMemo(
     () =>
