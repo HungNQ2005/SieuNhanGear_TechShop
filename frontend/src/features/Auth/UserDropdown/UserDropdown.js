@@ -10,6 +10,7 @@ import { getAvatarUri } from "../../../utils/avatar";
 export default function UserDropdown({ user, onClose, onLogout }) {
   const navigate = useNavigate();
   const avatarUri = getAvatarUri(user?.avatarURL);
+  const role = String(user?.role || "").toLowerCase().trim();
 
   return (
     <View style={styles.container}>
@@ -53,7 +54,7 @@ export default function UserDropdown({ user, onClose, onLogout }) {
         <Text style={styles.itemText}>📦 Đơn hàng</Text>
       </Pressable>
 
-      {user.role === "sales_staff" && (
+      {role === "sales_staff" && (
         <Pressable
           style={styles.item}
           onPress={() => {
@@ -65,7 +66,7 @@ export default function UserDropdown({ user, onClose, onLogout }) {
         </Pressable>
       )}
 
-      {user.role === "product_manager" && (
+      {role === "product_manager" && (
         <Pressable
           style={styles.item}
           onPress={() => {
@@ -77,7 +78,7 @@ export default function UserDropdown({ user, onClose, onLogout }) {
         </Pressable>
       )}
 
-      {user.role === "system_admin" && (
+      {(role === "system_admin" || role === "admin") && (
         <Pressable
           style={styles.item}
           onPress={() => {

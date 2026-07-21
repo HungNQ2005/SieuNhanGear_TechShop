@@ -119,10 +119,13 @@ export default function ShowroomFormModal({
   const handleSubmit = () => {
     if (!validate()) return;
 
+    const lat = form.latitude !== "" && !isNaN(Number(form.latitude)) ? Number(form.latitude) : 0;
+    const lng = form.longitude !== "" && !isNaN(Number(form.longitude)) ? Number(form.longitude) : 0;
+
     onSubmit({
       ...form,
-      latitude: Number(form.latitude),
-      longitude: Number(form.longitude),
+      latitude: lat,
+      longitude: lng,
     });
   };
 

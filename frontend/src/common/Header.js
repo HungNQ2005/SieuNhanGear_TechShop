@@ -505,22 +505,30 @@ export default function Header() {
         visible={showAuthModal}
         onClose={() => setShowAuthModal(false)}
         onLoginSuccess={async (user) => {
-          // Lấy thêm thông tin chi tiết từ API để có avatarURL
           const accountId = user._id || user.id;
+          let fullUser = user;
           try {
-            const response = await api.get(API.GET_ACCOUNT_BY_ID(accountId));
-            const fullUser = response.data.data;
-            setUser(fullUser);
-            localStorage.setItem("user", JSON.stringify(fullUser));
-            await loadCart(accountId);
+            const response = await api.get("/api/auth/me");
+            if (response.data && typeof response.data === "object") {
+              fullUser = response.data.account || response.data.data || response.data;
+            }
           } catch (error) {
-            console.error("Failed to fetch full user info:", error);
-            // Fallback: vẫn dùng user cũ
-            setUser(user);
-            localStorage.setItem("user", JSON.stringify(user));
-            await loadCart(accountId);
+            console.log("Using login response payload fallback:", error);
           }
+          setUser(fullUser);
+          localStorage.setItem("user", JSON.stringify(fullUser));
+          await loadCart(accountId);
           setShowAuthModal(false);
+
+          // Role-based automatic redirect upon login
+          const role = String(fullUser.role || "").toLowerCase().trim();
+          if (role === "product_manager") {
+            navigate(ROUTES.PRODUCT_MANAGEMENT);
+          } else if (role === "sales_staff") {
+            navigate(ROUTES.ORDER_MANAGEMENT);
+          } else if (role === "system_admin" || role === "admin") {
+            navigate(ROUTES.ADMIN_ACCOUNTS);
+          }
         }}
       />
     </View>

@@ -57,7 +57,7 @@ export default function OrderManagementScreen() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "null");
-    if (!user || (user.role !== "sales_staff" && user.role !== "system_admin")) {
+    if (!user || (user.role !== "sales_staff" && user.role !== "system_admin" && user.role !== "admin")) {
       navigate("/");
       return;
     }

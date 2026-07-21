@@ -12,13 +12,13 @@ function createWarehouseRouter() {
   router.get("/:id", warehouseController.getById);
 
   // POST /api/warehouses
-  router.post("/", authenticate, authorize("product_manager"), warehouseController.create);
+  router.post("/", authenticate, authorize("product_manager", "system_admin"), warehouseController.create);
 
   // PUT /api/warehouses/:id
-  router.put("/:id", authenticate, authorize("product_manager"), warehouseController.update);
+  router.put("/:id", authenticate, authorize("product_manager", "system_admin"), warehouseController.update);
 
   // DELETE /api/warehouses/:id
-  router.delete("/:id", authenticate, authorize("product_manager"), warehouseController.delete);
+  router.delete("/:id", authenticate, authorize("product_manager", "system_admin"), warehouseController.delete);
 
   return router;
 }

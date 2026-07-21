@@ -14,6 +14,8 @@ import {
   TEXT_SETTINGS,
   TEXT_LOGOUT,
   TEXT_ADMIN_CONSOLE,
+  TEXT_MENU_ACCOUNT,
+  TEXT_MENU_SHOWROOM,
 } from "../../../constants/i18nKeys";
 import {
   IconShippingBox,
@@ -23,6 +25,8 @@ import {
   IconSettingsGear,
   IconLogoutArrow,
   IconChevronDownGray,
+  IconCustomers,
+  IconStore,
 } from "../../../constants/icons";
 
 export default function Sidebar({ selected, onSelect }) {
@@ -44,7 +48,8 @@ export default function Sidebar({ selected, onSelect }) {
   ];
 
   const user = JSON.parse(localStorage.getItem("user") || "null");
-  const userRole = user ? user.role : "";
+  const rawRole = user ? String(user.role || "").toLowerCase().trim() : "";
+  const userRole = (rawRole === "admin" || rawRole === "sysadmin") ? "system_admin" : rawRole;
 
   const menus = [
     {
@@ -52,7 +57,7 @@ export default function Sidebar({ selected, onSelect }) {
       label: t(TEXT_ORDERS),
       route: ROUTES.ORDER_MANAGEMENT,
       icon: IconShippingBox,
-      allowedRoles: ["sales_staff", "system_admin"],
+      allowedRoles: ["sales_staff"],
     },
     {
       id: "products",
@@ -60,21 +65,35 @@ export default function Sidebar({ selected, onSelect }) {
       route: ROUTES.PRODUCT_MANAGEMENT,
       icon: IconGridOutline,
       children: productChildren,
-      allowedRoles: ["product_manager", "system_admin"],
+      allowedRoles: ["product_manager"],
     },
     {
       id: "inventory",
       label: t(TEXT_INVENTORY),
       route: ROUTES.INVENTORY_MANAGEMENT,
       icon: IconWarehouse,
-      allowedRoles: ["product_manager", "system_admin"],
+      allowedRoles: ["product_manager"],
     },
     {
       id: "vouchers",
       label: t(TEXT_VOUCHERS_MENU),
       route: ROUTES.VOUCHER_MANAGEMENT,
       icon: IconTagOutline,
-      allowedRoles: ["product_manager", "system_admin"],
+      allowedRoles: ["product_manager"],
+    },
+    {
+      id: "accounts",
+      label: t(TEXT_MENU_ACCOUNT),
+      route: ROUTES.ADMIN_ACCOUNTS,
+      icon: IconCustomers,
+      allowedRoles: ["system_admin"],
+    },
+    {
+      id: "showroom",
+      label: t(TEXT_MENU_SHOWROOM),
+      route: ROUTES.ADMIN_SHOWROOM,
+      icon: IconStore,
+      allowedRoles: ["system_admin"],
     },
   ].filter((item) => item.allowedRoles.includes(userRole));
 

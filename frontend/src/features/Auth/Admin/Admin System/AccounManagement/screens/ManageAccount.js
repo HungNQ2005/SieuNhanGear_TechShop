@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { styles } from "../screens/ManageAccount.styles";
 import AccountFormModal from "../components/AccountFormModal";
-import Sidebar from "../../Slidebar";
+import Sidebar from "../../../Sidebar";
 import { useNavigate } from "react-router-dom";
 import {
   IconMail,
@@ -70,18 +70,23 @@ import { useLocalization } from "../../../../../../providers/LocalizationProvide
 const ACCOUNT_ROLE_OPTIONS = [
   {
     value: "product_manager",
-    label: "Product Manager",
+    label: TEXT_ACCOUNT_MANAGEMENT_ROLE_PRODUCT_MANAGER,
     color: "#2563EB",
   },
   {
     value: "sales_staff",
-    label: "Sales Staff",
+    label: TEXT_ACCOUNT_MANAGEMENT_ROLE_SALES_STAFF,
     color: "#16A34A",
   },
   {
     value: "system_admin",
-    label: "System Admin",
+    label: TEXT_ACCOUNT_MANAGEMENT_ROLE_SYSTEM_ADMIN,
     color: "#DC2626",
+  },
+  {
+    value: "user",
+    label: TEXT_ACCOUNT_MANAGEMENT_ROLE_CUSTOMER,
+    color: "#64748B",
   },
 ];
 const ACCOUNT_ROLE_MAP = {
@@ -210,7 +215,7 @@ export default function ManageAccount() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "null");
-    if (!user || user.role !== "system_admin") {
+    if (!user || (user.role !== "system_admin" && user.role !== "admin")) {
       navigate("/");
       return;
     }
@@ -365,11 +370,9 @@ export default function ManageAccount() {
   };
 
   return (
-    <View style={{ flex: 1, flexDirection: "row" }}>
-      <View style={{ flex: 2 }}>
-        <Sidebar />
-      </View>
-      <View style={{ flex: 8 }}>
+    <View style={{ flex: 1, flexDirection: "row", backgroundColor: "#F8FAFC" }}>
+      <Sidebar selected="accounts" />
+      <View style={{ flex: 1, padding: 24 }}>
         {/* Header */}
         <View style={styles.headerRow}>
           <View>
@@ -398,18 +401,14 @@ export default function ManageAccount() {
             <IconSearchSmall />
             <TextInput
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChangeText={setSearch}
               placeholder={t(TEXT_ACCOUNT_MANAGEMENT_SEARCH)}
               placeholderTextColor="#94A3B8"
               style={{
                 flex: 1,
                 height: "100%",
-                border: "none",
-                outline: "none",
-                background: "transparent",
                 fontSize: 13,
                 color: "#0F172A",
-                fontFamily: "inherit",
               }}
             />
           </View>
@@ -422,7 +421,7 @@ export default function ManageAccount() {
               <Text style={styles.selectText}>
                 {statusFilter === "all"
                   ? t(TEXT_ACCOUNT_MANAGEMENT_ALL_ROLE)
-                  : ACCOUNT_ROLE_MAP[statusFilter]?.label}
+                  : t(ACCOUNT_ROLE_MAP[statusFilter]?.label)}
               </Text>
             </Pressable>
             {statusMenuOpen && (
@@ -455,7 +454,7 @@ export default function ManageAccount() {
                         },
                       ]}
                     >
-                      {opt.label}
+                      {t(opt.label)}
                     </Text>
                   </Pressable>
                 ))}

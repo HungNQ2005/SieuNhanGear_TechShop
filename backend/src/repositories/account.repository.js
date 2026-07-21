@@ -15,7 +15,7 @@ const accountRepository = {
       query.id = { $ne: Number(excludeId) };
     }
     const q = Account.findOne(query);
-    return withPassword ? q.select("+passwordHash") : q;
+    return withPassword ? q.select("+passwordHash +password") : q;
   },
 
   async create(data) {

@@ -12,7 +12,7 @@ function createStockHistoryRouter() {
   router.get("/:id", stockHistoryController.getById);
 
   // POST /api/stock-history
-  router.post("/", authenticate, authorize("product_manager"), stockHistoryController.create);
+  router.post("/", authenticate, authorize("product_manager", "system_admin"), stockHistoryController.create);
 
   return router;
 }

@@ -7,14 +7,14 @@ function createSpecificationRouter() {
   const router = express.Router();
 
   router.get("/groups", specificationController.getAllGroups);
-  router.post("/groups", authenticate, authorize("product_manager"), specificationController.createGroup);
-  router.put("/groups/:id", authenticate, authorize("product_manager"), specificationController.updateGroup);
-  router.delete("/groups/:id", authenticate, authorize("product_manager"), specificationController.deleteGroup);
+  router.post("/groups", authenticate, authorize("product_manager", "system_admin"), specificationController.createGroup);
+  router.put("/groups/:id", authenticate, authorize("product_manager", "system_admin"), specificationController.updateGroup);
+  router.delete("/groups/:id", authenticate, authorize("product_manager", "system_admin"), specificationController.deleteGroup);
 
   router.get("/attributes", specificationController.getAllAttributes);
-  router.post("/attributes", authenticate, authorize("product_manager"), specificationController.createAttribute);
-  router.put("/attributes/:id", authenticate, authorize("product_manager"), specificationController.updateAttribute);
-  router.delete("/attributes/:id", authenticate, authorize("product_manager"), specificationController.deleteAttribute);
+  router.post("/attributes", authenticate, authorize("product_manager", "system_admin"), specificationController.createAttribute);
+  router.put("/attributes/:id", authenticate, authorize("product_manager", "system_admin"), specificationController.updateAttribute);
+  router.delete("/attributes/:id", authenticate, authorize("product_manager", "system_admin"), specificationController.deleteAttribute);
 
   return router;
 }

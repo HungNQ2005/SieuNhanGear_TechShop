@@ -8,9 +8,9 @@ function createBannerRouter() {
   router.get("/", bannerController.getAll);
   router.get("/:id", bannerController.getById);
 
-  router.post("/", authenticate, authorize("product_manager"), bannerController.create);
-  router.put("/:id", authenticate, authorize("product_manager"), bannerController.update);
-  router.delete("/:id", authenticate, authorize("product_manager"), bannerController.delete);
+  router.post("/", authenticate, authorize("product_manager", "system_admin"), bannerController.create);
+  router.put("/:id", authenticate, authorize("product_manager", "system_admin"), bannerController.update);
+  router.delete("/:id", authenticate, authorize("product_manager", "system_admin"), bannerController.delete);
 
   return router;
 }

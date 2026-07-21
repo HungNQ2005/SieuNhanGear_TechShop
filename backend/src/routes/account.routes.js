@@ -6,13 +6,22 @@ const { authenticate, authorize } = require("../middlewares/auth.middleware");
 function createAccountRouter() {
   const router = express.Router();
 
-  router.use(authenticate, authorize("system_admin"));
+  router.use(authenticate);
+
+  // GET /api/accounts/:id (cho phép tự xem profile của chính mình hoặc System Admin xem mọi tài khoản)
+  router.get("/:id", (req, res, next) => {
+    const numericId = Number(req.params.id);
+    if (req.user && (req.user.role === "system_admin" || req.user.role === "admin" || req.user.id === numericId)) {
+      return accountController.getById(req, res, next);
+    }
+    return authorize("system_admin")(req, res, next);
+  });
+
+  // Chỉ System Admin mới được quản lý danh sách và thao tác CRUD tài khoản
+  router.use(authorize("system_admin"));
 
   // GET /api/accounts
   router.get("/", accountController.getAll);
-
-  // GET /api/accounts/:id
-  router.get("/:id", accountController.getById);
 
   // POST /api/accounts
   router.post("/", accountController.create);

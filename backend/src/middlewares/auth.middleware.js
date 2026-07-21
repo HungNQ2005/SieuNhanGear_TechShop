@@ -44,7 +44,16 @@ function authorize(...roles) {
         }),
       );
     }
-    if (roles.length && !roles.includes(req.user.role)) {
+    const userRole = req.user.role;
+    const isAllowed =
+      !roles.length ||
+      roles.some(
+        (r) =>
+          r === userRole ||
+          (userRole === "admin" && r === "system_admin") ||
+          (userRole === "system_admin" && r === "admin"),
+      );
+    if (!isAllowed) {
       return next(
         new HttpError({
           code: "FORBIDDEN",

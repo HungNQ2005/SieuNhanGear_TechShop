@@ -12,13 +12,13 @@ function createCategoryRouter() {
   router.get("/:id", categoryController.getById);
 
   // POST /api/categories
-  router.post("/", authenticate, authorize("product_manager"), categoryController.create);
+  router.post("/", authenticate, authorize("product_manager", "system_admin"), categoryController.create);
 
   // PUT /api/categories/:id
-  router.put("/:id", authenticate, authorize("product_manager"), categoryController.update);
+  router.put("/:id", authenticate, authorize("product_manager", "system_admin"), categoryController.update);
 
   // DELETE /api/categories/:id
-  router.delete("/:id", authenticate, authorize("product_manager"), categoryController.delete);
+  router.delete("/:id", authenticate, authorize("product_manager", "system_admin"), categoryController.delete);
 
   return router;
 }

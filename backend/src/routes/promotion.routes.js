@@ -10,9 +10,9 @@ function createPromotionRouter() {
   router.get("/:id", promotionController.getById);
 
   // Ghi dữ liệu chỉ product_manager (UC-12 Manage Promotion)
-  router.post("/", authenticate, authorize("product_manager"), promotionController.create);
-  router.put("/:id", authenticate, authorize("product_manager"), promotionController.update);
-  router.delete("/:id", authenticate, authorize("product_manager"), promotionController.delete);
+  router.post("/", authenticate, authorize("product_manager", "system_admin"), promotionController.create);
+  router.put("/:id", authenticate, authorize("product_manager", "system_admin"), promotionController.update);
+  router.delete("/:id", authenticate, authorize("product_manager", "system_admin"), promotionController.delete);
 
   return router;
 }

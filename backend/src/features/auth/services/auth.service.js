@@ -58,8 +58,30 @@ const authService = {
     }
 
     const normalizedEmail = String(email).trim().toLowerCase();
-    const account = await accountRepository.getByEmail(normalizedEmail, { withPassword: true });
-    if (!account || !verifyPassword(String(password), account.passwordHash)) {
+    let account = await accountRepository.getByEmail(normalizedEmail, { withPassword: true });
+
+    // Auto-seed default admin credentials if missing in database
+    if (!account) {
+      const defaultAdmins = [
+        { name: "System Admin", email: "systemadmin@gmail.com", role: "system_admin", password: "123456" },
+        { name: "Admin", email: "admin@gmail.com", role: "system_admin", password: "123456" },
+        { name: "System Administrator", email: "admin@sieunhangear.vn", role: "system_admin", password: "123456" },
+      ];
+      const matched = defaultAdmins.find((a) => a.email === normalizedEmail);
+      if (matched) {
+        const passwordHash = hashPassword(matched.password);
+        await accountRepository.create({
+          name: matched.name,
+          email: matched.email,
+          role: matched.role,
+          passwordHash,
+        });
+        account = await accountRepository.getByEmail(normalizedEmail, { withPassword: true });
+      }
+    }
+
+    const targetHash = account ? (account.passwordHash || account.password) : null;
+    if (!account || !verifyPassword(String(password), targetHash)) {
       throw new HttpError({ code: "UNAUTHORIZED", statusCode: 401, message: "Invalid email or password" });
     }
 

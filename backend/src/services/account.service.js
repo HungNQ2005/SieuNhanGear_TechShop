@@ -2,7 +2,7 @@ const { accountRepository } = require("../repositories/account.repository");
 const { HttpError } = require("../errors/httpError");
 const { hashPassword, generateTempPassword } = require("../utils/password");
 
-const ALLOWED_ROLES = ["user", "product_manager", "sales_staff", "system_admin"];
+const ALLOWED_ROLES = ["user", "product_manager", "sales_staff", "system_admin", "customer"];
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function validateAccountPayload(data, { partial = false } = {}) {

@@ -78,7 +78,7 @@ export default function InventoryManagementScreen() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "null");
-    if (!user || (user.role !== "product_manager" && user.role !== "system_admin")) {
+    if (!user || (user.role !== "product_manager" && user.role !== "system_admin" && user.role !== "admin")) {
       navigate("/");
       return;
     }
