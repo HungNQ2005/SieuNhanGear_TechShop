@@ -9,12 +9,15 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    if (typeof localStorage !== "undefined") {
-      const token = localStorage.getItem("token");
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+    try {
+      if (typeof localStorage !== "undefined") {
+        const token = localStorage.getItem("token");
+        if (token) {
+          config.headers = config.headers || {};
+          config.headers.Authorization = `Bearer ${token}`;
+        }
       }
-    }
+    } catch (_) {}
     return config;
   },
   (error) => {
@@ -29,7 +32,6 @@ export const getBannerById = (id) => api.get(API.GET_BANNER_BY_ID(id));
 // Products
 export const getProducts = () => api.get(API.GET_PRODUCT);
 export const getProductById = (id) => api.get(API.GET_PRODUCT_BY_ID(id));
-// NEW (merged from product-management-feature): CRUD cho trang Products
 export const createProduct = (data) => api.post(API.CREATE_PRODUCT, data);
 export const updateProduct = (id, data) =>
   api.patch(API.UPDATE_PRODUCT(id), data);
@@ -46,7 +48,6 @@ export const getNewsById = (id) => api.get(API.GET_NEWS_BY_ID(id));
 // Accounts
 export const getAccounts = () => api.get(API.GET_ACCOUNTS);
 export const getAccountById = (id) => api.get(API.GET_ACCOUNT_BY_ID(id));
-// Manage Accounts
 export const createAccount = (data) => api.post(API.GET_ACCOUNTS, data);
 export const updateAccount = (id, data) =>
   api.put(`${API.GET_ACCOUNTS}/${id}`, data);
@@ -55,7 +56,6 @@ export const deleteAccount = (id) => api.delete(`${API.GET_ACCOUNTS}/${id}`);
 // Comments
 export const getComments = () => api.get(API.GET_COMMENTS);
 export const getCommentById = (id) => api.get(API.GET_COMMENT_BY_ID(id));
-
 
 // ==========================
 // Orders
@@ -112,9 +112,10 @@ export const getOrderStatus = () =>
 
 export const getShippingCompanies = () =>
   api.get(API.GET_SHIPPING_COMPANIES);
-// Checkout
+
 export const getOrdersByAccount = (accountId) =>
   api.get(API.GET_ORDER_BY_ACCOUNT(accountId));
+
 // Vouchers
 export const getVouchers = () => api.get(API.GET_VOUCHERS);
 export const getVoucherById = (id) => api.get(API.GET_VOUCHER_BY_ID(id));
@@ -133,23 +134,42 @@ export const getPaymentMethodById = (id) =>
 // Address
 const PROVINCE_API_BASE = "https://provinces.open-api.vn/api/v2";
 export const getProvinces = async () => {
-  const response = await fetch(`${PROVINCE_API_BASE}/p/`);
-  const data = await response.json();
-  return { data };
+  try {
+    try {
+      const prox = await api.get('/api/provinces');
+      return { data: prox.data };
+    } catch (_) {
+      const response = await axios.get(`${PROVINCE_API_BASE}/p/`, { timeout: 8000 });
+      return { data: response.data };
+    }
+  } catch (error) {
+    console.error('getProvinces error:', error?.message || error);
+    return { data: [] };
+  }
 };
+
 export const getWardsByProvince = async (provinceCode) => {
-  const response = await fetch(
-    `${PROVINCE_API_BASE}/p/${provinceCode}?depth=2`,
-  );
-  const data = await response.json();
-  return { data: data.wards || [] };
+  try {
+    try {
+      const prox = await api.get(`/api/provinces/${provinceCode}/wards`);
+      return { data: prox.data };
+    } catch (_) {
+      const response = await axios.get(`${PROVINCE_API_BASE}/p/${provinceCode}?depth=2`, { timeout: 8000 });
+      const data = response.data;
+      return { data: data.wards || [] };
+    }
+  } catch (error) {
+    console.error('getWardsByProvince error:', error?.message || error);
+    return { data: [] };
+  }
 };
+
 // Shipping Address
 export const getShippingAddresses = () => api.get(API.GET_SHIPPING_ADDRESS);
 export const getShippingAddressByAccount = (accountId) =>
   api.get(API.GET_SHIPPING_ADDRESS_BY_ACCOUNT(accountId));
-// Orders
 
+// Orders lookup by code
 export const getOrderByCode = async (code) => {
   try {
     const orderRes = await api.get(API.GET_ORDER_BY_CODE(code));
@@ -161,7 +181,6 @@ export const getOrderByCode = async (code) => {
 
     const order = orders[0];
 
-    // Lấy order items
     let orderItems = order.items || [];
     try {
       const orderItemsRes = await api.get(
@@ -174,7 +193,6 @@ export const getOrderByCode = async (code) => {
       console.log("No extra order items endpoint, using embedded items", e);
     }
 
-    // Lấy products
     let products = [];
     try {
       const productsRes = await api.get(API.GET_PRODUCT);
@@ -204,10 +222,8 @@ export const getOrderByCode = async (code) => {
     return null;
   }
 };
-// ==========================
-// Inventory / Warehouses
-// ==========================
 
+// Inventory / Warehouses
 export const getWarehouses = () => api.get(API.GET_WAREHOUSES);
 export const getWarehouseById = (id) => api.get(API.GET_WAREHOUSE_BY_ID(id));
 
@@ -225,10 +241,7 @@ export const getStockHistoryByProduct = (productId) =>
 export const createStockHistory = (data) =>
   api.post(API.CREATE_STOCK_HISTORY, data);
 
-// ==========================
 // Specification Templates (Attribute Groups & Attributes)
-// ==========================
-
 export const getAttributeGroups = () => api.get(API.GET_ATTRIBUTE_GROUPS);
 export const getAttributeGroupById = (id) =>
   api.get(API.GET_ATTRIBUTE_GROUP_BY_ID(id));
@@ -248,21 +261,14 @@ export const updateAttribute = (id, data) =>
   api.patch(API.UPDATE_ATTRIBUTE(id), data);
 export const deleteAttribute = (id) => api.delete(API.DELETE_ATTRIBUTE(id));
 
-
-// ==========================
 // Manage Showroom
-// ==========================
-
 export const getShowrooms = () => api.get(API.GET_SHOWROOM);
-
 export const getShowroomById = (id) => api.get(`${API.GET_SHOWROOM}/${id}`);
-
 export const createShowroom = (data) => api.post(API.GET_SHOWROOM, data);
-
 export const updateShowroom = (id, data) =>
   api.put(`${API.GET_SHOWROOM}/${id}`, data);
-
 export const deleteShowroom = (id) => api.delete(`${API.GET_SHOWROOM}/${id}`);
+
 // Categories
 export const getCategories = () => api.get(API.GET_CATEGORY);
 export const getCategoryById = (id) => api.get(API.GET_CATEGORY_BY_ID(id));
@@ -270,4 +276,5 @@ export const createCategory = (data) => api.post(API.CREATE_CATEGORY, data);
 export const updateCategory = (id, data) =>
   api.patch(API.UPDATE_CATEGORY(id), data);
 export const deleteCategory = (id) => api.delete(API.DELETE_CATEGORY(id));
+
 export default api;

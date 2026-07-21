@@ -4,17 +4,12 @@ const path = require("path");
 
 const { env } = require("./config/env");
 const { ROUTES } = require("./constants/routes.constants");
-const {
-  createCatalogRouter,
-} = require("./features/catalog/routes/catalog.routes");
-
+const { createCatalogRouter } = require("./features/catalog/routes/catalog.routes");
 const { createHealthRouter } = require("./routes/health.routes");
 
 const { createAuthRouter } = require("./features/auth/routes/auth.routes");
 const { createCartRouter } = require("./features/cart/routes/cart.routes");
-const {
-  createProductRouter,
-} = require("./features/product/routes/product.routes");
+const { createProductRouter } = require("./features/product/routes/product.routes");
 const { createHomeRouter } = require("./features/home/routes/home.routes");
 const { notFoundMiddleware } = require("./middlewares/notFound.middleware");
 const { errorMiddleware } = require("./middlewares/error.middleware");
@@ -34,6 +29,8 @@ const { createManufacturerRouter } = require("./features/product/routes/manufact
 const { createNewsRouter } = require("./routes/news.routes");
 const { createOrderItemRouter } = require("./routes/orderItem.routes");
 const { createStatisticRouter } = require("./routes/statistic.routes");
+const { createProvinceRouter } = require("./routes/province.routes");
+const { createAIRouter } = require("./features/ai/ai.routes");
 
 function createApp() {
   const app = express();
@@ -42,13 +39,20 @@ function createApp() {
     cors({
       origin: env.CORS_ORIGINS,
       credentials: true,
-    }),
+    })
   );
   app.use(express.json({ limit: "10mb" }));
   app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
+  app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
+      return res.status(400).json({ code: "INVALID_JSON", message: "Request body must be valid JSON." });
+    }
+    return next(err);
+  });
+
   // Serve static files from the "src/asset/images" directory
-  app.use('/src/asset/images', express.static(path.join(__dirname, 'asset/images')));
+  app.use("/src/asset/images", express.static(path.join(__dirname, "asset/images")));
 
   app.get("/api/orderStatus", (req, res) => {
     const { orderStatusRepository } = require("./repositories/orderStatus.repository");
@@ -74,6 +78,7 @@ function createApp() {
   app.use(ROUTES.STOCK.BASE, createStockRouter());
   app.use(ROUTES.STOCK_HISTORY.BASE, createStockHistoryRouter());
   app.use(ROUTES.ACCOUNT.BASE, createAccountRouter());
+
   app.use(ROUTES.COMMENT.BASE, createCommentRouter());
   app.use(ROUTES.ORDER.BASE, createOrderRouter());
   app.use("/api/orderItems", createOrderItemRouter());
@@ -82,8 +87,10 @@ function createApp() {
   app.use(ROUTES.BANNER.BASE, createBannerRouter());
   app.use(ROUTES.STATISTIC.BASE, createStatisticRouter());
 
-  app.use(notFoundMiddleware);
+  app.use("/api", createProvinceRouter());
+  app.use("/api/ai", createAIRouter());
 
+  app.use(notFoundMiddleware);
   app.use(errorMiddleware);
 
   return app;

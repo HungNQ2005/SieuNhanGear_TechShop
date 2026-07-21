@@ -41,6 +41,18 @@ const ROUTES = {
     GET_NEWS_BY_ID: "/:id",
   },
 
+  CATEGORY: {
+    BASE: "/api/categories",
+    NULL: "/",
+    GET_CATEGORY_BY_ID: "/:id",
+  },
+
+  BANNER: {
+    BASE: "/api/banners",
+    NULL: "/",
+    GET_BANNER_BY_ID: "/:id",
+  },
+
   HOME: {
     BASE: "/api/home",
   },
@@ -51,12 +63,6 @@ const ROUTES = {
 
   VOUCHER: {
     BASE: "/api/vouchers",
-  },
-
-  CATEGORY: {
-    BASE: "/api/categories",
-    NULL: "/",
-    GET_CATEGORY_BY_ID: "/:id",
   },
 
   WAREHOUSE: {
@@ -91,12 +97,6 @@ const ROUTES = {
 
   SPECIFICATION: {
     BASE: "/api/specifications",
-  },
-
-  BANNER: {
-    BASE: "/api/banners",
-    NULL: "/",
-    GET_BANNER_BY_ID: "/:id",
   },
 
   STATISTIC: {

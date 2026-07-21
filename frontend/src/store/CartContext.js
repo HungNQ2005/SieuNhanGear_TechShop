@@ -6,7 +6,7 @@ import React, {
   useEffect,
 } from "react";
 import { getProducts } from "../services/api";
-import { getCartByAccount } from "../services/CartService";
+import { createCart, getCartByAccount } from "../services/CartService";
 
 const CartContext = createContext({
   items: [],
@@ -32,8 +32,8 @@ export function CartProvider({ children }) {
     }
     return [];
   });
+  const [accountId, setAccountId] = useState(null);
 
-  // Save to localStorage whenever items change
   useEffect(() => {
     if (typeof localStorage !== "undefined") {
       try {
@@ -44,33 +44,76 @@ export function CartProvider({ children }) {
     }
   }, [items]);
 
-  const loadCart = async (accountId) => {
+  useEffect(() => {
     try {
-      const cartRes = await getCartByAccount(accountId);
-      const cartList = Array.isArray(cartRes)
-        ? cartRes
-        : (Array.isArray(cartRes?.items)
-            ? cartRes.items
-            : (Array.isArray(cartRes?.data) ? cartRes.data : []));
+      const savedUser = localStorage.getItem("user");
+      if (savedUser) {
+        const user = JSON.parse(savedUser);
+        const resolvedAccountId = user._id || user.id;
+        if (resolvedAccountId) {
+          setAccountId(resolvedAccountId);
+        }
+      }
+    } catch (_) {}
+  }, []);
+
+  const normalizeCartPayload = (payload) => {
+    if (Array.isArray(payload)) return payload;
+    if (payload && Array.isArray(payload.items)) return payload.items;
+    if (payload && payload.data) return normalizeCartPayload(payload.data);
+    return [];
+  };
+
+  const syncCartToServer = async (nextItems, resolvedAccountId = accountId) => {
+    if (!resolvedAccountId) return;
+
+    try {
+      const payloadItems = (nextItems || []).map((item) => ({
+        productId: item.productId ?? item.id ?? item._id,
+        quantity: Number(item.quantity ?? 1),
+        price: Number(item.price ?? 0),
+      }));
+
+      await createCart(resolvedAccountId, payloadItems);
+    } catch (err) {
+      console.error("Sync cart failed:", err);
+    }
+  };
+
+  const loadCart = async (resolvedAccountId) => {
+    const activeAccountId = resolvedAccountId || accountId;
+    if (!activeAccountId) {
+      return;
+    }
+
+    try {
+      const cartPayload = await getCartByAccount(activeAccountId);
+      const cartItems = normalizeCartPayload(cartPayload);
 
       const productRes = await getProducts();
       const products = Array.isArray(productRes?.data)
         ? productRes.data
         : (Array.isArray(productRes) ? productRes : []);
 
-      if (cartList.length > 0) {
-        const fetchedItems = cartList.map((cartItem) => {
-          const product = cartItem.product || products.find((p) => String(p.id || p._id) === String(cartItem.productId)) || {};
+      if (cartItems.length > 0) {
+        const normalizedItems = cartItems
+          .map((cartItem) => {
+            const productId = cartItem.productId ?? cartItem.product?.id ?? cartItem.product?._id;
+            const product = cartItem.product || products.find((p) => String(p.id || p._id) === String(productId)) || {};
 
-          return {
-            ...product,
-            quantity: cartItem.quantity || 1,
-            accountId: cartItem.accountId,
-            cartId: cartItem.id || cartItem._id,
-          };
-        });
+            return {
+              ...product,
+              quantity: Number(cartItem.quantity ?? cartItem.qty ?? 1),
+              accountId: activeAccountId ?? cartPayload?.userId ?? null,
+              cartId: cartItem.id ?? cartItem._id ?? null,
+              productId: productId || product.id,
+            };
+          })
+          .filter(Boolean);
 
-        setItems(fetchedItems);
+        if (normalizedItems.length) {
+          setItems(normalizedItems);
+        }
       }
     } catch (err) {
       console.error("Load cart failed:", err);
@@ -83,55 +126,65 @@ export function CartProvider({ children }) {
       const productId = product.id || product._id;
       const existing = current.find((item) => String(item.id || item._id) === String(productId));
 
-      if (existing) {
-        return current.map((item) =>
-          String(item.id || item._id) === String(productId)
-            ? {
-                ...item,
-                quantity: item.quantity + (qty || 1),
-              }
-            : item,
-        );
-      }
+      const next = existing
+        ? current.map((item) =>
+            String(item.id || item._id) === String(productId)
+              ? {
+                  ...item,
+                  quantity: item.quantity + (qty || 1),
+                }
+              : item,
+          )
+        : [
+            ...current,
+            {
+              ...product,
+              quantity: qty || 1,
+            },
+          ];
 
-      return [
-        ...current,
-        {
-          ...product,
-          quantity: qty || 1,
-        },
-      ];
+      syncCartToServer(next, accountId);
+      return next;
     });
   };
 
   const increaseQuantity = (id) => {
-    setItems((current) =>
-      current.map((item) =>
+    setItems((current) => {
+      const next = current.map((item) =>
         String(item.id || item._id) === String(id)
           ? { ...item, quantity: item.quantity + 1 }
-          : item
-      )
-    );
+          : item,
+      );
+      syncCartToServer(next, accountId);
+      return next;
+    });
   };
 
   const decreaseQuantity = (id) => {
-    setItems((current) =>
-      current
+    setItems((current) => {
+      const next = current
         .map((item) =>
           String(item.id || item._id) === String(id)
             ? { ...item, quantity: item.quantity - 1 }
-            : item
+            : item,
         )
-        .filter((item) => item.quantity > 0)
-    );
+        .filter((item) => item.quantity > 0);
+      syncCartToServer(next, accountId);
+      return next;
+    });
   };
 
   const removeItem = (id) => {
-    setItems((current) => current.filter((item) => String(item.id || item._id) !== String(id)));
+    setItems((current) => {
+      const next = current.filter((item) => String(item.id || item._id) !== String(id));
+      syncCartToServer(next, accountId);
+      return next;
+    });
   };
 
   const clearCart = () => {
     setItems([]);
+    syncCartToServer([], accountId);
   };
 
   const value = useMemo(

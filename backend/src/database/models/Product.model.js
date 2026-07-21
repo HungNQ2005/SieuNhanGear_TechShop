@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 
-// Khớp với dữ liệu thật trong MongoDB (xem data/demo_data.json):
-// { id, name, rating, price, category_id, manufacturer_id, img_URL, stock }
 const productSchema = new mongoose.Schema(
   {
     id: {
@@ -45,7 +43,6 @@ const productSchema = new mongoose.Schema(
       default: 0,
       min: 0,
     },
-    // Dùng cho Admin (ProductsScreen): active | drafting | out_of_stock
     status: {
       type: String,
       enum: ["active", "drafting", "out_of_stock"],
@@ -57,7 +54,6 @@ const productSchema = new mongoose.Schema(
   }
 );
 
-// Trả về trường id dạng Number giống dữ liệu gốc, ẩn _id và __v
 productSchema.set("toJSON", {
   transform: (doc, ret) => {
     delete ret._id;
@@ -66,4 +62,4 @@ productSchema.set("toJSON", {
   },
 });
 
-module.exports = mongoose.model("Product", productSchema);
+module.exports = mongoose.models.Product || mongoose.model("Product", productSchema);

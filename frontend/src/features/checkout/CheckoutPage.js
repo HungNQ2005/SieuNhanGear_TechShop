@@ -20,8 +20,7 @@ import {
   getWardsByProvince,
   getShippingAddressByAccount,
 } from "../../services/api";
-import { deleteCart } from "../../services/CartService";
-import { getAccounts } from "../../services/api";
+import AuthModal from "../Auth/Auth";
 import ShippingInfoCard from "./ShippingInfoCard";
 import PaymentMethodCard from "./PaymentMethodCard";
 import OrderSummaryCard from "./OrderSummaryCard";
@@ -54,6 +53,8 @@ import { IconDiscount } from "../../constants/icons";
 export default function CheckoutPage() {
   const { t } = useLocalization();
   const [accountId, setAccountId] = useState(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [pendingCheckout, setPendingCheckout] = useState(false);
   const { items, loadCart, clearCart } = useCart();
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [vouchers, setVouchers] = useState([]);
@@ -77,28 +78,33 @@ export default function CheckoutPage() {
   const [pickerVisible, setPickerVisible] = useState(false);
   const [pickerType, setPickerType] = useState("");
   const [pickerData, setPickerData] = useState([]);
+  const [notifVisible, setNotifVisible] = useState(false);
+  const [notifMessage, setNotifMessage] = useState('');
 
   useEffect(() => {
     const initData = async () => {
       try {
-        // Lấy account đầu tiên
-        const accountRes = await getAccounts();
+        // Nếu user đã đăng nhập, lấy thông tin từ localStorage
+        const savedUser = localStorage.getItem('user');
+        const user = savedUser ? JSON.parse(savedUser) : null;
+        if (user) {
+          const accountIdVal = user._id || user.id;
+          setAccountId(accountIdVal);
+          await loadCart(accountIdVal);
+        }
 
-        const account = accountRes.data?.[0];
+        // Sử dụng allSettled để một API lỗi không làm hỏng toàn bộ init
+        const settled = await Promise.allSettled([
+          getPaymentMethods(),
+          getVouchers(),
+          getProvinces(),
+          user ? getShippingAddressByAccount(user._id || user.id) : Promise.resolve({ data: [] }),
+        ]);
 
-        if (!account) return;
-
-        setAccountId(account.id);
-
-        await loadCart(account.id);
-
-        const [paymentRes, voucherRes, provinceData, shippingRes] =
-          await Promise.all([
-            getPaymentMethods(),
-            getVouchers(),
-            getProvinces(),
-            getShippingAddressByAccount(account.id),
-          ]);
+        const paymentRes = settled[0].status === 'fulfilled' ? settled[0].value : null;
+        const voucherRes = settled[1].status === 'fulfilled' ? settled[1].value : null;
+        const provinceData = settled[2].status === 'fulfilled' ? settled[2].value : null;
+        const shippingRes = settled[3].status === 'fulfilled' ? settled[3].value : null;
 
         setPaymentMethods(paymentRes?.data || []);
         setVouchers(voucherRes?.data || []);
@@ -129,11 +135,14 @@ export default function CheckoutPage() {
         }
       } catch (err) {
         console.log(err);
+        setNotifMessage('Không tải được danh sách tỉnh/thành. Vui lòng thử lại sau.');
+        setNotifVisible(true);
       }
     };
 
     initData();
   }, []);
+
   const handleSelectProvince = async (province) => {
     setFormData((prev) => ({
       ...prev,
@@ -203,12 +212,28 @@ export default function CheckoutPage() {
   const handleCheckout = async () => {
     const required = ["name", "email", "phone", "province", "ward", "address"];
     const empty = required.filter((f) => !formData[f]?.trim());
-    if (empty.length || !safeItems.length) return;
+    if (!safeItems.length) {
+      setNotifMessage('Giỏ hàng rỗng');
+      setNotifVisible(true);
+      return;
+    }
+    if (empty.length) {
+      setNotifMessage('Vui lòng nhập đủ thông tin giao hàng');
+      setNotifVisible(true);
+      return;
+    }
+
+    // Kiểm tra đăng nhập
+    const savedUser = localStorage.getItem('user');
+    if (!savedUser) {
+      setPendingCheckout(true);
+      setShowAuthModal(true);
+      return;
+    }
 
     setSubmitting(true);
     try {
       const orderPayload = {
-        accountId: accountId,
         orderDate: new Date().toISOString(),
         receiverName: formData.name,
         email: formData.email,
@@ -225,26 +250,32 @@ export default function CheckoutPage() {
         subtotal,
         totalPrice: total,
         status: "Pending",
+        items: safeItems.map((it) => ({ productId: it.id, price: it.price || 0, quantity: it.quantity || 1 })),
       };
       const { data: createdOrder } = await createOrder(orderPayload);
-      await Promise.all(
-        safeItems.map((item) =>
-          createOrderItem({
-            orderId: createdOrder.id,
-            productId: item.id,
-            quantity: item.quantity || 1,
-            price: item.price || 0,
-          }),
-        ),
-      );
-      await Promise.all(
-        safeItems.map((item) =>
-          item.cartId ? deleteCart(item.cartId) : Promise.resolve(),
-        ),
-      );
-      clearCart();
-    } catch (_) { }
+      setNotifMessage('Đặt hàng thành công! Mã đơn: ' + (createdOrder?.code || createdOrder?.id || ''));
+      setNotifVisible(true);
+      setTimeout(() => {
+        clearCart();
+      }, 0);
+    } catch (_) {}
     setSubmitting(false);
+  };
+
+  const handleAuthSuccess = async (user) => {
+    try {
+      const accountIdVal = user._id || user.id;
+      localStorage.setItem('user', JSON.stringify(user));
+      setAccountId(accountIdVal);
+      await loadCart(accountIdVal);
+    } catch (e) {
+      localStorage.setItem('user', JSON.stringify(user));
+    }
+    setShowAuthModal(false);
+    if (pendingCheckout) {
+      setPendingCheckout(false);
+      handleCheckout();
+    }
   };
 
   const handleInputChange = (field, value) =>
@@ -260,6 +291,7 @@ export default function CheckoutPage() {
             formData={formData}
             handleInputChange={handleInputChange}
             openPicker={openPicker}
+            allowManualSelect={!provinces || provinces.length === 0}
           />
           {/* Discount */}
           <View style={styles.section}>
@@ -390,6 +422,23 @@ export default function CheckoutPage() {
           />
         </View>
       </View>
+
+        <AuthModal
+          visible={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          onLoginSuccess={handleAuthSuccess}
+        />
+        {/* Modal thông báo */}
+        <Modal visible={notifVisible} transparent animationType="fade" onRequestClose={() => setNotifVisible(false)}>
+          <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ width: 400, backgroundColor: '#fff', borderRadius: 8, padding: 20 }}>
+              <Text style={{ fontSize: 16, marginBottom: 12 }}>{notifMessage}</Text>
+              <TouchableOpacity onPress={() => setNotifVisible(false)} style={{ alignSelf: 'flex-end', padding: 8 }}>
+                <Text style={{ color: '#2563eb', fontWeight: '600' }}>OK</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
 
       {/* Modal Picker */}
       <Modal

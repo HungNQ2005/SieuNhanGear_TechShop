@@ -1,15 +1,5 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-
-import {
-  View,
-  ScrollView,
-  Text,
-} from "react-native";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { View, ScrollView, Text } from "react-native";
 import { useNavigate } from "react-router-dom";
 
 import Sidebar from "../Sidebar";
@@ -30,17 +20,11 @@ import {
   deleteVoucher,
 } from "../../../../services/api";
 
-import {
-  TEXT_VOUCHER_SEARCH,
-} from "../../../../constants/i18nKeys";
+import { TEXT_VOUCHER_SEARCH } from "../../../../constants/i18nKeys";
 
 import styles from "./VoucherManagement.styles";
 
 const PAGE_SIZE = 10;
-
-function computeVoucherStatus(voucher) {
-  return voucher.isActive ? "active" : "inactive";
-}
 
 export default function VoucherManagementScreen() {
   const { t } = useLocalization();
@@ -61,6 +45,10 @@ export default function VoucherManagementScreen() {
   const [selectedVoucher, setSelectedVoucher] = useState(null);
 
   const [saving, setSaving] = useState(false);
+
+  function computeVoucherStatus(voucher) {
+    return voucher.isActive ? "active" : "inactive";
+  }
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -96,8 +84,6 @@ export default function VoucherManagementScreen() {
       total: vouchers.length,
       active: vouchers.filter((v) => v.status === "active").length,
       inactive: vouchers.filter((v) => v.status === "inactive").length,
-      // The API doesn't expose redemption/usage data yet, so this is
-      // left at 0 until a usage-tracking field is added to the voucher model.
       used: 0,
     };
   }, [vouchers]);
@@ -106,43 +92,30 @@ export default function VoucherManagementScreen() {
     const keyword = search.trim().toLowerCase();
 
     return vouchers.filter((voucher) => {
-      if (
-        keyword &&
-        !voucher.code?.toLowerCase().includes(keyword)
-      ) {
+      if (keyword && !voucher.code?.toLowerCase().includes(keyword)) {
         return false;
       }
 
-      if (
-        statusFilter !== "all" &&
-        voucher.status !== statusFilter
-      ) {
+      if (statusFilter !== "all" && voucher.status !== statusFilter) {
         return false;
       }
 
       return true;
     });
-  }, [
-    vouchers,
-    search,
-    statusFilter,
-  ]);
+  }, [vouchers, search, statusFilter]);
 
   useEffect(() => {
     setPage(1);
-  }, [
-    search,
-    statusFilter,
-  ]);
+  }, [search, statusFilter]);
 
   const totalPages = Math.max(
     1,
-    Math.ceil(filteredVouchers.length / PAGE_SIZE)
+    Math.ceil(filteredVouchers.length / PAGE_SIZE),
   );
 
   const pagedVouchers = filteredVouchers.slice(
     (page - 1) * PAGE_SIZE,
-    page * PAGE_SIZE
+    page * PAGE_SIZE,
   );
 
   const handleCreate = () => {
@@ -181,14 +154,12 @@ export default function VoucherManagementScreen() {
     try {
       await deleteVoucher(voucher.id);
 
-      setVouchers((prev) =>
-        prev.filter((item) => item.id !== voucher.id)
-      );
+      setVouchers((prev) => prev.filter((item) => item.id !== voucher.id));
     } catch (err) {
       console.log("Delete voucher error", err);
     }
   };
-    return (
+  return (
     <View style={styles.root}>
       <Sidebar selected="voucher" />
 
@@ -199,10 +170,7 @@ export default function VoucherManagementScreen() {
           searchPlaceholder={t(TEXT_VOUCHER_SEARCH)}
         />
 
-        <ScrollView
-          style={styles.content}
-          showsVerticalScrollIndicator={false}
-        >
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
           <VoucherHeader
             search={search}
             onSearchChange={setSearch}
@@ -219,15 +187,8 @@ export default function VoucherManagementScreen() {
           <VoucherFilterBar
             statusFilter={statusFilter}
             onStatusChange={setStatusFilter}
-            from={
-              filteredVouchers.length
-                ? (page - 1) * PAGE_SIZE + 1
-                : 0
-            }
-            to={Math.min(
-              page * PAGE_SIZE,
-              filteredVouchers.length
-            )}
+            from={filteredVouchers.length ? (page - 1) * PAGE_SIZE + 1 : 0}
+            to={Math.min(page * PAGE_SIZE, filteredVouchers.length)}
             total={filteredVouchers.length}
           />
 

@@ -1,13 +1,22 @@
 const jwt = require("../utils/jwt");
 const { HttpError } = require("../errors/httpError");
 
-// authenticate: đọc "Authorization: Bearer <token>", verify JWT, gắn req.user = { id, email, role }
 function authenticate(req, res, next) {
   try {
-    const header = req.headers.authorization || "";
-    const [scheme, token] = header.split(" ");
+    const header = req.headers.authorization || req.headers.Authorization || "";
+    const parts = header.split(" ");
+    if (parts.length !== 2) {
+      throw new HttpError({
+        code: "UNAUTHORIZED",
+        statusCode: 401,
+        message: "Missing or invalid Authorization header",
+      });
+    }
 
-    if (scheme !== "Bearer" || !token) {
+    const scheme = parts[0];
+    const token = parts[1];
+
+    if (!/^Bearer$/i.test(scheme) || !token) {
       throw new HttpError({
         code: "UNAUTHORIZED",
         statusCode: 401,
@@ -24,15 +33,13 @@ function authenticate(req, res, next) {
       });
     }
 
-    req.user = { id: payload.id, email: payload.email, role: payload.role };
+    req.user = { id: payload.id, email: payload.email, role: payload.role, _id: payload._id };
     next();
   } catch (e) {
     next(e);
   }
 }
 
-// authorize(...roles): phân quyền theo role, dùng SAU authenticate
-// Ví dụ: router.post('/', authenticate, authorize('system_admin'), controller.create)
 function authorize(...roles) {
   return (req, res, next) => {
     if (!req.user) {
@@ -66,16 +73,14 @@ function authorize(...roles) {
   };
 }
 
-// optionalAuthenticate: kiểm tra token nếu có thì gắn req.user, nếu không có token thì vẫn tiếp tục
 function optionalAuthenticate(req, res, next) {
   try {
-    const header = req.headers.authorization || "";
-    const [scheme, token] = header.split(" ");
-
-    if (scheme === "Bearer" && token) {
-      const payload = jwt.verify(token);
+    const header = req.headers.authorization || req.headers.Authorization || "";
+    const parts = header.split(" ");
+    if (parts.length === 2 && /^Bearer$/i.test(parts[0]) && parts[1]) {
+      const payload = jwt.verify(parts[1]);
       if (payload) {
-        req.user = { id: payload.id, email: payload.email, role: payload.role };
+        req.user = { id: payload.id, email: payload.email, role: payload.role, _id: payload._id };
       }
     }
     next();
@@ -84,4 +89,9 @@ function optionalAuthenticate(req, res, next) {
   }
 }
 
-module.exports = { authenticate, optionalAuthenticate, authorize };
+module.exports = {
+  authenticate,
+  optionalAuthenticate,
+  authorize,
+  authMiddleware: authenticate,
+};

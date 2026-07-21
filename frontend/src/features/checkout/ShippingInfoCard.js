@@ -64,6 +64,7 @@ export default function ShippingInfoCard({
   formData,
   handleInputChange,
   openPicker,
+  allowManualSelect = false,
 }) {
   return (
     <View style={styles.section}>
@@ -86,25 +87,36 @@ export default function ShippingInfoCard({
             </Text>
 
             {field.type === "select" ? (
-              <TouchableOpacity
-                style={styles.selectInput}
-                onPress={() => openPicker(field.id)}
-              >
-                <Text
-                  style={
-                    formData[field.id]
-                      ? styles.selectText
-                      : styles.selectPlaceholder
-                  }
+              // Nếu không có danh sách (allowManualSelect=true), cho phép nhập tay
+              allowManualSelect ? (
+                <TextInput
+                  style={styles.input}
+                  placeholder={t(field.placeholder)}
+                  placeholderTextColor="#9CA3AF"
+                  value={formData[field.id] || ""}
+                  onChangeText={(value) => handleInputChange(field.id, value)}
+                />
+              ) : (
+                <TouchableOpacity
+                  style={styles.selectInput}
+                  onPress={() => openPicker(field.id)}
                 >
-                  {formData[field.id] ||
-                    (field.id === "province"
-                      ? t(TEXT_CHECKOUT_PROVINCE)
-                      : t(TEXT_CHECKOUT_WARD))}
-                </Text>
+                  <Text
+                    style={
+                      formData[field.id]
+                        ? styles.selectText
+                        : styles.selectPlaceholder
+                    }
+                  >
+                    {formData[field.id] ||
+                      (field.id === "province"
+                        ? t(TEXT_CHECKOUT_PROVINCE)
+                        : t(TEXT_CHECKOUT_WARD))}
+                  </Text>
 
-                <Text style={styles.selectArrow}>▼</Text>
-              </TouchableOpacity>
+                  <Text style={styles.selectArrow}>▼</Text>
+                </TouchableOpacity>
+              )
             ) : (
               <TextInput
                 style={styles.input}
