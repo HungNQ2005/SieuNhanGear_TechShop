@@ -62,13 +62,14 @@ export default function Header() {
     setSelectedCategoryId,
     selectedManufacturerId,
     setSelectedManufacturerId,
+    searchQuery,
+    setSearchQuery,
     clearFilters,
   } = useFilter();
 
   const { width } = useWindowDimensions();
   const isCompact = width < 1100;
 
-  const [searchQuery, setSearchQuery] = useState("");
   const { totalItems } = useCart();
   const [user, setUser] = useState(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -78,7 +79,13 @@ export default function Header() {
   const [manufacturers, setManufacturers] = useState([]);
   const [loadingDropdown, setLoadingDropdown] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchResultsVisible, setSearchResultsVisible] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState("");
+  const [searchAnchor, setSearchAnchor] = useState({ top: 0, left: 0, width: 0 });
   const categoryButtonRef = useRef(null);
+  const searchContainerRef = useRef(null);
 
   const [moreVisible, setMoreVisible] = useState(false);
   const [morePosition, setMorePosition] = useState({ top: 0, left: 0 });
@@ -164,9 +171,86 @@ export default function Header() {
     navigate(ROUTES.HOME);
   };
 
-  const handleSearch = () => {
-    // Implement search logic here
-    console.log("Search:", searchQuery);
+  const handleSearch = async () => {
+    const trimmedQuery = (searchQuery || "").trim();
+    setSearchQuery(trimmedQuery);
+    setSearchError("");
+
+    if (!trimmedQuery) {
+      setSearchResults([]);
+      setSearchResultsVisible(false);
+      return;
+    }
+
+    searchContainerRef.current?.measure((x, y, width, height, pageX, pageY) => {
+      setSearchAnchor({ top: pageY + height + 8, left: pageX, width });
+    });
+
+    setSearchLoading(true);
+    setSearchResultsVisible(true);
+
+    try {
+      const [productsRes, categoriesRes, manufacturersRes] = await Promise.all([
+        api.get(API.GET_PRODUCT),
+        categories.length > 0 ? Promise.resolve({ data: categories }) : api.get(API.GET_CATEGORY),
+        manufacturers.length > 0 ? Promise.resolve({ data: manufacturers }) : api.get(API.GET_MANUFACTURER),
+      ]);
+
+      const products = Array.isArray(productsRes.data) ? productsRes.data : [];
+      const categoryList = Array.isArray(categoriesRes.data) ? categoriesRes.data : [];
+      const manufacturerList = Array.isArray(manufacturersRes.data) ? manufacturersRes.data : [];
+
+      if (categoryList.length && categories.length === 0) {
+        setCategories(categoryList);
+      }
+      if (manufacturerList.length && manufacturers.length === 0) {
+        setManufacturers(manufacturerList);
+      }
+
+      const normalizedQuery = trimmedQuery.toLowerCase();
+      const matchingCategoryIds = new Set(
+        categoryList
+          .filter((cat) => {
+            const name = (cat.name || "").toLowerCase();
+            const description = ((cat.description_vi || "") + " " + (cat.description_en || "")).toLowerCase();
+            return name.includes(normalizedQuery) || description.includes(normalizedQuery);
+          })
+          .map((cat) => String(cat.id))
+      );
+
+      const matchingManufacturerIds = new Set(
+        manufacturerList
+          .filter((man) => {
+            const name = (man.name || "").toLowerCase();
+            const description = ((man.description_vi || "") + " " + (man.description_en || "")).toLowerCase();
+            return name.includes(normalizedQuery) || description.includes(normalizedQuery);
+          })
+          .map((man) => String(man.id))
+      );
+
+      const filteredProducts = products.filter((product) => {
+        const name = (product.name || "").toLowerCase();
+        const description = `${product.description || ""} ${product.description_vi || ""} ${product.description_en || ""}`.toLowerCase();
+        const categoryMatch = matchingCategoryIds.has(String(product.category_id));
+        const manufacturerMatch = matchingManufacturerIds.has(String(product.manufacturer_id));
+
+        return (
+          name.includes(normalizedQuery) ||
+          description.includes(normalizedQuery) ||
+          categoryMatch ||
+          manufacturerMatch
+        );
+      });
+
+      setSearchResults(filteredProducts);
+      setSearchError(filteredProducts.length === 0 ? "Không tìm thấy sản phẩm phù hợp." : "");
+    } catch (error) {
+      console.error("Search error:", error);
+      setSearchResults([]);
+      setSearchError("Không thể tải kết quả tìm kiếm.");
+    } finally {
+      setSearchLoading(false);
+    }
   };
 
   return (
@@ -296,18 +380,76 @@ export default function Header() {
           </Modal>
 
           {/* Search bar */}
-          <View style={styles.searchContainer}>
+          <View ref={searchContainerRef} style={styles.searchContainer}>
             <TextInput
               value={searchQuery}
               onChangeText={setSearchQuery}
               placeholder={t(TEXT_SEARCH_PLACEHOLDER)}
               style={styles.searchInput}
               onSubmitEditing={handleSearch}
+              returnKeyType="search"
             />
             <Pressable style={styles.searchButton} onPress={handleSearch}>
               <IconSearch />
             </Pressable>
           </View>
+
+          <Modal
+            visible={searchResultsVisible}
+            transparent
+            animationType="fade"
+            onRequestClose={() => setSearchResultsVisible(false)}
+          >
+            <Pressable
+              style={styles.modalOverlay}
+              onPress={() => setSearchResultsVisible(false)}
+            >
+              <Pressable
+                style={[
+                  styles.searchResultsModalContent,
+                  {
+                    top: searchAnchor.top,
+                    left: searchAnchor.left,
+                    width: Math.max(searchAnchor.width, 280),
+                  },
+                ]}
+                onPress={(e) => e.stopPropagation()}
+              >
+                <View style={styles.searchResultsHeader}>
+                  <Text style={styles.searchResultsTitle}>Kết quả tìm kiếm</Text>
+                  <Pressable onPress={() => setSearchResultsVisible(false)}>
+                    <Text style={styles.searchResultsCloseText}>Đóng</Text>
+                  </Pressable>
+                </View>
+
+                {searchLoading ? (
+                  <ActivityIndicator color="#2563eb" style={{ paddingVertical: 20 }} />
+                ) : searchError ? (
+                  <Text style={styles.searchResultsEmpty}>{searchError}</Text>
+                ) : (
+                  <ScrollView style={{ maxHeight: 360 }} showsVerticalScrollIndicator={false}>
+                    {searchResults.map((product) => (
+                      <Pressable
+                        key={product.id}
+                        style={styles.searchResultItem}
+                        onPress={() => {
+                          setSearchResultsVisible(false);
+                          navigate(ROUTES.PRODUCT_PAGE.replace(':id', product.id));
+                        }}
+                      >
+                        <Text style={styles.searchResultName}>{product.name}</Text>
+                        <Text style={styles.searchResultMeta}>
+                          {typeof product.price === "number"
+                            ? `${product.price.toLocaleString("vi-VN")}₫`
+                            : "Xem chi tiết"}
+                        </Text>
+                      </Pressable>
+                    ))}
+                  </ScrollView>
+                )}
+              </Pressable>
+            </Pressable>
+          </Modal>
 
           {/* Right actions */}
           <View style={styles.rightActions}>
@@ -754,6 +896,57 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     color: "#374151",
+  },
+  searchResultsModalContent: {
+    position: "absolute",
+    maxWidth: "95%",
+    backgroundColor: "#ffffff",
+    borderRadius: 12,
+    padding: 14,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 20,
+    elevation: 16,
+    borderWidth: 1,
+    borderColor: "#e5e7eb",
+  },
+  searchResultsHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  searchResultsTitle: {
+    fontSize: 15,
+    fontWeight: "700",
+    color: "#111827",
+  },
+  searchResultsCloseText: {
+    fontSize: 13,
+    color: "#2563eb",
+    fontWeight: "600",
+  },
+  searchResultItem: {
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f3f4f6",
+  },
+  searchResultName: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#111827",
+  },
+  searchResultMeta: {
+    fontSize: 12,
+    color: "#6b7280",
+    marginTop: 2,
+  },
+  searchResultsEmpty: {
+    paddingVertical: 20,
+    textAlign: "center",
+    color: "#6b7280",
+    fontSize: 14,
   },
   userDropdown: {
     position: "absolute",

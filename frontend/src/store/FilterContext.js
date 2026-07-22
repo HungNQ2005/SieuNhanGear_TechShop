@@ -5,10 +5,12 @@ const FilterContext = createContext();
 export function FilterProvider({ children }) {
     const [selectedCategoryId, setSelectedCategoryId] = useState(null);
     const [selectedManufacturerId, setSelectedManufacturerId] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const clearFilters = () => {
         setSelectedCategoryId(null);
         setSelectedManufacturerId(null);
+        setSearchQuery('');
     };
 
     return (
@@ -17,6 +19,8 @@ export function FilterProvider({ children }) {
             setSelectedCategoryId,
             selectedManufacturerId,
             setSelectedManufacturerId,
+            searchQuery,
+            setSearchQuery,
             clearFilters,
         }}>
             {children}
