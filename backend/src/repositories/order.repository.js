@@ -28,7 +28,10 @@ const orderRepository = {
   },
 
   async create(data) {
-    const id = await nextId(Order);
+    let id = await nextId(Order);
+    if (!id || isNaN(id)) {
+      id = Math.max(1, Date.now() % 1000000); // Fallback ID generation
+    }
     const code = data.code || `ORD-${Date.now()}`;
     const order = new Order({ ...data, id, code });
     return order.save();

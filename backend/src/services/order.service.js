@@ -7,6 +7,10 @@ const { accountRepository } = require("../repositories/account.repository");
 const { HttpError } = require("../errors/httpError");
 
 async function attachItems(order) {
+  if (!order || !order.id || isNaN(order.id)) {
+    console.warn("Warning: Order has invalid ID", { orderId: order?.id, order: order?.toJSON?.() });
+    return { ...order.toJSON(), items: [] };
+  }
   const items = await orderItemRepository.getByOrder(order.id);
   return { ...order.toJSON(), items: items.map((i) => i.toJSON()) };
 }

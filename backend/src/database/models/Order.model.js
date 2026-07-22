@@ -13,7 +13,7 @@ const orderItemSchema = new mongoose.Schema(
 
 const orderSchema = new mongoose.Schema(
   {
-    id: { type: Number, index: true },
+    id: { type: Number, index: true, required: true },
     code: { type: String, required: true, trim: true },
     customerId: { type: Number, index: true },
     accountId: { type: mongoose.Schema.Types.Mixed, index: true },
