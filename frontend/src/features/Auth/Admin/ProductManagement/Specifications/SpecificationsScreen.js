@@ -98,14 +98,16 @@ export default function SpecificationsScreen() {
         getAttributeGroups(),
         getAttributes(),
       ]);
-      const loadedGroups =
-        groupsRes.data && groupsRes.data.length ? groupsRes.data : FALLBACK_GROUPS;
-      const loadedAttributes =
-        attributesRes.data && attributesRes.data.length
-          ? attributesRes.data
-          : FALLBACK_ATTRIBUTES;
-      setGroups(loadedGroups);
-      setAttributes(loadedAttributes);
+      const gData = Array.isArray(groupsRes.data) ? groupsRes.data : [];
+      const aData = Array.isArray(attributesRes.data) ? attributesRes.data : [];
+
+      if (gData.length > 0 || aData.length > 0) {
+        setGroups(gData);
+        setAttributes(aData);
+      } else {
+        setGroups(FALLBACK_GROUPS);
+        setAttributes(FALLBACK_ATTRIBUTES);
+      }
     } catch (err) {
       console.log("Failed to load specification templates, using fallback", err);
       setGroups(FALLBACK_GROUPS);
@@ -124,13 +126,13 @@ export default function SpecificationsScreen() {
     loadData();
   }, [loadData, navigate]);
 
-  const groupMap = useMemo(() => new Map(groups.map((g) => [g.id, g])), [groups]);
+  const groupMap = useMemo(() => new Map(groups.map((g) => [Number(g.id), g])), [groups]);
 
   const joinedAttributes = useMemo(
     () =>
       attributes.map((a) => ({
         ...a,
-        groupName: groupMap.get(a.groupId)?.name,
+        groupName: groupMap.get(Number(a.groupId))?.name || "Chưa phân nhóm",
       })),
     [attributes, groupMap]
   );
@@ -165,22 +167,22 @@ export default function SpecificationsScreen() {
     page * PAGE_SIZE
   );
 
-  // CRUD cho Nhom thuoc tinh
+  // CRUD cho Nhóm thuộc tính
   const handleCreateGroup = async (payload) => {
     setSaving(true);
     try {
       const res = await createAttributeGroup({ ...payload, productsCount: 0 });
-      const newGroup = res.data?.id
-        ? res.data
-        : { id: Date.now(), ...payload, productsCount: 0 };
-      setGroups((prev) => [...prev, newGroup]);
+      const newGroup = res.data?.id ? res.data : res.data;
+      if (newGroup) {
+        setGroups((prev) => [...prev, newGroup]);
+      } else {
+        await loadData();
+      }
       setGroupModalVisible(false);
       setEditingGroup(null);
     } catch (err) {
-      console.log("Failed to create attribute group", err);
-      setGroups((prev) => [...prev, { id: Date.now(), ...payload, productsCount: 0 }]);
-      setGroupModalVisible(false);
-      setEditingGroup(null);
+      console.error("Failed to create attribute group", err);
+      alert("Không thể lưu nhóm thuộc tính vào cơ sở dữ liệu. Vui lòng kiểm tra kết nối backend.");
     } finally {
       setSaving(false);
     }
@@ -191,14 +193,12 @@ export default function SpecificationsScreen() {
     try {
       const res = await updateAttributeGroup(id, payload);
       const updated = res.data?.id ? res.data : { id, ...payload };
-      setGroups((prev) => prev.map((g) => (g.id === id ? { ...g, ...updated } : g)));
+      setGroups((prev) => prev.map((g) => (Number(g.id) === Number(id) ? { ...g, ...updated } : g)));
       setGroupModalVisible(false);
       setEditingGroup(null);
     } catch (err) {
-      console.log("Failed to update attribute group", err);
-      setGroups((prev) => prev.map((g) => (g.id === id ? { ...g, ...payload } : g)));
-      setGroupModalVisible(false);
-      setEditingGroup(null);
+      console.error("Failed to update attribute group", err);
+      alert("Không thể cập nhật nhóm thuộc tính. Vui lòng thử lại.");
     } finally {
       setSaving(false);
     }
@@ -207,38 +207,42 @@ export default function SpecificationsScreen() {
   const handleDeleteGroup = async (group) => {
     try {
       await deleteAttributeGroup(group.id);
-    } catch (err) {
-      console.log("Failed to delete attribute group on server", err);
-    } finally {
-      setGroups((prev) => prev.filter((g) => g.id !== group.id));
+      setGroups((prev) => prev.filter((g) => Number(g.id) !== Number(group.id)));
       setAttributes((prev) => prev.filter((a) => Number(a.groupId) !== Number(group.id)));
+    } catch (err) {
+      console.error("Failed to delete attribute group on server", err);
+      alert("Không thể xóa nhóm thuộc tính. Vui lòng thử lại.");
     }
   };
 
-  // CRUD cho Thuoc tinh
+  // CRUD cho Thuộc tính
   const handleSaveAttribute = async (payload) => {
     setSaving(true);
+    const normalizedPayload = {
+      ...payload,
+      dataType: payload.dataType?.toLowerCase() || "text",
+    };
     try {
       if (editingAttr) {
-        const res = await updateAttribute(editingAttr.id, payload);
-        const updated = res.data?.id ? res.data : { ...editingAttr, ...payload };
-        setAttributes((prev) => prev.map((a) => (a.id === editingAttr.id ? { ...a, ...updated } : a)));
+        const res = await updateAttribute(editingAttr.id, normalizedPayload);
+        const updated = res.data?.id ? res.data : { ...editingAttr, ...normalizedPayload };
+        setAttributes((prev) =>
+          prev.map((a) => (Number(a.id) === Number(editingAttr.id) ? { ...a, ...updated } : a))
+        );
       } else {
-        const res = await createAttribute(payload);
-        const created = res.data?.id ? res.data : { id: Date.now(), usageCount: 0, ...payload };
-        setAttributes((prev) => [...prev, created]);
+        const res = await createAttribute(normalizedPayload);
+        const created = res.data?.id ? res.data : res.data;
+        if (created) {
+          setAttributes((prev) => [...prev, created]);
+        } else {
+          await loadData();
+        }
       }
       setAttrModalVisible(false);
       setEditingAttr(null);
     } catch (err) {
-      console.log("Failed to save attribute", err);
-      if (editingAttr) {
-        setAttributes((prev) => prev.map((a) => (a.id === editingAttr.id ? { ...a, ...payload } : a)));
-      } else {
-        setAttributes((prev) => [...prev, { id: Date.now(), usageCount: 0, ...payload }]);
-      }
-      setAttrModalVisible(false);
-      setEditingAttr(null);
+      console.error("Failed to save attribute", err);
+      alert("Không thể lưu thuộc tính vào cơ sở dữ liệu. Vui lòng kiểm tra kết nối backend.");
     } finally {
       setSaving(false);
     }
@@ -247,12 +251,12 @@ export default function SpecificationsScreen() {
   const handleDeleteAttribute = async (attr) => {
     try {
       await deleteAttribute(attr.id);
-    } catch (err) {
-      console.log("Failed to delete attribute on server", err);
-    } finally {
-      setAttributes((prev) => prev.filter((a) => a.id !== attr.id));
+      setAttributes((prev) => prev.filter((a) => Number(a.id) !== Number(attr.id)));
       setAttrModalVisible(false);
       setEditingAttr(null);
+    } catch (err) {
+      console.error("Failed to delete attribute on server", err);
+      alert("Không thể xóa thuộc tính. Vui lòng thử lại.");
     }
   };
 
