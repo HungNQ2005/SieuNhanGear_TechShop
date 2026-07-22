@@ -171,6 +171,18 @@ export default function Header() {
     navigate(ROUTES.HOME);
   };
 
+  const getProductImageUri = (url) => {
+    if (!url) return null;
+    if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("data:")) {
+      return url;
+    }
+    const baseUrl = API.BASE_API_URL.endsWith("/")
+      ? API.BASE_API_URL.slice(0, -1)
+      : API.BASE_API_URL;
+    const path = url.startsWith("/") ? url : `/${url}`;
+    return `${baseUrl}${path}`;
+  };
+
   const handleSearch = async () => {
     const trimmedQuery = (searchQuery || "").trim();
     setSearchQuery(trimmedQuery);
@@ -437,12 +449,28 @@ export default function Header() {
                           navigate(ROUTES.PRODUCT_PAGE.replace(':id', product.id));
                         }}
                       >
-                        <Text style={styles.searchResultName}>{product.name}</Text>
-                        <Text style={styles.searchResultMeta}>
-                          {typeof product.price === "number"
-                            ? `${product.price.toLocaleString("vi-VN")}₫`
-                            : "Xem chi tiết"}
-                        </Text>
+                        <View style={styles.searchResultContent}>
+                          {getProductImageUri(product.img_URL) ? (
+                            <Image
+                              source={{ uri: getProductImageUri(product.img_URL) }}
+                              style={styles.searchResultImage}
+                              resizeMode="cover"
+                            />
+                          ) : (
+                            <View style={styles.searchResultImagePlaceholder}>
+                              <Text style={styles.searchResultImagePlaceholderText}>No Image</Text>
+                            </View>
+                          )}
+
+                          <View style={styles.searchResultInfo}>
+                            <Text style={styles.searchResultName}>{product.name}</Text>
+                            <Text style={styles.searchResultMeta}>
+                              {typeof product.price === "number"
+                                ? `${product.price.toLocaleString("vi-VN")}₫`
+                                : "Xem chi tiết"}
+                            </Text>
+                          </View>
+                        </View>
                       </Pressable>
                     ))}
                   </ScrollView>
@@ -931,6 +959,32 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#f3f4f6",
+  },
+  searchResultContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  searchResultImage: {
+    width: 48,
+    height: 48,
+    borderRadius: 8,
+    backgroundColor: "#f3f4f6",
+  },
+  searchResultImagePlaceholder: {
+    width: 48,
+    height: 48,
+    borderRadius: 8,
+    backgroundColor: "#f3f4f6",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  searchResultImagePlaceholderText: {
+    fontSize: 10,
+    color: "#6b7280",
+  },
+  searchResultInfo: {
+    flex: 1,
   },
   searchResultName: {
     fontSize: 14,
