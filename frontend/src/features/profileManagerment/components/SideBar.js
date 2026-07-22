@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import { styles } from '../styles/SideBar.styles';
-import { IconUser, IconShoppingCart, IconLogoutArrow, IconHeart } from '../../../constants/icons';
+import { IconAvatar, IconUser, IconShoppingCart, IconLogoutArrow, IconHeart } from '../../../constants/icons';
 import { useLocalization } from '../../../providers/LocalizationProvider';
 import {
     TEXT_PROFILE_INFO,
@@ -46,7 +46,7 @@ export default function SideBar({ user, activeTab, setActiveTab }) {
                     />
                 ) : (
                     <View style={styles.avatarFallback}>
-                        <Text style={styles.avatarFallbackText}>{initialLetter}</Text>
+                        <IconAvatar color="#fff" size={40} />
                     </View>
                 )}
 

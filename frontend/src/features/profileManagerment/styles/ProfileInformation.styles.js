@@ -23,15 +23,25 @@ export const styles = StyleSheet.create({
         fontWeight: '700',
         color: '#0F172A',
     },
+    buttonRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        gap: 10,
+        marginTop: 16,
+    },
     editButton: {
         backgroundColor: '#2563EB',
-        paddingHorizontal: 16,
+        paddingHorizontal: 12,
         paddingVertical: 8,
         borderRadius: 8,
+        minHeight: 36,
+        justifyContent: 'center',
     },
     editButtonText: {
         color: '#fff',
         fontWeight: '600',
+        fontSize: 14,
     },
     infoRow: {
         flexDirection: 'row',
@@ -151,13 +161,17 @@ export const styles = StyleSheet.create({
         textAlign: 'center',
     },
     changePasswordButton: {
-        marginTop: 20,
-        alignSelf: 'flex-start',
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        borderRadius: 8,
+        backgroundColor: '#EFF6FF',
+        minHeight: 36,
+        justifyContent: 'center',
     },
     changePasswordText: {
         color: '#2563EB',
         fontWeight: '600',
-        fontSize: 16,
+        fontSize: 14,
     },
     passwordRequirements: {
         marginVertical: 16,

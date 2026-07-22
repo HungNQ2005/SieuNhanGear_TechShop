@@ -321,18 +321,18 @@ export default function ProfileInformation({ accountId }) {
             )}
 
             {!isEditing && (
-                <TouchableOpacity onPress={() => setIsEditing(true)} style={styles.editButton}>
-                    <Text style={styles.editButtonText}>{t(TEXT_PROFILE_EDIT)}</Text>
-                </TouchableOpacity>
-            )}
+                <View style={styles.buttonRow}>
+                    <TouchableOpacity onPress={() => setIsEditing(true)} style={styles.editButton}>
+                        <Text style={styles.editButtonText}>{t(TEXT_PROFILE_EDIT)}</Text>
+                    </TouchableOpacity>
 
-            {!isEditing && (
-                <TouchableOpacity
-                    style={styles.changePasswordButton}
-                    onPress={() => setShowChangePassword(true)}
-                >
-                    <Text style={styles.changePasswordText}>{t(TEXT_PROFILE_CHANGE_PASSWORD)}</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.changePasswordButton}
+                        onPress={() => setShowChangePassword(true)}
+                    >
+                        <Text style={styles.changePasswordText}>{t(TEXT_PROFILE_CHANGE_PASSWORD)}</Text>
+                    </TouchableOpacity>
+                </View>
             )}
 
             {/* Change Password Modal */}

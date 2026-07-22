@@ -6,6 +6,7 @@ import { ROUTES } from "../../../constants/routes";
 import styles from "./UserDropdown.styles";
 
 import { getAvatarUri } from "../../../utils/avatar";
+import { IconAvatar } from "../../../constants/icons";
 
 export default function UserDropdown({ user, onClose, onLogout }) {
   const navigate = useNavigate();
@@ -22,9 +23,7 @@ export default function UserDropdown({ user, onClose, onLogout }) {
           />
         ) : (
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>
-              {user?.name ? user.name.charAt(0).toUpperCase() : "U"}
-            </Text>
+            <IconAvatar color="#fff" size={18} />
           </View>
         )}
 

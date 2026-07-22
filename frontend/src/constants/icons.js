@@ -142,6 +142,23 @@ export const IconUser = () => (
   </svg>
 );
 
+export const IconAvatar = ({ color = "currentColor", size = 20 }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={color}
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="12" cy="12" r="9" />
+    <circle cx="12" cy="8" r="3" />
+    <path d="M6.5 18a5.5 5.5 0 0 1 11 0" />
+  </svg>
+);
+
 export const IconShoppingCart = () => (
   <svg
     width="20"

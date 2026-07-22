@@ -45,6 +45,7 @@ import {
   IconPhone,
   IconMapPin,
   IconGlobe,
+  IconAvatar,
   IconUser,
   IconShoppingCart,
   IconBox,
