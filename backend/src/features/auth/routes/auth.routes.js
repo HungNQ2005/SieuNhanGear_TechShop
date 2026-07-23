@@ -5,24 +5,155 @@ const { authenticate } = require('../../../middlewares/auth.middleware');
 function createAuthRouter() {
   const router = express.Router();
 
-  // POST /api/auth/register (UC-01) - luôn tạo tài khoản Customer (role "user")
+  /**
+   * @openapi
+   * /api/auth/register:
+   *   post:
+   *     tags:
+   *       - Auth
+   *     summary: Đăng ký tài khoản người dùng
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required:
+   *               - username
+   *               - email
+   *               - password
+   *             properties:
+   *               username:
+   *                 type: string
+   *               email:
+   *                 type: string
+   *               password:
+   *                 type: string
+   *               fullName:
+   *                 type: string
+   *               phone:
+   *                 type: string
+   *     responses:
+   *       201:
+   *         description: Đăng ký thành công
+   *       400:
+   *         description: Yêu cầu không hợp lệ
+   */
   router.post('/register', authController.register);
 
-  // POST /api/auth/login (UC-02) - dùng chung cho mọi role, trả về JWT kèm role
+  /**
+   * @openapi
+   * /api/auth/login:
+   *   post:
+   *     tags:
+   *       - Auth
+   *     summary: Đăng nhập tài khoản
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required:
+   *               - username
+   *               - password
+   *             properties:
+   *               username:
+   *                 type: string
+   *               password:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: Đăng nhập thành công, trả về JWT token
+   *       401:
+   *         description: Sai thông tin đăng nhập
+   */
   router.post('/login', authController.login);
 
-  // POST /api/auth/logout
+  /**
+   * @openapi
+   * /api/auth/logout:
+   *   post:
+   *     tags:
+   *       - Auth
+   *     summary: Đăng xuất người dùng
+   *     responses:
+   *       200:
+   *         description: Đăng xuất thành công
+   */
   router.post('/logout', (req, res) => {
     res.json({ success: true, message: "Logged out successfully" });
   });
 
-  // GET /api/auth/me - lấy thông tin tài khoản đang đăng nhập (cần Bearer token)
+  /**
+   * @openapi
+   * /api/auth/me:
+   *   get:
+   *     tags:
+   *       - Auth
+   *     summary: Lấy thông tin cá nhân hiện tại
+   *     security:
+   *       - BearerAuth: []
+   *     responses:
+   *       200:
+   *         description: Trả về thông tin profile người dùng
+   *       401:
+   *         description: Chưa xác thực
+   */
   router.get('/me', authenticate, authController.me);
 
-  // PUT /api/auth/me (UC-03 Manage Profile) - cập nhật thông tin của chính mình
+  /**
+   * @openapi
+   * /api/auth/me:
+   *   put:
+   *     tags:
+   *       - Auth
+   *     summary: Cập nhật thông tin cá nhân
+   *     security:
+   *       - BearerAuth: []
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               fullName:
+   *                 type: string
+   *               phone:
+   *                 type: string
+   *               address:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: Cập nhật thành công
+   *       401:
+   *         description: Chưa xác thực
+   */
   router.put('/me', authenticate, authController.updateMe);
 
-  // POST /api/auth/forgot-password - dat lai mat khau theo email
+  /**
+   * @openapi
+   * /api/auth/forgot-password:
+   *   post:
+   *     tags:
+   *       - Auth
+   *     summary: Quên mật khẩu
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required:
+   *               - email
+   *             properties:
+   *               email:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: Đã gửi email / phản hồi hướng dẫn đặt lại mật khẩu
+   */
   router.post('/forgot-password', authController.forgotPassword);
 
   return router;

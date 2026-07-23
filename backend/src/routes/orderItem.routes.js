@@ -5,7 +5,23 @@ const demoData = require("../data/demo_data.json");
 function createOrderItemRouter() {
   const router = express.Router();
 
-  // GET /api/orderItems?orderId=...
+  /**
+   * @openapi
+   * /api/orderItems:
+   *   get:
+   *     tags:
+   *       - Orders
+   *     summary: Lấy danh sách sản phẩm thuộc đơn hàng
+   *     parameters:
+   *       - in: query
+   *         name: orderId
+   *         schema:
+   *           type: string
+   *         description: Lọc chi tiết sản phẩm theo mã đơn hàng
+   *     responses:
+   *       200:
+   *         description: Danh sách sản phẩm của đơn hàng
+   */
   router.get("/", async (req, res) => {
     try {
       const { orderId } = req.query;

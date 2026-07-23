@@ -188,10 +188,22 @@
     }
   ],
   "manufacturers": [
-    { "id": 1, "name": "ASUS" },
-    { "id": 2, "name": "Dell" },
-    { "id": 3, "name": "Apple" },
-    { "id": 4, "name": "SN-Gear" }
+    {
+      "id": 1,
+      "name": "ASUS"
+    },
+    {
+      "id": 2,
+      "name": "Dell"
+    },
+    {
+      "id": 3,
+      "name": "Apple"
+    },
+    {
+      "id": 4,
+      "name": "SN-Gear"
+    }
   ],
   "news": [
     {
@@ -217,7 +229,10 @@
     }
   ],
   "banners": [
-    { "id": 1, "img_URL": "images/banner/banner_1.jpg" }
+    {
+      "id": 1,
+      "img_URL": "images/banner/banner_1.jpg"
+    }
   ],
   "showroom": [
     {
@@ -249,25 +264,94 @@
     }
   ],
   "cart": [
-    { "id": 1, "accountId": 1, "productId": 1, "quantity": 1 },
-    { "id": 2, "accountId": 1, "productId": 3, "quantity": 2 }
+    {
+      "id": 1,
+      "accountId": 1,
+      "productId": 1,
+      "quantity": 1
+    },
+    {
+      "id": 2,
+      "accountId": 1,
+      "productId": 3,
+      "quantity": 2
+    }
   ],
   "accounts": [
-    { "id": 1, "name": "Admin", "email": "admin@gmail.com", "password": "123456", "phone": "", "role": "system_admin" },
-    { "id": 2, "name": "User", "email": "user@gmail.com", "password": "123456", "role": "user" },
-    { "id": 3, "name": "System Admin", "email": "systemadmin@gmail.com", "password": "123456", "role": "system_admin" },
-    { "id": 4, "name": "Product Manager", "email": "productmanager@gmail.com", "password": "123456", "role": "product_manager" },
-    { "id": 5, "name": "Sales Staff", "email": "salesstaff@gmail.com", "password": "123456", "role": "sales_staff" }
+    {
+      "id": 1,
+      "name": "Admin",
+      "email": "admin@gmail.com",
+      "password": "123456",
+      "phone": "",
+      "role": "system_admin"
+    },
+    {
+      "id": 2,
+      "name": "User",
+      "email": "user@gmail.com",
+      "password": "123456",
+      "role": "user"
+    },
+    {
+      "id": 3,
+      "name": "System Admin",
+      "email": "systemadmin@gmail.com",
+      "password": "123456",
+      "role": "system_admin"
+    },
+    {
+      "id": 4,
+      "name": "Product Manager",
+      "email": "productmanager@gmail.com",
+      "password": "123456",
+      "role": "product_manager"
+    },
+    {
+      "id": 5,
+      "name": "Sales Staff",
+      "email": "salesstaff@gmail.com",
+      "password": "123456",
+      "role": "sales_staff"
+    }
   ],
   "orderStatus": [
-    { "id": 1, "name": "Processing", "color": "#2563EB" },
-    { "id": 2, "name": "Shipping", "color": "#F59E0B" },
-    { "id": 3, "name": "Delivered", "color": "#10B981" },
-    { "id": 4, "name": "Cancelled", "color": "#EF4444" }
+    {
+      "id": 1,
+      "name": "Processing",
+      "color": "#2563EB"
+    },
+    {
+      "id": 2,
+      "name": "Shipping",
+      "color": "#F59E0B"
+    },
+    {
+      "id": 3,
+      "name": "Delivered",
+      "color": "#10B981"
+    },
+    {
+      "id": 4,
+      "name": "Cancelled",
+      "color": "#EF4444"
+    }
   ],
   "orderItems": [
-    { "id": 1, "orderId": 1, "productId": 1, "price": 35990000, "quantity": 1 },
-    { "id": 2, "orderId": 1, "productId": 3, "price": 49990000, "quantity": 2 }
+    {
+      "id": 1,
+      "orderId": 1,
+      "productId": 1,
+      "price": 35990000,
+      "quantity": 1
+    },
+    {
+      "id": 2,
+      "orderId": 1,
+      "productId": 3,
+      "price": 49990000,
+      "quantity": 2
+    }
   ],
   "orders": [
     {
@@ -351,17 +435,53 @@
     }
   ],
   "shippingCompanies": [
-    { "id": 1, "name": "Viettel Post", "phone": "19008095" },
-    { "id": 2, "name": "GHN", "phone": "1900636677" },
-    { "id": 3, "name": "GHTK", "phone": "19006092" }
+    {
+      "id": 1,
+      "name": "Viettel Post",
+      "phone": "19008095"
+    },
+    {
+      "id": 2,
+      "name": "GHN",
+      "phone": "1900636677"
+    },
+    {
+      "id": 3,
+      "name": "GHTK",
+      "phone": "19006092"
+    }
   ],
   "paymentMethods": [
-    { "id": 1, "code": "cod", "name": "Thanh toán khi nhận hàng", "description": "Thanh toán bằng tiền mặt khi nhận hàng" },
-    { "id": 2, "code": "bank_transfer", "name": "Chuyển khoản ngân hàng", "description": "Thanh toán bằng chuyển khoản" }
+    {
+      "id": 1,
+      "code": "cod",
+      "name": "Thanh toán khi nhận hàng",
+      "description": "Thanh toán bằng tiền mặt khi nhận hàng"
+    },
+    {
+      "id": 2,
+      "code": "bank_transfer",
+      "name": "Chuyển khoản ngân hàng",
+      "description": "Thanh toán bằng chuyển khoản"
+    }
   ],
   "vouchers": [
-    { "id": 2, "code": "NEWYEAR15", "description": "Giảm 15% cho mọi đơn hàng", "discountPercentage": 15, "minOrderValue": 0, "isActive": true },
-    { "id": 3, "code": "FLASH30", "description": "Giảm 30% cho đơn từ 1.000.000đ", "discountPercentage": 30, "minOrderValue": 1000000, "isActive": true }
+    {
+      "id": 2,
+      "code": "NEWYEAR15",
+      "description": "Giảm 15% cho mọi đơn hàng",
+      "discountPercentage": 15,
+      "minOrderValue": 0,
+      "isActive": true
+    },
+    {
+      "id": 3,
+      "code": "FLASH30",
+      "description": "Giảm 30% cho đơn từ 1.000.000đ",
+      "discountPercentage": 30,
+      "minOrderValue": 1000000,
+      "isActive": true
+    }
   ],
   "shippingAddresses": [
     {
@@ -392,10 +512,30 @@
     }
   ],
   "warehouses": [
-    { "id": 1, "name": "Hanoi - Zone A", "code": "HN-A", "region": "Hanoi" },
-    { "id": 2, "name": "Saigon - Zone C", "code": "SG-C", "region": "Ho Chi Minh" },
-    { "id": 3, "name": "Danang - Zone B", "code": "DN-B", "region": "Danang" },
-    { "id": 4, "name": "Hanoi - Zone D", "code": "HN-D", "region": "Hanoi" }
+    {
+      "id": 1,
+      "name": "Hanoi - Zone A",
+      "code": "HN-A",
+      "region": "Hanoi"
+    },
+    {
+      "id": 2,
+      "name": "Saigon - Zone C",
+      "code": "SG-C",
+      "region": "Ho Chi Minh"
+    },
+    {
+      "id": 3,
+      "name": "Danang - Zone B",
+      "code": "DN-B",
+      "region": "Danang"
+    },
+    {
+      "id": 4,
+      "name": "Hanoi - Zone D",
+      "code": "HN-D",
+      "region": "Hanoi"
+    }
   ],
   "stock": [],
   "stockHistory": []

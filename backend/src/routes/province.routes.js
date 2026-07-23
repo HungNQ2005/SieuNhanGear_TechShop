@@ -25,7 +25,17 @@ function fetchJson(url) {
 function createProvinceRouter() {
   const router = express.Router();
 
-  // GET /api/provinces -> proxy to external API
+  /**
+   * @openapi
+   * /api/provinces:
+   *   get:
+   *     tags:
+   *       - Orders
+   *     summary: Lấy danh sách tỉnh/thành phố Việt Nam
+   *     responses:
+   *       200:
+   *         description: Danh sách tỉnh/thành phố
+   */
   router.get('/provinces', async (req, res) => {
     try {
       const json = await fetchJson(`${PROVINCE_API_BASE}/p/`);
@@ -36,7 +46,23 @@ function createProvinceRouter() {
     }
   });
 
-  // GET /api/provinces/:code/wards -> proxy wards for a province
+  /**
+   * @openapi
+   * /api/provinces/{code}/wards:
+   *   get:
+   *     tags:
+   *       - Orders
+   *     summary: Lấy danh sách phường/xã theo mã tỉnh thành
+   *     parameters:
+   *       - in: path
+   *         name: code
+   *         required: true
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: Danh sách phường/xã
+   */
   router.get('/provinces/:code/wards', async (req, res) => {
     try {
       const { code } = req.params;

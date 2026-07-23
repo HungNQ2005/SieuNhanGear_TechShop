@@ -572,6 +572,7 @@ export const TEXT_ADMIN_SYSTEM_SUBTITLE =
   "adminSystem.TEXT_ADMIN_SYSTEM_SUBTITLE";
 export const TEXT_MENU_ACCOUNT = "menu.TEXT_ACCOUNT";
 export const TEXT_MENU_SHOWROOM = "menu.TEXT_SHOWROOM";
+export const TEXT_MENU_NEWS = "menu.TEXT_NEWS";
 
 // ==========================================================
 // Showroom Form
@@ -695,6 +696,48 @@ export const TEXT_SHOWROOM_MANAGEMENT_DELETE_FAILED =
 
 export const TEXT_SHOWROOM_MANAGEMENT_SAVE_FAILED =
   "showroomManagement.TEXT_SAVE_FAILED";
+
+// ==========================================================
+// News Management Screen & Form
+// ==========================================================
+export const TEXT_NEWS_MANAGEMENT_TITLE = "newsManagement.TEXT_TITLE";
+export const TEXT_NEWS_MANAGEMENT_SUBTITLE = "newsManagement.TEXT_SUBTITLE";
+export const TEXT_NEWS_MANAGEMENT_CREATE = "newsManagement.TEXT_CREATE";
+export const TEXT_NEWS_MANAGEMENT_SEARCH = "newsManagement.TEXT_SEARCH";
+export const TEXT_NEWS_MANAGEMENT_COL_TITLE = "newsManagement.TEXT_COL_TITLE";
+export const TEXT_NEWS_MANAGEMENT_COL_AUTHOR = "newsManagement.TEXT_COL_AUTHOR";
+export const TEXT_NEWS_MANAGEMENT_COL_STATUS = "newsManagement.TEXT_COL_STATUS";
+export const TEXT_NEWS_MANAGEMENT_COL_ACTION = "newsManagement.TEXT_COL_ACTION";
+export const TEXT_NEWS_MANAGEMENT_EMPTY = "newsManagement.TEXT_EMPTY";
+export const TEXT_NEWS_MANAGEMENT_DELETE_TITLE = "newsManagement.TEXT_DELETE_TITLE";
+export const TEXT_NEWS_MANAGEMENT_DELETE_CONFIRM = "newsManagement.TEXT_DELETE_CONFIRM";
+export const TEXT_NEWS_MANAGEMENT_DELETE_SUCCESS = "newsManagement.TEXT_DELETE_SUCCESS";
+export const TEXT_NEWS_MANAGEMENT_DELETE_FAILED = "newsManagement.TEXT_DELETE_FAILED";
+export const TEXT_NEWS_MANAGEMENT_DELETE = "newsManagement.TEXT_DELETE";
+export const TEXT_NEWS_MANAGEMENT_DELETING = "newsManagement.TEXT_DELETING";
+export const TEXT_NEWS_MANAGEMENT_CANCEL = "newsManagement.TEXT_CANCEL";
+export const TEXT_NEWS_MANAGEMENT_LOAD_ERROR = "newsManagement.TEXT_LOAD_ERROR";
+export const TEXT_NEWS_MANAGEMENT_SHOWING = "newsManagement.TEXT_SHOWING";
+export const TEXT_NEWS_MANAGEMENT_ALL_STATUS = "newsManagement.TEXT_ALL_STATUS";
+export const TEXT_NEWS_MANAGEMENT_PUBLISHED = "newsManagement.TEXT_PUBLISHED";
+export const TEXT_NEWS_MANAGEMENT_DRAFT = "newsManagement.TEXT_DRAFT";
+export const TEXT_NEWS_MANAGEMENT_HIDDEN = "newsManagement.TEXT_HIDDEN";
+export const TEXT_NEWS_MANAGEMENT_UNKNOWN_ERROR = "newsManagement.TEXT_UNKNOWN_ERROR";
+
+export const TEXT_NEWS_CREATE_TITLE = "newsManagement.TEXT_CREATE_TITLE";
+export const TEXT_NEWS_EDIT_TITLE = "newsManagement.TEXT_EDIT_TITLE";
+export const TEXT_NEWS_TITLE = "newsManagement.TEXT_NEWS_TITLE";
+export const TEXT_NEWS_CONTENT = "newsManagement.TEXT_NEWS_CONTENT";
+export const TEXT_NEWS_IMAGE = "newsManagement.TEXT_NEWS_IMAGE";
+export const TEXT_NEWS_STATUS = "newsManagement.TEXT_NEWS_STATUS";
+export const TEXT_NEWS_CANCEL = "newsManagement.TEXT_CANCEL";
+export const TEXT_NEWS_SAVE = "newsManagement.TEXT_SAVE";
+export const TEXT_NEWS_SAVING = "newsManagement.TEXT_SAVING";
+export const TEXT_NEWS_REQUIRED_TITLE = "newsManagement.TEXT_REQUIRED_TITLE";
+export const TEXT_NEWS_REQUIRED_CONTENT = "newsManagement.TEXT_REQUIRED_CONTENT";
+export const TEXT_NEWS_CREATE_SUCCESS = "newsManagement.TEXT_CREATE_SUCCESS";
+export const TEXT_NEWS_UPDATE_SUCCESS = "newsManagement.TEXT_UPDATE_SUCCESS";
+
 // ─── Map ──────────────────────────────────────────────────────────────────────
 export const I18N_KEYS = {
   common: {

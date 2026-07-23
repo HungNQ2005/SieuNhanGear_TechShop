@@ -1,10 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 
-const demoPath = path.join(__dirname, '..', '..', 'data', 'demo_data.json');
-
-const loadDemo = () => {
-  const raw = fs.readFileSync(demoPath, 'utf-8');
+function loadDemo() {
+  const filePath = path.resolve(__dirname, "../../../data/demo_data.json");
+  const raw = fs.readFileSync(filePath, "utf-8");
   return JSON.parse(raw);
 };
 

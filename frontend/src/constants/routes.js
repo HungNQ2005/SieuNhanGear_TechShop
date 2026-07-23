@@ -27,6 +27,7 @@ export const ROUTES = {
   ADMIN_ACCOUNTS: "/admin/account",
   ADMIN_PRODUCT: "/admin/products",
   ADMIN_VOUCHER: "/admin/vouchers",
+  ADMIN_NEWS: "/admin/news",
     //Profile
   PROFILE: "/profile",
   PROFILE_INFOMATION: "/profile/information",

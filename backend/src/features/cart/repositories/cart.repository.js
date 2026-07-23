@@ -31,6 +31,23 @@ const cartRepository = {
   async clearByAccount(accountId) {
     return CartItem.deleteMany({ accountId: Number(accountId) });
   },
+
+  async syncByAccount(accountId, items) {
+    await CartItem.deleteMany({ accountId: Number(accountId) });
+    const createdItems = [];
+    for (const item of items) {
+      const id = await nextId(CartItem);
+      const newDoc = new CartItem({
+        id,
+        accountId: Number(accountId),
+        productId: Number(item.productId),
+        quantity: Number(item.quantity || 1),
+      });
+      const saved = await newDoc.save();
+      createdItems.push(saved);
+    }
+    return createdItems;
+  },
 };
 
 module.exports = { cartRepository };

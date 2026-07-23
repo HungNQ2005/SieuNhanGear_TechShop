@@ -4,6 +4,16 @@ const { HttpError } = require("../errors/httpError");
 const DATA_TYPES = ["text", "number", "boolean", "select"];
 
 const specificationService = {
+  async getAllSpecifications() {
+    const groups = await specificationRepository.getAllGroups();
+    const attributes = await specificationRepository.getAllAttributes();
+    return groups.map((group) => {
+      const groupObj = group.toObject ? group.toObject() : group;
+      groupObj.attributes = attributes.filter((attr) => attr.groupId === group.id);
+      return groupObj;
+    });
+  },
+
   async getAllGroups() {
     return specificationRepository.getAllGroups();
   },
