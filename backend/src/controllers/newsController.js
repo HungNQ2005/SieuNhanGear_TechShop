@@ -1,26 +1,42 @@
-const demoData = require("../data/demo_data.json");
+const { newsService } = require("../services/news.service");
 
-const getAllNews = async (req, res) => {
+const newsController = {
+  async getAllNews(req, res, next) {
     try {
-        res.json(demoData.news || []);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+      res.json(await newsService.getAll(req.query));
+    } catch (e) {
+      next(e);
     }
-};
-
-const getNewsById = async (req, res) => {
+  },
+  async getNewsById(req, res, next) {
     try {
-        const item = (demoData.news || []).find(n => String(n.id) === String(req.params.id));
-        if (!item) {
-            return res.status(404).json({ message: "News not found" });
-        }
-        res.json(item);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+      res.json(await newsService.getById(req.params.id));
+    } catch (e) {
+      next(e);
     }
+  },
+  async createNews(req, res, next) {
+    try {
+      res.status(201).json(await newsService.create(req.body));
+    } catch (e) {
+      next(e);
+    }
+  },
+  async updateNews(req, res, next) {
+    try {
+      res.json(await newsService.update(req.params.id, req.body));
+    } catch (e) {
+      next(e);
+    }
+  },
+  async deleteNews(req, res, next) {
+    try {
+      await newsService.delete(req.params.id);
+      res.json({ message: "Deleted successfully" });
+    } catch (e) {
+      next(e);
+    }
+  }
 };
 
-module.exports = {
-    getAllNews,
-    getNewsById,
-};
+module.exports = newsController;

@@ -27,6 +27,7 @@ import InventoryManagementScreen from "./src/features/Auth/Admin/InventoryManage
 import SpecificationsScreen from "./src/features/Auth/Admin/ProductManagement/Specifications/SpecificationsScreen";
 import ManageShowroom from "./src/features/Auth/Admin/Admin System/ShowroomManagement/screens/ManageShowroom";
 import ManageAccount from "./src/features/Auth/Admin/Admin System/AccounManagement/screens/ManageAccount";
+import ManageNews from "./src/features/Auth/Admin/Admin System/NewsManagement/screens/ManageNews";
 import ProductsScreen from "./src/features/Auth/Admin/ProductManagement/Products/ProductsScreen";
 import CategoriesScreen from "./src/features/Auth/Admin/ProductManagement/Categories/CategoriesScreen";
 import VoucherManagementScreen from "./src/features/Auth/Admin/VoucherManagement/VoucherManagementScreen";
@@ -92,6 +93,10 @@ export default function App() {
                   <Route
                     path={ROUTES.ADMIN_ACCOUNTS}
                     element={<ManageAccount />}
+                  />
+                  <Route
+                    path={ROUTES.ADMIN_NEWS}
+                    element={<ManageNews />}
                   />
                   <Route
                     path={ROUTES.ADMIN_PRODUCT}

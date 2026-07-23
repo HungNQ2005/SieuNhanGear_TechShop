@@ -25,6 +25,9 @@ export const API = {
   DELETE_PRODUCT: (id) => `api/products/${id}`,
   GET_NEWS: "api/news",
   GET_NEWS_BY_ID: (id) => `api/news/${id}`,
+  CREATE_NEWS: "api/news",
+  UPDATE_NEWS: (id) => `api/news/${id}`,
+  DELETE_NEWS: (id) => `api/news/${id}`,
 
   // Account
   GET_ACCOUNTS: "api/accounts",

@@ -44,6 +44,9 @@ export const getManufacturerById = (id) => api.get(API.GET_MANUFACTURE_BY_ID(id)
 // News
 export const getNews = () => api.get(API.GET_NEWS);
 export const getNewsById = (id) => api.get(API.GET_NEWS_BY_ID(id));
+export const createNews = (data) => api.post(API.CREATE_NEWS, data);
+export const updateNews = (id, data) => api.patch(API.UPDATE_NEWS(id), data);
+export const deleteNews = (id) => api.delete(API.DELETE_NEWS(id));
 
 // Accounts
 export const getAccounts = () => api.get(API.GET_ACCOUNTS);

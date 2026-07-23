@@ -8,9 +8,36 @@ function createManufacturerRouter() {
         getManufacturerById,
     } = require('../../../controllers/manufacturerController');
 
-    // GET /api/manufacturers
+    /**
+     * @openapi
+     * /api/manufacturers:
+     *   get:
+     *     tags:
+     *       - Manufacturers
+     *     summary: Lấy danh sách thương hiệu / nhà sản xuất
+     *     responses:
+     *       200:
+     *         description: Danh sách nhà sản xuất
+     */
     router.get(ROUTES.MANUFACTURER.NULL, getAllManufacturers);
-    // GET /api/manufacturers/:id
+
+    /**
+     * @openapi
+     * /api/manufacturers/{id}:
+     *   get:
+     *     tags:
+     *       - Manufacturers
+     *     summary: Lấy thông tin nhà sản xuất theo ID
+     *     parameters:
+     *       - in: path
+     *         name: id
+     *         required: true
+     *         schema:
+     *           type: string
+     *     responses:
+     *       200:
+     *         description: Chi tiết nhà sản xuất
+     */
     router.get(ROUTES.MANUFACTURER.GET_MANUFACTURER_BY_ID, getManufacturerById);
 
     return router;

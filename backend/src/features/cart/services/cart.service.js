@@ -84,6 +84,21 @@ const cartService = {
   async clearCart(accountId) {
     return cartRepository.clearByAccount(accountId);
   },
+
+  async syncCart(accountId, rawItems = []) {
+    const validItems = [];
+    if (Array.isArray(rawItems)) {
+      for (const item of rawItems) {
+        const productId = Number(item.productId ?? item.id ?? item._id);
+        const quantity = Number(item.quantity ?? 1);
+        if (productId && quantity > 0) {
+          validItems.push({ productId, quantity });
+        }
+      }
+    }
+    await cartRepository.syncByAccount(accountId, validItems);
+    return this.getCart(accountId);
+  },
 };
 
 module.exports = { cartService };

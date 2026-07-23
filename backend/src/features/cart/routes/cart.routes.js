@@ -1,49 +1,206 @@
 const express = require('express');
 const { cartController } = require('../controllers/cart.controller');
-const legacyCartController = require('../../../controllers/cartController');
-const { authenticate, optionalAuthenticate } = require('../../../middlewares/auth.middleware');
+const { optionalAuthenticate } = require('../../../middlewares/auth.middleware');
 
 function createCartRouter() {
   const router = express.Router();
 
-  // GET /api/cart
-  router.get('/', optionalAuthenticate, (req, res, next) => {
-    if (cartController && cartController.getCart) {
-      return cartController.getCart(req, res, next);
-    }
-    return legacyCartController.getCart(req, res, next);
-  });
+  /**
+   * @openapi
+   * /api/cart:
+   *   get:
+   *     tags:
+   *       - Cart
+   *     summary: Lấy thông tin giỏ hàng hiện tại
+   *     security:
+   *       - BearerAuth: []
+   *     responses:
+   *       200:
+   *         description: Chi tiết giỏ hàng
+   */
+  router.get('/', optionalAuthenticate, cartController.getCart);
 
-  // Legacy endpoints
-  router.post('/', (req, res, next) => {
-    if (legacyCartController && legacyCartController.createCart) {
-      return legacyCartController.createCart(req, res, next);
-    }
-    if (cartController && cartController.addItem) {
-      return cartController.addItem(req, res, next);
-    }
-    res.status(404).json({ message: "Cart POST endpoint unavailable" });
-  });
+  /**
+   * @openapi
+   * /api/cart:
+   *   post:
+   *     tags:
+   *       - Cart
+   *     summary: Đồng bộ hoặc thêm sản phẩm vào giỏ hàng
+   *     security:
+   *       - BearerAuth: []
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               items:
+   *                 type: array
+   *                 items:
+   *                   type: object
+   *                   required:
+   *                     - productId
+   *                     - quantity
+   *                   properties:
+   *                     productId:
+   *                       type: string
+   *                       example: PROD-101
+   *                     quantity:
+   *                       type: integer
+   *                       example: 1
+   *     responses:
+   *       200:
+   *         description: Thành công
+   */
+  router.post('/', optionalAuthenticate, cartController.syncOrAddItem);
 
-  router.put('/:id', (req, res, next) => {
-    if (legacyCartController && legacyCartController.updateCart) {
-      return legacyCartController.updateCart(req, res, next);
-    }
-    res.status(404).json({ message: "Cart PUT endpoint unavailable" });
-  });
+  /**
+   * @openapi
+   * /api/cart/{id}:
+   *   put:
+   *     tags:
+   *       - Cart
+   *     summary: Cập nhật giỏ hàng theo ID
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               items:
+   *                 type: array
+   *                 items:
+   *                   type: object
+   *                   properties:
+   *                     productId:
+   *                       type: string
+   *                       example: PROD-101
+   *                     quantity:
+   *                       type: integer
+   *                       example: 2
+   *     responses:
+   *       200:
+   *         description: Cập nhật thành công
+   */
+  router.put('/:id', optionalAuthenticate, cartController.updateCart);
 
-  router.delete('/:id', (req, res, next) => {
-    if (legacyCartController && legacyCartController.deleteCart) {
-      return legacyCartController.deleteCart(req, res, next);
-    }
-    res.status(404).json({ message: "Cart DELETE endpoint unavailable" });
-  });
+  /**
+   * @openapi
+   * /api/cart/{id}:
+   *   delete:
+   *     tags:
+   *       - Cart
+   *     summary: Xóa giỏ hàng theo ID
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: Xóa thành công
+   */
+  router.delete('/:id', optionalAuthenticate, cartController.deleteCart);
 
-  // Item endpoints
-  router.post('/items', authenticate, cartController.addItem);
-  router.put('/items/:itemId', authenticate, cartController.updateItem);
-  router.delete('/items/:itemId', authenticate, cartController.removeItem);
-  router.delete('/', authenticate, cartController.clearCart);
+  /**
+   * @openapi
+   * /api/cart:
+   *   delete:
+   *     tags:
+   *       - Cart
+   *     summary: Xóa toàn bộ giỏ hàng
+   *     responses:
+   *       200:
+   *         description: Đã xóa toàn bộ giỏ hàng
+   */
+  router.delete('/', optionalAuthenticate, cartController.clearCart);
+
+  /**
+   * @openapi
+   * /api/cart/items:
+   *   post:
+   *     tags:
+   *       - Cart
+   *     summary: Thêm sản phẩm vào giỏ hàng
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required:
+   *               - productId
+   *               - quantity
+   *             properties:
+   *               productId:
+   *                 type: string
+   *                 example: PROD-101
+   *               quantity:
+   *                 type: integer
+   *                 example: 1
+   *     responses:
+   *       200:
+   *         description: Thêm thành công
+   */
+  router.post('/items', optionalAuthenticate, cartController.addItem);
+
+  /**
+   * @openapi
+   * /api/cart/items/{itemId}:
+   *   put:
+   *     tags:
+   *       - Cart
+   *     summary: Cập nhật số lượng item trong giỏ hàng
+   *     parameters:
+   *       - in: path
+   *         name: itemId
+   *         required: true
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               quantity:
+   *                 type: integer
+   *                 example: 3
+   *     responses:
+   *       200:
+   *         description: Cập nhật item thành công
+   */
+  router.put('/items/:itemId', optionalAuthenticate, cartController.updateItem);
+
+  /**
+   * @openapi
+   * /api/cart/items/{itemId}:
+   *   delete:
+   *     tags:
+   *       - Cart
+   *     summary: Xóa item khỏi giỏ hàng
+   *     parameters:
+   *       - in: path
+   *         name: itemId
+   *         required: true
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: Xóa item thành công
+   */
+  router.delete('/items/:itemId', optionalAuthenticate, cartController.removeItem);
 
   return router;
 }

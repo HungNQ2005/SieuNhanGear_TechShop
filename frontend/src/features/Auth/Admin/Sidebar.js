@@ -16,6 +16,7 @@ import {
   TEXT_ADMIN_CONSOLE,
   TEXT_MENU_ACCOUNT,
   TEXT_MENU_SHOWROOM,
+  TEXT_MENU_NEWS,
 } from "../../../constants/i18nKeys";
 import {
   IconShippingBox,
@@ -27,6 +28,7 @@ import {
   IconChevronDownGray,
   IconCustomers,
   IconStore,
+  IconNews,
 } from "../../../constants/icons";
 
 export default function Sidebar({ selected, onSelect }) {
@@ -93,6 +95,13 @@ export default function Sidebar({ selected, onSelect }) {
       label: t(TEXT_MENU_SHOWROOM),
       route: ROUTES.ADMIN_SHOWROOM,
       icon: IconStore,
+      allowedRoles: ["system_admin"],
+    },
+    {
+      id: "news",
+      label: t(TEXT_MENU_NEWS),
+      route: ROUTES.ADMIN_NEWS,
+      icon: IconNews,
       allowedRoles: ["system_admin"],
     },
   ].filter((item) => item.allowedRoles.includes(userRole));

@@ -1,6 +1,7 @@
 const { createApp } = require("./app");
 const { env } = require("./config/env");
 const { connectMongo } = require("./database/mongoose");
+const { seedDatabase } = require("./database/seed");
 
 async function start() {
   // Connect to MongoDB
@@ -9,6 +10,7 @@ async function start() {
   await connectMongo({ uri: env.MONGODB_URI });
   // eslint-disable-next-line no-console
   console.log("[backend] MongoDB connected.");
+  await seedDatabase();
 
   const app = createApp();
 

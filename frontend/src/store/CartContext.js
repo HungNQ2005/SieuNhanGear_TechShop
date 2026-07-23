@@ -4,6 +4,7 @@ import React, {
   useMemo,
   useState,
   useEffect,
+  useCallback,
 } from "react";
 import { getProducts } from "../services/api";
 import { createCart, getCartByAccount } from "../services/CartService";
@@ -44,19 +45,6 @@ export function CartProvider({ children }) {
     }
   }, [items]);
 
-  useEffect(() => {
-    try {
-      const savedUser = localStorage.getItem("user");
-      if (savedUser) {
-        const user = JSON.parse(savedUser);
-        const resolvedAccountId = user._id || user.id;
-        if (resolvedAccountId) {
-          setAccountId(resolvedAccountId);
-        }
-      }
-    } catch (_) {}
-  }, []);
-
   const normalizeCartPayload = (payload) => {
     if (Array.isArray(payload)) return payload;
     if (payload && Array.isArray(payload.items)) return payload.items;
@@ -64,8 +52,8 @@ export function CartProvider({ children }) {
     return [];
   };
 
-  const syncCartToServer = async (nextItems, resolvedAccountId = accountId) => {
-    if (!resolvedAccountId) return;
+  const syncCartToServer = useCallback(async (nextItems, targetAccountId = accountId) => {
+    if (!targetAccountId) return;
 
     try {
       const payloadItems = (nextItems || []).map((item) => ({
@@ -74,13 +62,13 @@ export function CartProvider({ children }) {
         price: Number(item.price ?? 0),
       }));
 
-      await createCart(resolvedAccountId, payloadItems);
+      await createCart(targetAccountId, payloadItems);
     } catch (err) {
       console.error("Sync cart failed:", err);
     }
-  };
+  }, [accountId]);
 
-  const loadCart = async (resolvedAccountId) => {
+  const loadCart = useCallback(async (resolvedAccountId) => {
     const activeAccountId = resolvedAccountId || accountId;
     if (!activeAccountId) {
       return;
@@ -95,7 +83,7 @@ export function CartProvider({ children }) {
         ? productRes.data
         : (Array.isArray(productRes) ? productRes : []);
 
-      if (cartItems.length > 0) {
+      if (Array.isArray(cartItems)) {
         const normalizedItems = cartItems
           .map((cartItem) => {
             const productId = cartItem.productId ?? cartItem.product?.id ?? cartItem.product?._id;
@@ -103,22 +91,35 @@ export function CartProvider({ children }) {
 
             return {
               ...product,
+              id: product.id || product._id || productId,
               quantity: Number(cartItem.quantity ?? cartItem.qty ?? 1),
               accountId: activeAccountId ?? cartPayload?.userId ?? null,
               cartId: cartItem.id ?? cartItem._id ?? null,
-              productId: productId || product.id,
+              productId: Number(productId || product.id),
             };
           })
-          .filter(Boolean);
+          .filter((item) => item.id);
 
-        if (normalizedItems.length) {
-          setItems(normalizedItems);
-        }
+        setItems(normalizedItems);
       }
     } catch (err) {
       console.error("Load cart failed:", err);
     }
-  };
+  }, [accountId]);
+
+  useEffect(() => {
+    try {
+      const savedUser = localStorage.getItem("user");
+      if (savedUser) {
+        const user = JSON.parse(savedUser);
+        const resolvedAccountId = user._id || user.id;
+        if (resolvedAccountId) {
+          setAccountId(resolvedAccountId);
+          loadCart(resolvedAccountId);
+        }
+      }
+    } catch (_) {}
+  }, [loadCart]);
 
   const addToCart = (product, qty = 1) => {
     if (!product) return;
@@ -204,7 +205,7 @@ export function CartProvider({ children }) {
         0,
       ),
     }),
-    [items],
+    [items, loadCart, syncCartToServer],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

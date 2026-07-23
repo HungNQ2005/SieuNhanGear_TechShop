@@ -1,6 +1,13 @@
 const { specificationService } = require("../services/specification.service");
 
 const specificationController = {
+  async getAllSpecifications(req, res, next) {
+    try {
+      res.json(await specificationService.getAllSpecifications());
+    } catch (e) {
+      next(e);
+    }
+  },
   async getAllGroups(req, res, next) {
     try {
       res.json(await specificationService.getAllGroups());
